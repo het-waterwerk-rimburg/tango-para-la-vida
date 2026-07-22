@@ -1,0 +1,415 @@
+{
+  "_comment": "All marketing copy for the Tango Para La Vida landing page. Edit any value here — the page re-renders it automatically. Do not remove keys, only edit the string/array values.",
+
+  "meta": {
+    "siteTitle": "Tango Para La Vida | Leadership & Team Development Through Argentine Tango",
+    "siteDescription": "Experiential leadership, communication and team-building programs for organizations, using Argentine Tango as a practical laboratory for connection and self-awareness."
+  },
+
+  "header": {
+    "logoAlt": "Tango MJ — Tango Para La Vida",
+    "nav": [
+      { "label": "Benefits", "href": "#benefits" },
+      { "label": "Programs", "href": "#programs" },
+      { "label": "Packages", "href": "#packages" },
+      { "label": "How It Works", "href": "#how-it-works" },
+      { "label": "Testimonials", "href": "#testimonials" },
+      { "label": "About", "href": "#about" },
+      { "label": "FAQ", "href": "#faq" },
+      { "label": "Contact", "href": "#contact" }
+    ],
+    "ctaTexto": "Book a Call"
+  },
+
+  "hero": {
+    "eyebrow": "Tango Para La Vida — Business Programs",
+    "titulo": "Leadership, trust and communication — learned through movement, not slides.",
+    "subtitulo": "Tango Para La Vida uses Argentine Tango as a practical laboratory for leadership, communication, collaboration and self-awareness — a portfolio of experiential programs for organizations, leadership teams and professionals.",
+    "ctaPrincipal": "Book a Discovery Call",
+    "ctaSecundario": "Explore the Programs"
+  },
+
+  "benefits": {
+    "titulo": "Why organizations choose Tango Para La Vida",
+    "subtitulo": "Every program rests on the same principle: what the body learns, the team keeps.",
+    "items": [
+      { "icon": "trust", "titulo": "Build trust within teams", "descripcion": "Shared physical experience creates trust faster than any workshop slide deck." },
+      { "icon": "communication", "titulo": "Improve communication", "descripcion": "Participants discover that communication goes far beyond words." },
+      { "icon": "collaboration", "titulo": "Strengthen collaboration", "descripcion": "Embodied practice in leading and following builds real team dynamics." },
+      { "icon": "awareness", "titulo": "Develop self-awareness", "descripcion": "Movement reveals personal patterns that are invisible in a meeting room." },
+      { "icon": "leadership", "titulo": "Enhance leadership skills", "descripcion": "Leaders discover that leadership is relational, not positional." },
+      { "icon": "resilience", "titulo": "Foster adaptability & resilience", "descripcion": "Growth begins outside the comfort zone — and so does adaptability." }
+    ],
+    "ctaTexto": "See How It Works"
+  },
+
+  "about": {
+    "_comment": "facilitadores bios are invented placeholder copy (explicitly requested) — review and edit before publishing.",
+    "eyebrow": "Who We Are",
+    "titulo": "Leadership, taught the way it's actually learned",
+    "parrafo1": "Tango Para La Vida is a program by TangoMJ — a portfolio of experiential programs that use Argentine Tango as a practical laboratory for leadership, communication, collaboration and self-awareness, built for organizations, leadership teams and professionals who want stronger communication, trust and more effective collaboration.",
+    "parrafo2": "We believe the most important lessons in leadership aren't learned from a slide deck — they're learned in the body, through real connection with another person. Every program we run is built around that idea: put people in an unfamiliar, embodied experience together, and watch communication, trust and leadership show up in ways a classroom never reveals.",
+    "pilares": [
+      { "titulo": "Embodied, not theoretical", "descripcion": "Movement and connection are the classroom — not slides." },
+      { "titulo": "Practical, not abstract", "descripcion": "Every session translates directly into how your team communicates and leads back at work." },
+      { "titulo": "Experiential, not lecture-based", "descripcion": "People remember what they feel. Growth happens outside the comfort zone, together." }
+    ],
+    "facilitadores": {
+      "titulo": "Meet your facilitators",
+      "intro": "Tango Para La Vida is created and facilitated by Maddalena and Joel — professional tango teachers who bring coaching, NLP and non-verbal communication into every session.",
+      "items": [
+        {
+          "nombre": "Maddalena",
+          "cargo": "Tango Instructor & Facilitator",
+          "iniciales": "M",
+          "bio": "Maddalena has spent years teaching Argentine Tango, developing a sharp eye for how connection, trust and hesitation show up in the body before anyone says a word. She combines her background as a dance instructor with coaching and non-verbal communication tools, helping participants notice patterns in themselves they'd never catch in a normal meeting."
+        },
+        {
+          "nombre": "Joel",
+          "cargo": "Tango Instructor & Facilitator",
+          "iniciales": "J",
+          "bio": "Joel teaches tango and trains leaders, blending years on the dance floor with coaching and NLP (neuro-linguistic programming). He's especially drawn to the moment a group stops thinking about the steps and starts actually listening to each other — and he designs every session to get there faster."
+        }
+      ]
+    }
+  },
+
+  "programs": {
+    "titulo": "Three levels of embodied learning",
+    "subtitulo": "Select a level below to see exactly what it includes — from a two-hour spark of connection to a full leadership development day.",
+    "selectorHint": "Choose a level",
+    "items": [
+      {
+        "nombre": "Tango Connection Experience™",
+        "nivelCorto": "Level 1",
+        "nivel": "Level 1 — Experiential Team Building",
+        "proposito": "Create connection, energy and trust through Tango-inspired movement in a fun and engaging environment.",
+        "idealFor": ["Corporate events", "Conferences", "Team outings", "Company celebrations"],
+        "duracion": "2 Hours",
+        "focus": ["Connection", "Communication", "Trust", "Shared experience"],
+        "resultados": [
+          "Communication goes beyond words.",
+          "Vulnerability strengthens connection.",
+          "Trust is built through shared experiences.",
+          "Growth begins outside the comfort zone."
+        ],
+        "metodoNota": "At this level, the Method moves fast — a light, energetic pass through all six stages, built for connection and fun rather than deep analysis.",
+        "paquetes": [
+          {
+            "id": "basic",
+            "nombre": "Basic",
+            "resumen": "A focused single session to spark connection at your next event.",
+            "caracteristicas": [
+              "One 2-hour session",
+              "Up to 20 participants",
+              "One dedicated facilitator",
+              "Post-session summary for your team"
+            ],
+            "precioNota": "Custom quote — tailored to your team size.",
+            "destacado": false,
+            "ctaTexto": "Choose Basic"
+          },
+          {
+            "id": "normal",
+            "nombre": "Normal",
+            "resumen": "The full Connection Experience, with a bit of extra care before and after.",
+            "caracteristicas": [
+              "Full 2-hour session",
+              "Up to 40 participants",
+              "Pre-event planning call",
+              "Digital recap for your team",
+              "One follow-up check-in"
+            ],
+            "precioNota": "Custom quote — tailored to your team size.",
+            "destacado": true,
+            "ctaTexto": "Choose Normal"
+          },
+          {
+            "id": "premium",
+            "nombre": "Premium",
+            "resumen": "A fully tailored experience for larger or higher-profile events.",
+            "caracteristicas": [
+              "Full 2-hour session",
+              "Unlimited participants",
+              "Custom theming for your event",
+              "Professional photo/video recap",
+              "Executive summary report"
+            ],
+            "precioNota": "Custom quote — tailored to your team size.",
+            "destacado": false,
+            "ctaTexto": "Choose Premium"
+          }
+        ]
+      },
+      {
+        "nombre": "Dance of Collaboration™",
+        "nivelCorto": "Level 2",
+        "nivel": "Level 2 — Team Development Workshop",
+        "proposito": "An experiential workshop where teams explore communication, trust and collaboration through embodied learning.",
+        "idealFor": ["Teams", "Departments", "SMEs", "Family businesses"],
+        "duracion": "3–4 Hours",
+        "focus": ["Communication", "Trust", "Team dynamics", "Collaboration", "Relational awareness"],
+        "resultados": [
+          "Experience both leadership and followership.",
+          "Improve clarity, timing and responsiveness.",
+          "Understand how trust is created.",
+          "Develop adaptability in collaborative environments.",
+          "Increase awareness to enable better choices."
+        ],
+        "metodoNota": "Here there's real room to slow down in Observe and Understand, so teams can connect the exercises to their actual communication patterns back at work.",
+        "paquetes": [
+          {
+            "id": "basic",
+            "nombre": "Basic",
+            "resumen": "A lighter-touch version of the workshop for smaller teams.",
+            "caracteristicas": [
+              "3-hour workshop",
+              "Up to 20 participants",
+              "One dedicated facilitator",
+              "Post-session summary for your team"
+            ],
+            "precioNota": "Custom quote — tailored to your team size.",
+            "destacado": false,
+            "ctaTexto": "Choose Basic"
+          },
+          {
+            "id": "normal",
+            "nombre": "Normal",
+            "resumen": "Our most popular path — the full workshop plus tools your team keeps using.",
+            "caracteristicas": [
+              "Full 3–4 hour workshop",
+              "Up to 40 participants",
+              "Pre-session consultation call",
+              "Digital takeaway guide for participants",
+              "One follow-up check-in call"
+            ],
+            "precioNota": "Custom quote — tailored to your team size.",
+            "destacado": true,
+            "ctaTexto": "Choose Normal"
+          },
+          {
+            "id": "premium",
+            "nombre": "Premium",
+            "resumen": "A deeper, more personalized collaboration journey for the whole team.",
+            "caracteristicas": [
+              "Full 3–4 hour workshop",
+              "Unlimited participants",
+              "Custom program design for your organization",
+              "1:1 debrief sessions for team leads",
+              "Two follow-up coaching calls"
+            ],
+            "precioNota": "Custom quote — tailored to your team size.",
+            "destacado": false,
+            "ctaTexto": "Choose Premium"
+          }
+        ]
+      },
+      {
+        "nombre": "Embodied Leadership Lab™",
+        "nivelCorto": "Level 3",
+        "nivel": "Level 3 — Leadership Development",
+        "proposito": "A leadership experience that allows participants to discover how their leadership style is reflected in their body language, communication, decision-making and relationships.",
+        "idealFor": ["Leadership teams", "Managers", "Entrepreneurs"],
+        "duracion": "5–6 Hours",
+        "focus": ["Leadership", "Self-leadership", "Decision making", "Influence", "Communication"],
+        "resultados": [
+          "Leadership is relational, not positional.",
+          "Balance clarity with care.",
+          "Recognize personal leadership patterns.",
+          "Develop sustainable self-leadership."
+        ],
+        "metodoNota": "This is the fullest version of the Method — extended time in Understand and Experiment, with real space for individual reflection during Integrate.",
+        "paquetes": [
+          {
+            "id": "basic",
+            "nombre": "Basic",
+            "resumen": "The core leadership lab for a smaller group of leaders.",
+            "caracteristicas": [
+              "Half-day (5–6 hour) lab",
+              "Up to 15 leaders",
+              "One dedicated facilitator",
+              "Post-session summary for your team"
+            ],
+            "precioNota": "Custom quote — tailored to your team size.",
+            "destacado": false,
+            "ctaTexto": "Choose Basic"
+          },
+          {
+            "id": "normal",
+            "nombre": "Normal",
+            "resumen": "The full leadership lab plus tools your leaders keep using.",
+            "caracteristicas": [
+              "Full 5–6 hour leadership lab",
+              "Up to 30 leaders",
+              "Pre-session consultation call",
+              "Personalized leadership takeaway guide",
+              "One follow-up coaching call"
+            ],
+            "precioNota": "Custom quote — tailored to your team size.",
+            "destacado": true,
+            "ctaTexto": "Choose Normal"
+          },
+          {
+            "id": "premium",
+            "nombre": "Premium",
+            "resumen": "A complete leadership development journey with lasting support.",
+            "caracteristicas": [
+              "Full 5–6 hour leadership lab",
+              "Unlimited leaders",
+              "Custom curriculum design",
+              "1:1 debrief for every leader",
+              "Two follow-up coaching calls plus a 90-day check-in"
+            ],
+            "precioNota": "Custom quote — tailored to your team size.",
+            "destacado": false,
+            "ctaTexto": "Choose Premium"
+          }
+        ]
+      }
+    ],
+    "ctaTexto": "Book a Discovery Call"
+  },
+
+  "packages": {
+    "_comment": "The 3 package options themselves now live per-level, inside each programs.items[].paquetes array — they change depending on the level selected in the Programs section. This object only holds the shared section copy.",
+    "titulo": "Choose your package",
+    "subtitulo": "Every level comes in three ways to book it. Not sure which one fits? Normal is the right starting point for most teams.",
+    "recommendedLabel": "Recommended"
+  },
+
+  "packageBenefits": {
+    "_comment": "Shows what's included in the currently selected package (or the recommended one, by default) — content itself comes from programs.items[].paquetes[].caracteristicas, this object only holds the section chrome.",
+    "titulo": "Here's what you'll get",
+    "subtituloTemplate": "Everything included in the {{package}} package for {{level}}.",
+    "ctaTexto": "Book This Package"
+  },
+
+  "method": {
+    "titulo": "The Tango Para La Vida Method™",
+    "tagline": "Movement reveals. Awareness creates choice. Practice creates change.",
+    "subtitulo": "Every workshop — regardless of level — follows the same six-stage structure. Only the depth and ratio of Tango to reflection changes.",
+    "etapas": [
+      {
+        "numero": "01",
+        "nombre": "Arrive",
+        "objetivo": "Create safety. Bring people into the room and into their body.",
+        "actividades": ["Welcome", "Context", "Light movement", "Fun connection exercises"],
+        "pregunta": "Where am I right now?"
+      },
+      {
+        "numero": "02",
+        "nombre": "Experience",
+        "objetivo": "Create an embodied experience before any explanation.",
+        "actividades": ["Mirroring", "Walking", "Leading/following", "Partner exercises"],
+        "pregunta": "What happens naturally?"
+      },
+      {
+        "numero": "03",
+        "nombre": "Observe",
+        "objetivo": "Develop awareness through reflection — without judgment.",
+        "actividades": ["Individual reflection", "Group reflection", "Partner feedback"],
+        "pregunta": "What did I notice?"
+      },
+      {
+        "numero": "04",
+        "nombre": "Understand",
+        "objetivo": "Link experience to relevant concepts and frameworks.",
+        "actividades": ["Communication", "Leadership", "Trust", "Triggers", "Volition", "Collaboration"],
+        "pregunta": "What does this mean?"
+      },
+      {
+        "numero": "05",
+        "nombre": "Experiment",
+        "objetivo": "Try something different. Test new approaches.",
+        "actividades": ["Role switching", "Partner rotation", "Modified exercises"],
+        "pregunta": "What else is possible?"
+      },
+      {
+        "numero": "06",
+        "nombre": "Integrate",
+        "objetivo": "Transfer learning into daily life and work.",
+        "actividades": ["Journaling", "Discussion", "Action steps"],
+        "pregunta": "Where does this show up? What will I do differently?"
+      }
+    ],
+    "ctaTexto": "Find Your Starting Point"
+  },
+
+  "testimonials": {
+    "_comment": "No real testimonials were available yet, so these are intentionally visible placeholders (not invented fake quotes) — replace nombre/cargo/texto with real feedback from participants before publishing, and delete this _comment.",
+    "titulo": "What people are saying",
+    "subtitulo": "Real feedback from teams and leaders — coming soon. Replace these cards with quotes from your own participants.",
+    "items": [
+      { "texto": "Add a real quote from a participant, client or partner here — what changed for their team after the experience.", "nombre": "Client Name", "cargo": "Role, Company" },
+      { "texto": "Add a real quote from a participant, client or partner here — what changed for their team after the experience.", "nombre": "Client Name", "cargo": "Role, Company" },
+      { "texto": "Add a real quote from a participant, client or partner here — what changed for their team after the experience.", "nombre": "Client Name", "cargo": "Role, Company" }
+    ]
+  },
+
+  "faq": {
+    "titulo": "Frequently asked questions",
+    "subtitulo": "Everything you need to know before reaching out.",
+    "items": [
+      {
+        "pregunta": "What is Tango Para La Vida?",
+        "respuesta": "Tango Para La Vida is a portfolio of experiential programs that use Argentine Tango as a practical laboratory for leadership, communication, collaboration and self-awareness — designed for organizations, leadership teams and professionals."
+      },
+      {
+        "pregunta": "Which program is right for our organization?",
+        "respuesta": "It depends on your goal and the time you have. Tango Connection Experience (2 hours) is ideal for a single event, Dance of Collaboration (3–4 hours) suits a team workshop, and Embodied Leadership Lab (5–6 hours) is a full leadership development day."
+      },
+      {
+        "pregunta": "Which package should we choose?",
+        "respuesta": "Normal is the right starting point for most teams — it includes a full workshop plus a pre-session call and follow-up. Basic works well for a single lighter-touch session, and Premium suits organizations planning a multi-session leadership journey."
+      },
+      {
+        "pregunta": "Who are these programs designed for?",
+        "respuesta": "Primarily leadership teams, entrepreneurs, IT companies, SMEs and family businesses — as well as healthcare organizations, physiotherapy practices, wellbeing organizations, yoga & mindfulness communities and education organizations."
+      },
+      {
+        "pregunta": "What will my team actually take away?",
+        "respuesta": "A direct, embodied experience of trust, communication and collaboration — insights like \"trust is built through shared experience\" and \"communication goes beyond words\" that stay with participants long after the session ends."
+      },
+      {
+        "pregunta": "How do we book a program?",
+        "respuesta": "Reach out through the contact form below or book a discovery call, and we'll help you choose the right level, package and schedule for your team."
+      }
+    ]
+  },
+
+  "finalCta": {
+    "titulo": "Ready to build a stronger team?",
+    "subtitulo": "Book a discovery call and we'll help you choose the right program for where your team is today.",
+    "ctaTexto": "Book a Discovery Call"
+  },
+
+  "formulario": {
+    "titulo": "Prefer we reach out to you?",
+    "subtitulo": "Not ready to book yet? Leave your details and we'll get back to you.",
+    "labelNombre": "Name",
+    "labelEmail": "Email",
+    "labelTelefono": "Phone (optional)",
+    "labelMensaje": "Tell us about your team and what you're hoping to achieve",
+    "placeholderNombre": "Your name",
+    "placeholderEmail": "you@company.com",
+    "placeholderTelefono": "Your phone number",
+    "placeholderMensaje": "A few words about your team and your goals...",
+    "botonTexto": "Send Message",
+    "botonTextoEnviando": "Sending...",
+    "confirmacion": "Thanks! We've received your message and will be in touch soon.",
+    "packagePrefillTemplate": "I'm interested in the {{package}} package — tell me more."
+  },
+
+  "footer": {
+    "tagline": "Using Argentine Tango as a practical laboratory for leadership, communication, collaboration and self-awareness.",
+    "columnaPrograms": "Programs",
+    "columnaCompany": "Company",
+    "contacto": {
+      "emailLabel": "Email",
+      "email": "hello@tangoparalavida.com",
+      "telefonoLabel": "Phone",
+      "telefono": "+1 (000) 000-0000"
+    },
+    "copyright": "Tango Para La Vida. All rights reserved."
+  }
+}
