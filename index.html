@@ -184,7 +184,8 @@
     </section>
 
     <!-- ==========================================================================
-         PROGRAMS — interactive level selector
+         PROGRAMS + PACKAGES — unified: pick a level, see its description, then
+         immediately pick a package for that same level right below.
          ========================================================================== -->
     <section class="py-20 md:py-28" id="programs">
       <div class="max-w-[1180px] mx-auto px-6">
@@ -236,53 +237,43 @@
           </div>
         </template>
 
-        <template x-if="content">
-          <div class="flex justify-center mt-14">
-            <a href="#contact" x-text="content.programs.ctaTexto" class="btn rounded-full border-none bg-detalle text-texto shadow-button transition-all duration-300 hover:-translate-y-0.5"></a>
-          </div>
-        </template>
-      </div>
-    </section>
-
-    <!-- ==========================================================================
-         PACKAGES
-         ========================================================================== -->
-    <section class="py-20 md:py-28 bg-header/40" id="packages">
-      <div class="max-w-[1180px] mx-auto px-6">
-        <template x-if="content">
-          <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-14">
-            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-principal" x-text="content.packages.titulo"></h2>
-            <p class="mt-4 text-lg text-texto/70" x-text="content.packages.subtitulo"></p>
-            <span class="badge badge-outline border-secundario/30 bg-secundario/10 text-secundario font-semibold py-3 px-4 mt-5" x-text="'Showing packages for ' + content.programs.items[selectedLevel].nivelCorto + ' — ' + content.programs.items[selectedLevel].nombre"></span>
-          </div>
-        </template>
-
-        <div class="grid md:grid-cols-3 gap-8 items-center">
-          <template x-for="(pkg, i) in (content ? content.programs.items[selectedLevel].paquetes : [])" :key="pkg.id">
-            <div class="card relative bg-white rounded-lg border shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
-                 :class="pkg.destacado ? 'md:-translate-y-2 border-detalle ring-2 ring-detalle shadow-card-hover' : (selectedPackage === pkg.id ? 'border-secundario ring-2 ring-secundario/40' : 'border-principal/10')"
-                 data-aos="fade-up" :data-aos-delay="i * 100">
-              <span x-show="pkg.destacado" x-text="content.packages.recommendedLabel" class="absolute -top-4 left-1/2 -translate-x-1/2 bg-detalle text-texto text-xs font-bold uppercase tracking-wide px-4 py-1.5 rounded-full shadow-button"></span>
-              <div class="card-body p-8">
-                <h3 class="card-title text-principal" x-text="pkg.nombre"></h3>
-                <p class="text-sm text-texto/70" x-text="pkg.resumen"></p>
-                <ul class="flex flex-col gap-3 my-4 flex-grow">
-                  <template x-for="f in pkg.caracteristicas" :key="f">
-                    <li class="flex gap-2 text-sm text-texto">
-                      <span x-html="checkIcon()"></span>
-                      <span x-text="f"></span>
-                    </li>
-                  </template>
-                </ul>
-                <p class="text-xs text-texto/50 mb-4" x-text="pkg.precioNota"></p>
-                <button type="button" @click="choosePackage(pkg)"
-                        class="btn rounded-full border-none font-semibold transition-all duration-300 hover:-translate-y-0.5"
-                        :class="pkg.destacado ? 'bg-detalle text-texto shadow-button' : 'bg-principal text-white hover:bg-secundario'">
-                  <span x-text="selectedPackage === pkg.id ? 'Selected ✓' : pkg.ctaTexto"></span>
-                </button>
-              </div>
+        <!-- Packages for the level selected above — enabled immediately below the description. -->
+        <div id="packages" class="pt-16 md:pt-20">
+          <template x-if="content">
+            <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-10">
+              <h3 class="text-2xl md:text-3xl font-extrabold tracking-tight text-principal" x-text="content.packages.titulo"></h3>
+              <p class="mt-4 text-texto/70" x-text="content.packages.subtitulo"></p>
+              <span class="badge badge-outline border-secundario/30 bg-secundario/10 text-secundario font-semibold py-3 px-4 mt-5" x-text="'For ' + content.programs.items[selectedLevel].nivelCorto + ' — ' + content.programs.items[selectedLevel].nombre"></span>
             </div>
           </template>
+
+          <div class="grid md:grid-cols-3 gap-8 items-center">
+            <template x-for="(pkg, i) in (content ? content.programs.items[selectedLevel].paquetes : [])" :key="pkg.id">
+              <div class="card relative bg-white rounded-lg border shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+                   :class="pkg.destacado ? 'md:-translate-y-2 border-detalle ring-2 ring-detalle shadow-card-hover' : (selectedPackage === pkg.id ? 'border-secundario ring-2 ring-secundario/40' : 'border-principal/10')"
+                   data-aos="fade-up" :data-aos-delay="i * 100">
+                <span x-show="pkg.destacado" x-text="content.packages.recommendedLabel" class="absolute -top-4 left-1/2 -translate-x-1/2 bg-detalle text-texto text-xs font-bold uppercase tracking-wide px-4 py-1.5 rounded-full shadow-button"></span>
+                <div class="card-body p-8">
+                  <h3 class="card-title text-principal" x-text="pkg.nombre"></h3>
+                  <p class="text-sm text-texto/70" x-text="pkg.resumen"></p>
+                  <ul class="flex flex-col gap-3 my-4 flex-grow">
+                    <template x-for="f in pkg.caracteristicas" :key="f">
+                      <li class="flex gap-2 text-sm text-texto">
+                        <span x-html="checkIcon()"></span>
+                        <span x-text="f"></span>
+                      </li>
+                    </template>
+                  </ul>
+                  <p class="text-xs text-texto/50 mb-4" x-text="pkg.precioNota"></p>
+                  <button type="button" @click="choosePackage(pkg)"
+                          class="btn rounded-full border-none font-semibold transition-all duration-300 hover:-translate-y-0.5"
+                          :class="pkg.destacado ? 'bg-detalle text-texto shadow-button' : 'bg-principal text-white hover:bg-secundario'">
+                    <span x-text="selectedPackage === pkg.id ? 'Selected ✓' : pkg.ctaTexto"></span>
+                  </button>
+                </div>
+              </div>
+            </template>
+          </div>
         </div>
       </div>
     </section>
@@ -290,7 +281,7 @@
     <!-- ==========================================================================
          PACKAGE BENEFITS — what you get with the currently selected package
          ========================================================================== -->
-    <section class="py-20 md:py-28" id="package-benefits">
+    <section class="py-20 md:py-28 bg-header/40" id="package-benefits">
       <div class="max-w-[1180px] mx-auto px-6">
         <template x-if="content && currentPackage">
           <div class="max-w-3xl mx-auto">
@@ -323,7 +314,7 @@
     <!-- ==========================================================================
          THE TANGO PARA LA VIDA METHOD — six-stage structure, depth adapts per level
          ========================================================================== -->
-    <section class="py-20 md:py-28 bg-header/40" id="how-it-works">
+    <section class="py-20 md:py-28" id="how-it-works">
       <div class="max-w-[1180px] mx-auto px-6">
         <template x-if="content">
           <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-6">
@@ -370,7 +361,7 @@
     <!-- ==========================================================================
          TESTIMONIALS — auto-playing carousel, pauses on hover
          ========================================================================== -->
-    <section class="py-20 md:py-28" id="testimonials">
+    <section class="py-20 md:py-28 bg-header/40" id="testimonials">
       <div class="max-w-[1180px] mx-auto px-6">
         <template x-if="content">
           <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-14">
@@ -424,7 +415,7 @@
     <!-- ==========================================================================
          ABOUT US
          ========================================================================== -->
-    <section class="py-20 md:py-28 bg-header/40" id="about">
+    <section class="py-20 md:py-28" id="about">
       <div class="max-w-[1180px] mx-auto px-6">
         <template x-if="content">
           <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-10">
@@ -480,7 +471,7 @@
     <!-- ==========================================================================
          FAQ
          ========================================================================== -->
-    <section class="py-20 md:py-28" id="faq">
+    <section class="py-20 md:py-28 bg-header/40" id="faq">
       <div class="max-w-[1180px] mx-auto px-6">
         <template x-if="content">
           <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-14">
