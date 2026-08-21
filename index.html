@@ -200,7 +200,7 @@
           <div class="tabs tabs-boxed bg-transparent justify-center gap-3 mb-10" data-aos="fade-up" role="tablist">
             <template x-for="(p, i) in content.programs.items" :key="p.nombre">
               <a role="tab" href="javascript:void(0)" @click="selectedLevel = i" :aria-selected="selectedLevel === i"
-                 class="tab rounded-full font-semibold transition-all duration-300"
+                 class="tab rounded-full font-semibold transition-all duration-300 cursor-pointer"
                  :class="selectedLevel === i ? 'bg-principal text-white shadow-[0_8px_20px_rgba(7,58,124,0.25)]' : 'bg-principal/5 text-principal hover:bg-principal/10'"
                  x-text="p.nivelCorto"></a>
             </template>
@@ -249,8 +249,10 @@
 
           <div class="grid md:grid-cols-3 gap-8 items-center">
             <template x-for="(pkg, i) in (content ? content.programs.items[selectedLevel].paquetes : [])" :key="pkg.id">
-              <div class="card relative bg-white rounded-lg border shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
-                   :class="pkg.destacado ? 'md:-translate-y-2 border-detalle ring-2 ring-detalle shadow-card-hover' : (selectedPackage === pkg.id ? 'border-secundario ring-2 ring-secundario/40' : 'border-principal/10')"
+              <div role="button" tabindex="0" :aria-pressed="selectedPackage === pkg.id"
+                   @click="choosePackage(pkg)" @keydown.enter="choosePackage(pkg)" @keydown.space.prevent="choosePackage(pkg)"
+                   class="card relative flex flex-col h-full rounded-lg border shadow-card transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-card-hover"
+                   :class="[pkg.destacado ? 'md:-translate-y-2' : '', selectedPackage === pkg.id ? 'bg-detalle/10 border-detalle ring-2 ring-detalle shadow-card-hover' : 'bg-white border-principal/10 hover:border-secundario/40']"
                    data-aos="fade-up" :data-aos-delay="i * 100">
                 <span x-show="pkg.destacado" x-text="content.packages.recommendedLabel" class="absolute -top-4 left-1/2 -translate-x-1/2 bg-detalle text-texto text-xs font-bold uppercase tracking-wide px-4 py-1.5 rounded-full shadow-button"></span>
                 <div class="card-body p-8">
@@ -265,15 +267,24 @@
                     </template>
                   </ul>
                   <p class="text-xs text-texto/50 mb-4" x-text="pkg.precioNota"></p>
-                  <button type="button" @click="choosePackage(pkg)"
-                          class="btn rounded-full border-none font-semibold transition-all duration-300 hover:-translate-y-0.5"
-                          :class="pkg.destacado ? 'bg-detalle text-texto shadow-button' : 'bg-principal text-white hover:bg-secundario'">
-                    <span x-text="selectedPackage === pkg.id ? 'Selected ✓' : pkg.ctaTexto"></span>
-                  </button>
+                  <span class="inline-flex items-center justify-center rounded-full font-semibold px-6 py-3 text-sm transition-all duration-300 cursor-pointer"
+                        :class="selectedPackage === pkg.id ? 'bg-detalle text-texto shadow-button' : 'bg-principal text-white'"
+                        x-text="selectedPackage === pkg.id ? 'Selected ✓' : pkg.ctaTexto"></span>
                 </div>
               </div>
             </template>
           </div>
+
+          <template x-if="content">
+            <div x-show="packageJustSelected" style="display:none"
+                 x-transition:enter="transition ease-out duration-400" x-transition:enter-start="opacity-0 translate-y-3" x-transition:enter-end="opacity-100 translate-y-0"
+                 class="mt-10 flex flex-col items-center gap-3 text-center">
+              <p class="text-sm text-texto/70" x-text="continueCtaText"></p>
+              <button type="button" @click="goToContact()"
+                      x-text="content.packages.continueCtaTexto"
+                      class="btn rounded-full border-none bg-principal text-white shadow-[0_8px_20px_rgba(7,58,124,0.25)] cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:bg-secundario"></button>
+            </div>
+          </template>
         </div>
       </div>
     </section>
@@ -302,8 +313,8 @@
 
               <div class="mt-10 flex flex-col sm:flex-row items-center justify-between gap-5 pt-8 border-t border-principal/10">
                 <p class="text-sm text-texto/60" x-text="currentPackage.precioNota"></p>
-                <button type="button" @click="choosePackage(currentPackage)" x-text="content.packageBenefits.ctaTexto"
-                        class="btn rounded-full border-none bg-detalle text-texto shadow-button transition-all duration-300 hover:-translate-y-0.5"></button>
+                <button type="button" @click="choosePackage(currentPackage); goToContact()" x-text="content.packageBenefits.ctaTexto"
+                        class="btn rounded-full border-none bg-detalle text-texto shadow-button cursor-pointer transition-all duration-300 hover:-translate-y-0.5"></button>
               </div>
             </div>
           </div>
@@ -523,7 +534,7 @@
           <div data-aos="fade-right" class="text-left">
             <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-principal" x-text="content.formulario.titulo"></h2>
             <p class="mt-4 text-lg text-texto/70" x-text="content.formulario.subtitulo"></p>
-            <p x-show="selectedPackage" x-text="'Selected package: ' + form.package" class="mt-6 inline-flex items-center gap-2 rounded-full bg-secundario/10 text-secundario text-sm font-semibold px-4 py-2"></p>
+            <p x-show="currentPackage" x-text="'Booking: ' + content.programs.items[selectedLevel].nombre + ' — ' + currentPackage.nombre + ' package'" class="mt-6 inline-flex items-center gap-2 rounded-full bg-secundario/10 text-secundario text-sm font-semibold px-4 py-2"></p>
           </div>
         </template>
 
@@ -532,7 +543,12 @@
           <form data-aos="fade-left" class="grid grid-cols-1 sm:grid-cols-2 gap-5 bg-white p-8 rounded-lg shadow-card"
                 x-ref="contactForm" action="https://formspree.io/f/REPLACE_ME" method="POST" novalidate
                 @submit.prevent="submitForm()">
-            <input type="hidden" name="package" x-model="form.package" />
+            <!-- Level/Package are visible, editable selects, kept in sync with the
+                 Programs section above via the shared selectedLevel/selectedPackage
+                 state — these hidden inputs mirror their human-readable labels for
+                 the actual form submission. -->
+            <input type="hidden" name="level" :value="content.programs.items[selectedLevel].nombre" />
+            <input type="hidden" name="package" :value="currentPackage ? currentPackage.nombre : ''" />
 
             <div class="flex flex-col gap-1.5">
               <label for="field-name" class="text-sm font-semibold text-principal" x-text="content.formulario.labelNombre"></label>
@@ -543,6 +559,24 @@
               <label for="field-email" class="text-sm font-semibold text-principal" x-text="content.formulario.labelEmail"></label>
               <input type="email" id="field-email" name="email" required x-model="form.email" :placeholder="content.formulario.placeholderEmail" autocomplete="email"
                      class="input input-bordered w-full rounded-sm border-principal/10 bg-white text-texto focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10" />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label for="field-level" class="text-sm font-semibold text-principal" x-text="content.formulario.labelNivel"></label>
+              <select id="field-level" x-model.number="selectedLevel"
+                      class="select select-bordered w-full rounded-sm border-principal/10 bg-white text-texto cursor-pointer focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10">
+                <template x-for="(p, i) in content.programs.items" :key="p.nombre">
+                  <option :value="i" x-text="p.nivelCorto + ' — ' + p.nombre"></option>
+                </template>
+              </select>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label for="field-package-select" class="text-sm font-semibold text-principal" x-text="content.formulario.labelPaquete"></label>
+              <select id="field-package-select" x-model="selectedPackage"
+                      class="select select-bordered w-full rounded-sm border-principal/10 bg-white text-texto cursor-pointer focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10">
+                <template x-for="pkg in content.programs.items[selectedLevel].paquetes" :key="pkg.id">
+                  <option :value="pkg.id" x-text="pkg.nombre + (pkg.destacado ? ' — ' + content.packages.recommendedLabel : '')"></option>
+                </template>
+              </select>
             </div>
             <div class="flex flex-col gap-1.5 sm:col-span-2">
               <label for="field-phone" class="text-sm font-semibold text-principal" x-text="content.formulario.labelTelefono"></label>

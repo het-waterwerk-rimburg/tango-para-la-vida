@@ -273,7 +273,9 @@
     "_comment": "The 3 package options themselves now live per-level, inside each programs.items[].paquetes array — they change depending on the level selected in the Programs section. This object only holds the shared section copy.",
     "titulo": "Choose your package",
     "subtitulo": "Every level comes in three ways to book it. Not sure which one fits? Normal is the right starting point for most teams.",
-    "recommendedLabel": "Recommended"
+    "recommendedLabel": "Recommended",
+    "continueCtaTemplate": "You selected {{package}} for {{level}}.",
+    "continueCtaTexto": "Continue to Booking ↓"
   },
 
   "packageBenefits": {
@@ -387,6 +389,8 @@
     "subtitulo": "Not ready to book yet? Leave your details and we'll get back to you.",
     "labelNombre": "Name",
     "labelEmail": "Email",
+    "labelNivel": "Program Level",
+    "labelPaquete": "Package",
     "labelTelefono": "Phone (optional)",
     "labelMensaje": "Tell us about your team and what you're hoping to achieve",
     "placeholderNombre": "Your name",

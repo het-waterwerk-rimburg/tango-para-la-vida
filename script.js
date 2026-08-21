@@ -24,11 +24,12 @@ document.addEventListener('alpine:init', () => {
     scrolled: false,
     mobileMenuOpen: false,
     selectedLevel: 0,
-    selectedPackage: null,
+    selectedPackage: null, // set to the recommended package's id once content loads — never left null
+    packageJustSelected: false, // true only after the visitor actively clicks a package card
     openFaqIndex: null,
     testimonialIndex: 0,
     testimonialsPaused: false,
-    form: { name: '', email: '', phone: '', message: '', package: '' },
+    form: { name: '', email: '', phone: '', message: '' },
     formStatus: 'idle', // idle | sending | done | error
 
     async init() {
@@ -41,9 +42,16 @@ document.addEventListener('alpine:init', () => {
 
       window.addEventListener('scroll', () => { this.scrolled = window.scrollY > 8; }, { passive: true });
 
-      // Packages are level-specific (each level has its own Basic/Normal/Premium),
-      // so switching levels should clear any "Selected ✓" highlight from before.
-      this.$watch('selectedLevel', () => { this.selectedPackage = null; });
+      this.selectedPackage = this.defaultPackageIdForLevel(this.selectedLevel);
+
+      // Packages are level-specific (each level has its own Basic/Normal/Premium).
+      // Switching levels resets the selection back to that level's recommended
+      // package and hides the "Continue to Booking" button until the visitor
+      // actively picks one again.
+      this.$watch('selectedLevel', () => {
+        this.selectedPackage = this.defaultPackageIdForLevel(this.selectedLevel);
+        this.packageJustSelected = false;
+      });
 
       this.startTestimonialAutoplay();
 
@@ -77,9 +85,15 @@ document.addEventListener('alpine:init', () => {
       return ICONS[name] || '';
     },
 
-    // The package the "What You'll Get" section currently shows: whichever
-    // package the visitor picked in the Packages section, or — before they've
-    // picked one — the recommended ("Normal") package for the selected level.
+    defaultPackageIdForLevel(levelIndex) {
+      const pkgs = this.content.programs.items[levelIndex].paquetes;
+      const recommended = pkgs.find((p) => p.destacado);
+      return recommended ? recommended.id : pkgs[0].id;
+    },
+
+    // The package the "What You'll Get" section (and the form's Package select)
+    // currently shows: whichever package is selected for the current level —
+    // the visitor's own pick, or the recommended one by default.
     get currentPackage() {
       if (!this.content) return null;
       const level = this.content.programs.items[this.selectedLevel];
@@ -94,24 +108,35 @@ document.addEventListener('alpine:init', () => {
         .replace('{{level}}', level.nombre);
     },
 
+    get continueCtaText() {
+      if (!this.content || !this.currentPackage) return '';
+      const level = this.content.programs.items[this.selectedLevel];
+      return this.content.packages.continueCtaTemplate
+        .replace('{{package}}', this.currentPackage.nombre)
+        .replace('{{level}}', level.nombre);
+    },
+
     checkIcon() {
       return CHECK_ICON;
     },
 
+    // Selecting a package no longer jumps the page straight to the contact
+    // form — it just marks the choice and reveals a "Continue to Booking"
+    // button, so the visitor can keep comparing options before committing.
     choosePackage(pkg) {
       const level = this.content.programs.items[this.selectedLevel];
       const label = `${pkg.nombre} (${level.nombre})`;
 
       this.selectedPackage = pkg.id;
-      this.form.package = label;
+      this.packageJustSelected = true;
 
       if (!this.form.message.trim()) {
         this.form.message = this.content.formulario.packagePrefillTemplate.replace('{{package}}', label);
       }
+    },
 
-      this.$nextTick(() => {
-        document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-      });
+    goToContact() {
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
     },
 
     async submitForm() {
@@ -138,8 +163,7 @@ document.addEventListener('alpine:init', () => {
         // and simply confirm locally — nothing is sent anywhere until the
         // TODO in index.html (form action) is replaced with a real endpoint.
         this.formStatus = 'done';
-        this.form = { name: '', email: '', phone: '', message: '', package: '' };
-        this.selectedPackage = null;
+        this.form = { name: '', email: '', phone: '', message: '' };
       } catch (err) {
         this.formStatus = 'error';
       }
