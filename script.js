@@ -26,6 +26,7 @@ document.addEventListener('alpine:init', () => {
     selectedLevel: 0,
     selectedPackage: null, // set to the recommended package's id once content loads — never left null
     packageJustSelected: false, // true only after the visitor actively clicks a package card
+    takeawaySlide: 0, // current slide in the "What participants take away" slider
     openFaqIndex: null,
     testimonialIndex: 0,
     testimonialsPaused: false,
@@ -51,13 +52,14 @@ document.addEventListener('alpine:init', () => {
       this.$watch('selectedLevel', () => {
         this.selectedPackage = this.defaultPackageIdForLevel(this.selectedLevel);
         this.packageJustSelected = false;
+        this.takeawaySlide = 0;
       });
 
       this.startTestimonialAutoplay();
 
       await this.$nextTick();
       if (window.AOS) {
-        window.AOS.init({ once: true, duration: 700, easing: 'ease-out-cubic', offset: 60 });
+        window.AOS.init({ once: true, duration: 600, easing: 'ease-out-cubic', offset: 60 });
       }
     },
 
@@ -91,21 +93,13 @@ document.addEventListener('alpine:init', () => {
       return recommended ? recommended.id : pkgs[0].id;
     },
 
-    // The package the "What You'll Get" section (and the form's Package select)
+    // The package the form's Package select (and the "Booking:" summary badge)
     // currently shows: whichever package is selected for the current level —
     // the visitor's own pick, or the recommended one by default.
     get currentPackage() {
       if (!this.content) return null;
       const level = this.content.programs.items[this.selectedLevel];
       return level.paquetes.find((p) => p.id === this.selectedPackage) || level.paquetes.find((p) => p.destacado) || level.paquetes[0];
-    },
-
-    get packageBenefitsSubtitle() {
-      if (!this.content || !this.currentPackage) return '';
-      const level = this.content.programs.items[this.selectedLevel];
-      return this.content.packageBenefits.subtituloTemplate
-        .replace('{{package}}', this.currentPackage.nombre)
-        .replace('{{level}}', level.nombre);
     },
 
     get continueCtaText() {
@@ -123,16 +117,12 @@ document.addEventListener('alpine:init', () => {
     // Selecting a package no longer jumps the page straight to the contact
     // form — it just marks the choice and reveals a "Continue to Booking"
     // button, so the visitor can keep comparing options before committing.
+    // The message box is cleared on every new selection, since a message
+    // written for one package/level likely doesn't apply to another.
     choosePackage(pkg) {
-      const level = this.content.programs.items[this.selectedLevel];
-      const label = `${pkg.nombre} (${level.nombre})`;
-
       this.selectedPackage = pkg.id;
       this.packageJustSelected = true;
-
-      if (!this.form.message.trim()) {
-        this.form.message = this.content.formulario.packagePrefillTemplate.replace('{{package}}', label);
-      }
+      this.form.message = '';
     },
 
     goToContact() {

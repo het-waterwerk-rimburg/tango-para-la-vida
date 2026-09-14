@@ -62,20 +62,59 @@ Cambiar un valor ahí actualiza automáticamente todos los lugares del sitio que
 
 ## Programas, paquetes y el formulario
 
-- **Programas**: la sección "Programs" es un selector de 3 niveles (Level 1, 2 y 3) hecho con
-  daisyUI `tabs` + Alpine (`selectedLevel`). Al hacer clic en un nivel, el panel de abajo
-  muestra reactivamente su detalle completo (propósito, duración, ideal para, qué se lleva el
-  equipo). Level 4 (Volition Intensive) fue removido de `content.json` — si querés volver a
-  agregarlo, sumá un objeto más al array `programs.items`.
-- **Paquetes**: la sección "Packages" muestra 3 tarjetas seleccionables (Basic / Normal /
-  Premium) con daisyUI `card`. "Normal" queda marcado como recomendado
-  (`packages.items[].destacado: true`). Al hacer clic en "Choose X" (método `choosePackage` en
-  `script.js`), se guarda el paquete elegido en un campo oculto del formulario, se completa
-  automáticamente el mensaje si está vacío, y baja el scroll hasta el formulario de contacto.
+- **Programas**: la sección "Programs" es un selector de 3 niveles (Fun / Team / Leaders) hecho
+  con daisyUI `tabs` + Alpine (`selectedLevel`). Al hacer clic en un nivel, el panel de abajo
+  muestra reactivamente su detalle completo (propósito — que ya incluye el "ideal for" en el
+  mismo texto —, qué se lleva el equipo, y los 3 paquetes de ese nivel). Level 4 (Volition
+  Intensive) fue removido de `content.json` — si querés volver a agregarlo, sumá un objeto más
+  al array `programs.items`.
+- **Paquetes**: viven dentro de la misma card del nivel (no en una sección aparte), 3 tarjetas
+  seleccionables (Basic / Normal / Premium) por nivel. "Normal" queda marcado como recomendado
+  (`paquetes[].destacado: true`). Al hacer clic en una card (método `choosePackage` en
+  `script.js`) se marca la elección, se limpia el mensaje del formulario, y aparece un botón
+  "Continue to Booking" para bajar al formulario cuando el visitante quiera.
+- **"What participants take away"**: un slider con una foto/ícono + frase por cada resultado —
+  ver la sección de fotos más abajo.
 - **FAQ**: usa el componente `collapse` de daisyUI, controlado por Alpine (`openFaqIndex`) —
   solo una pregunta abierta a la vez.
 - **Teléfono en el formulario**: el campo es de texto libre (`type="tel"`), sin ninguna máscara
   ni patrón de formato — acepta cualquier forma de escribir el número.
+
+## Fotos del slider "What participants take away"
+
+Cada punto de "lo que se lleva el equipo" (`programs.items[].resultados[]`) tiene un campo
+`imagen` que apunta a un archivo dentro de `assets/takeaways/`. **Todavía no hay fotos ahí** —
+mientras el archivo no exista, el slide muestra automáticamente un ícono de respaldo (no rompe
+nada), así que podés ir agregando fotos de a una.
+
+Para activar una foto: descargala de un banco gratuito de uso comercial (sin atribución) —
+
+- Tango / conexión: https://unsplash.com/s/photos/tango-argentino
+- Confianza en equipos: https://unsplash.com/s/photos/trust-business
+- Trabajo en equipo: https://unsplash.com/s/photos/teamwork
+- Liderazgo: https://unsplash.com/s/photos/leadership
+
+— y guardala **exactamente** con el nombre que espera cada slide (formato `.jpg`, se puede
+cambiar la extensión en `content.json` si preferís `.png`/`.webp`):
+
+| Nivel | Frase | Archivo esperado |
+|---|---|---|
+| Fun | Communication goes beyond words. | `assets/takeaways/fun-1.jpg` |
+| Fun | Vulnerability strengthens connection. | `assets/takeaways/fun-2.jpg` |
+| Fun | Trust is built through shared experiences. | `assets/takeaways/fun-3.jpg` |
+| Fun | Growth begins outside the comfort zone. | `assets/takeaways/fun-4.jpg` |
+| Team | Experience both leadership and followership. | `assets/takeaways/team-1.jpg` |
+| Team | Improve clarity, timing and responsiveness. | `assets/takeaways/team-2.jpg` |
+| Team | Understand how trust is created. | `assets/takeaways/team-3.jpg` |
+| Team | Develop adaptability in collaborative environments. | `assets/takeaways/team-4.jpg` |
+| Team | Increase awareness to enable better choices. | `assets/takeaways/team-5.jpg` |
+| Leaders | Leadership is relational, not positional. | `assets/takeaways/leaders-1.jpg` |
+| Leaders | Balance clarity with care. | `assets/takeaways/leaders-2.jpg` |
+| Leaders | Recognize personal leadership patterns. | `assets/takeaways/leaders-3.jpg` |
+| Leaders | Develop sustainable self-leadership. | `assets/takeaways/leaders-4.jpg` |
+
+Recomendado: fotos horizontales (apaisadas), ya que se recortan a una caja de 16:9 aprox.
+(`object-cover`).
 
 ## Pendientes antes de publicar (buscar `TODO` en el código)
 

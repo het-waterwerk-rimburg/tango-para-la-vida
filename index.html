@@ -13,9 +13,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- Tailwind CSS (Play CDN — no build step). Theme is extended below with the
-       project's exact brand colors, radii and shadows, so all utility classes
-       (bg-principal, rounded-lg, shadow-card, etc.) stay a single source of truth. -->
+  <!-- Tailwind CSS (Play CDN, no build step). Theme is extended below with the
+       project's exact brand colors (from colores.md), radii, shadows and the
+       "premium" easing from general-style.md, so all utility classes stay a
+       single source of truth. -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -27,25 +28,30 @@
             acento: '#7A1F2B',
             detalle: '#f6b40e',
             texto: '#2C2C2A',
-            header: '#F2EEE6'
+            header: '#F2EEE6',
+            bg: '#f6f6f6',
+            surface: '#ffffff'
           },
           fontFamily: {
             sans: ['Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif']
           },
           borderRadius: {
-            sm: '12px',
+            sm: '14px',
             md: '20px',
             lg: '28px'
           },
           boxShadow: {
-            card: '0 2px 8px rgba(7,58,124,0.06), 0 12px 32px rgba(7,58,124,0.08)',
-            'card-hover': '0 8px 16px rgba(7,58,124,0.08), 0 24px 48px rgba(7,58,124,0.14)',
-            button: '0 8px 20px rgba(246,180,14,0.35)'
+            card: '0 1px 2px rgba(7,58,124,0.05)',
+            'card-hover': '0 18px 40px rgba(7,58,124,0.12)',
+            button: '0 8px 20px rgba(246,180,14,0.32)'
+          },
+          transitionTimingFunction: {
+            premium: 'cubic-bezier(0.22, 1, 0.36, 1)'
           },
           keyframes: {
             drift: {
               '0%': { transform: 'translate3d(0,0,0) scale(1)' },
-              '100%': { transform: 'translate3d(0,3%,0) scale(1.06)' }
+              '100%': { transform: 'translate3d(0,3%,0) scale(1.05)' }
             }
           },
           animation: {
@@ -82,32 +88,33 @@
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js" defer></script>
   <script src="https://unpkg.com/aos@2/dist/aos.js" defer></script>
 </head>
-<body x-data="site()" x-init="init()" x-cloak class="bg-white text-texto antialiased">
+<body x-data="site()" x-init="init()" x-cloak class="bg-bg text-texto antialiased">
 
   <!-- ==========================================================================
        HEADER
        ========================================================================== -->
   <header id="top" :class="{ 'shadow-sm': scrolled }" class="sticky top-0 z-50 bg-header/90 backdrop-blur-md backdrop-saturate-150 transition-shadow duration-500">
     <div class="max-w-[1180px] mx-auto px-6 h-[76px] flex items-center justify-between gap-6">
-      <a href="#top" class="flex items-center" aria-label="Tango Para La Vida — Home">
+      <a href="#top" class="flex items-center" aria-label="Tango Para La Vida home">
         <img src="assets/logo.png" :alt="content && content.header.logoAlt" class="h-8 w-auto" />
       </a>
 
       <template x-if="content">
         <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-principal" aria-label="Primary">
           <template x-for="item in content.header.nav" :key="item.href">
-            <a :href="item.href" x-text="item.label" class="hover:text-secundario transition-colors duration-200"></a>
+            <a :href="item.href" x-text="item.label" class="hover:text-acento transition-colors duration-[0.4s]"></a>
           </template>
         </nav>
       </template>
 
       <div class="flex items-center gap-3">
-        <a href="#contact" x-text="content && content.header.ctaTexto" class="btn btn-sm hidden md:inline-flex rounded-full border-none bg-detalle text-texto shadow-button transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(246,180,14,0.45)]">Book a Call</a>
+        <a href="#contact" x-text="content && content.header.ctaTexto"
+           class="btn btn-sm hidden md:inline-flex rounded-full border-2 border-detalle bg-detalle text-texto shadow-button cursor-pointer transition-all duration-[0.4s] ease-premium hover:scale-[1.04] hover:shadow-[0_12px_28px_rgba(246,180,14,0.4)] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle">Book a Call</a>
 
-        <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden flex flex-col justify-center gap-1.5 w-10 h-10" aria-label="Open menu" :aria-expanded="mobileMenuOpen" aria-controls="mobile-nav">
-          <span class="block h-0.5 w-6 bg-principal rounded-full transition-transform duration-300" :class="mobileMenuOpen && 'translate-y-2 rotate-45'"></span>
-          <span class="block h-0.5 w-6 bg-principal rounded-full transition-opacity duration-300" :class="mobileMenuOpen && 'opacity-0'"></span>
-          <span class="block h-0.5 w-6 bg-principal rounded-full transition-transform duration-300" :class="mobileMenuOpen && '-translate-y-2 -rotate-45'"></span>
+        <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden flex flex-col justify-center gap-1.5 w-10 h-10 cursor-pointer" aria-label="Open menu" :aria-expanded="mobileMenuOpen" aria-controls="mobile-nav">
+          <span class="block h-0.5 w-6 bg-principal rounded-full transition-transform duration-[0.4s]" :class="mobileMenuOpen && 'translate-y-2 rotate-45'"></span>
+          <span class="block h-0.5 w-6 bg-principal rounded-full transition-opacity duration-[0.4s]" :class="mobileMenuOpen && 'opacity-0'"></span>
+          <span class="block h-0.5 w-6 bg-principal rounded-full transition-transform duration-[0.4s]" :class="mobileMenuOpen && '-translate-y-2 -rotate-45'"></span>
         </button>
       </div>
     </div>
@@ -115,7 +122,7 @@
     <div id="mobile-nav" x-show="mobileMenuOpen" @click.outside="mobileMenuOpen = false"
          x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-3" x-transition:enter-end="opacity-100 translate-y-0"
          x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-3"
-         class="md:hidden fixed top-[76px] inset-x-0 bg-header border-b border-principal/10 flex flex-col gap-6 p-6 z-40" style="display:none">
+         class="md:hidden fixed top-[76px] inset-x-0 bg-header border-b-2 border-principal/15 flex flex-col gap-6 p-6 z-40" style="display:none">
       <template x-if="content">
         <nav class="flex flex-col gap-4 text-lg font-semibold text-principal" aria-label="Mobile">
           <template x-for="item in content.header.nav" :key="item.href">
@@ -123,18 +130,19 @@
           </template>
         </nav>
       </template>
-      <a href="#contact" x-text="content && content.header.ctaTexto" @click="mobileMenuOpen = false" class="btn rounded-full border-none bg-detalle text-texto shadow-button">Book a Call</a>
+      <a href="#contact" x-text="content && content.header.ctaTexto" @click="mobileMenuOpen = false"
+         class="btn rounded-full border-2 border-detalle bg-detalle text-texto shadow-button cursor-pointer transition-all duration-[0.4s] ease-premium hover:scale-[1.04] active:scale-[0.99]">Book a Call</a>
     </div>
   </header>
 
   <main>
 
     <!-- ==========================================================================
-         HERO
+         HERO — the one section allowed a (single, subtle, palette-only) glow.
          ========================================================================== -->
-    <section class="relative overflow-hidden pt-28 pb-20 md:pt-40 md:pb-28 text-center bg-white">
-      <div aria-hidden="true" class="absolute -inset-x-10 -top-40 h-[720px] blur-[10px] opacity-70 animate-drift pointer-events-none"
-        style="background: radial-gradient(closest-side, rgba(246,180,14,0.3), transparent 70%) 15% 20% / 55% 55% no-repeat, radial-gradient(closest-side, rgba(55,130,211,0.24), transparent 70%) 85% 10% / 60% 60% no-repeat, radial-gradient(closest-side, rgba(122,31,43,0.14), transparent 70%) 50% 60% / 50% 50% no-repeat;">
+    <section class="relative overflow-hidden pt-28 pb-20 md:pt-40 md:pb-28 text-center bg-surface">
+      <div aria-hidden="true" class="absolute -inset-x-10 -top-40 h-[640px] blur-[10px] opacity-60 animate-drift pointer-events-none"
+        style="background: radial-gradient(closest-side, rgba(246,180,14,0.22), transparent 70%) 50% 30% / 60% 60% no-repeat;">
       </div>
 
       <template x-if="content">
@@ -144,8 +152,10 @@
           <p data-aos="fade-up" data-aos-delay="200" class="mt-6 text-lg text-texto/70 max-w-xl mx-auto" x-text="content.hero.subtitulo"></p>
           <div data-aos="fade-up" data-aos-delay="300" class="mt-10 flex flex-wrap justify-center gap-4">
             <!-- TODO: replace href with the real booking/calendar link (e.g. Calendly) -->
-            <a href="#contact" x-text="content.hero.ctaPrincipal" class="btn btn-lg rounded-full border-none bg-detalle text-texto shadow-button transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(246,180,14,0.45)]"></a>
-            <a href="#programs" x-text="content.hero.ctaSecundario" class="btn btn-lg btn-outline rounded-full border-2 border-principal/10 text-principal transition-all duration-300 hover:bg-principal/5 hover:border-secundario hover:-translate-y-0.5"></a>
+            <a href="#contact" x-text="content.hero.ctaPrincipal"
+               class="btn btn-lg rounded-full border-2 border-detalle bg-detalle text-texto shadow-button cursor-pointer transition-all duration-[0.4s] ease-premium hover:scale-[1.04] hover:shadow-[0_12px_28px_rgba(246,180,14,0.4)] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle"></a>
+            <a href="#programs" x-text="content.hero.ctaSecundario"
+               class="btn btn-lg rounded-full border-2 border-principal bg-transparent text-principal cursor-pointer transition-all duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:bg-acento/5 hover:scale-[1.04] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle"></a>
           </div>
         </div>
       </template>
@@ -154,7 +164,7 @@
     <!-- ==========================================================================
          BENEFITS
          ========================================================================== -->
-    <section class="py-20 md:py-28 bg-header/40" id="benefits">
+    <section class="py-20 md:py-28" id="benefits">
       <div class="max-w-[1180px] mx-auto px-6">
         <template x-if="content">
           <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-14">
@@ -165,9 +175,9 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <template x-for="(item, i) in (content ? content.benefits.items : [])" :key="item.titulo">
-            <div class="card bg-white rounded-md shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card-hover" data-aos="fade-up" :data-aos-delay="i * 70">
+            <div class="card bg-surface border-[1.5px] border-principal rounded-md shadow-card transition-all duration-[0.4s] ease-premium hover:-translate-y-1.5 hover:border-acento hover:shadow-card-hover hover:bg-acento/[0.03]" data-aos="fade-up" :data-aos-delay="i * 70">
               <div class="card-body p-8">
-                <div class="w-12 h-12 rounded-sm bg-secundario/10 text-principal flex items-center justify-center mb-4" x-html="icon(item.icon)"></div>
+                <div class="w-12 h-12 rounded-sm bg-secundario/10 text-principal flex items-center justify-center mb-4 [&>svg]:w-6 [&>svg]:h-6" x-html="icon(item.icon)"></div>
                 <h3 class="text-xl font-semibold text-principal" x-text="item.titulo"></h3>
                 <p class="mt-2 text-sm text-texto/70" x-text="item.descripcion"></p>
               </div>
@@ -177,7 +187,8 @@
 
         <template x-if="content">
           <div class="flex justify-center mt-14">
-            <a href="#how-it-works" x-text="content.benefits.ctaTexto" class="btn rounded-full border-none bg-principal text-white shadow-[0_8px_20px_rgba(7,58,124,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-secundario"></a>
+            <a href="#how-it-works" x-text="content.benefits.ctaTexto"
+               class="btn rounded-full border-2 border-principal bg-principal text-white cursor-pointer transition-all duration-[0.4s] ease-premium hover:bg-acento hover:border-acento hover:scale-[1.04] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle"></a>
           </div>
         </template>
       </div>
@@ -200,121 +211,107 @@
           <div class="tabs tabs-boxed bg-transparent justify-center gap-3 mb-10" data-aos="fade-up" role="tablist">
             <template x-for="(p, i) in content.programs.items" :key="p.nombre">
               <a role="tab" href="javascript:void(0)" @click="selectedLevel = i" :aria-selected="selectedLevel === i"
-                 class="tab rounded-full font-semibold transition-all duration-300 cursor-pointer"
-                 :class="selectedLevel === i ? 'bg-principal text-white shadow-[0_8px_20px_rgba(7,58,124,0.25)]' : 'bg-principal/5 text-principal hover:bg-principal/10'"
+                 class="tab rounded-full font-semibold border-2 transition-all duration-[0.4s] ease-premium cursor-pointer hover:scale-[1.04] active:scale-[0.99]"
+                 :class="selectedLevel === i ? 'bg-principal border-principal text-white shadow-[0_8px_20px_rgba(7,58,124,0.25)]' : 'bg-surface border-principal/20 text-principal hover:border-acento hover:text-acento'"
                  x-text="p.nivelCorto"></a>
             </template>
           </div>
         </template>
 
         <template x-if="content">
-          <div class="card bg-white rounded-lg shadow-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="card bg-surface border-[1.5px] border-principal rounded-lg shadow-card" data-aos="fade-up" data-aos-delay="100">
             <div class="card-body p-8 md:p-12" x-data="{ get p() { return content.programs.items[selectedLevel]; } }">
               <span class="inline-block text-xs font-semibold uppercase tracking-wide text-acento bg-acento/10 rounded-full px-3 py-1 mb-4 w-fit" x-text="p.nivel"></span>
               <h3 class="text-2xl font-bold text-principal mb-3" x-text="p.nombre"></h3>
               <p class="text-texto/70 mb-8 max-w-2xl" x-text="p.proposito"></p>
-              <div class="grid sm:grid-cols-2 gap-10">
-                <div>
-                  <h4 class="text-sm font-semibold text-principal mb-2">Duration</h4>
-                  <p class="text-texto/70 mb-6" x-text="p.duracion"></p>
-                  <h4 class="text-sm font-semibold text-principal mb-3">Ideal for</h4>
-                  <ul class="flex flex-wrap gap-2">
-                    <template x-for="tag in p.idealFor" :key="tag">
-                      <li class="badge badge-outline border-secundario/30 text-secundario bg-secundario/10 font-medium py-3" x-text="tag"></li>
-                    </template>
-                  </ul>
-                </div>
-                <div>
-                  <h4 class="text-sm font-semibold text-principal mb-3">What participants take away</h4>
-                  <ul class="flex flex-col gap-2.5">
-                    <template x-for="r in p.resultados" :key="r">
-                      <li class="relative pl-5 text-sm text-texto"><span class="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-detalle"></span><span x-text="r"></span></li>
-                    </template>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </template>
 
-        <!-- Packages for the level selected above — enabled immediately below the description. -->
-        <div id="packages" class="pt-16 md:pt-20">
-          <template x-if="content">
-            <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-10">
-              <h3 class="text-2xl md:text-3xl font-extrabold tracking-tight text-principal" x-text="content.packages.titulo"></h3>
-              <p class="mt-4 text-texto/70" x-text="content.packages.subtitulo"></p>
-              <span class="badge badge-outline border-secundario/30 bg-secundario/10 text-secundario font-semibold py-3 px-4 mt-5" x-text="'For ' + content.programs.items[selectedLevel].nivelCorto + ' — ' + content.programs.items[selectedLevel].nombre"></span>
-            </div>
-          </template>
-
-          <div class="grid md:grid-cols-3 gap-8 items-center">
-            <template x-for="(pkg, i) in (content ? content.programs.items[selectedLevel].paquetes : [])" :key="pkg.id">
-              <div role="button" tabindex="0" :aria-pressed="selectedPackage === pkg.id"
-                   @click="choosePackage(pkg)" @keydown.enter="choosePackage(pkg)" @keydown.space.prevent="choosePackage(pkg)"
-                   class="card relative flex flex-col h-full rounded-lg border shadow-card transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-card-hover"
-                   :class="[pkg.destacado ? 'md:-translate-y-2' : '', selectedPackage === pkg.id ? 'bg-detalle/10 border-detalle ring-2 ring-detalle shadow-card-hover' : 'bg-white border-principal/10 hover:border-secundario/40']"
-                   data-aos="fade-up" :data-aos-delay="i * 100">
-                <span x-show="pkg.destacado" x-text="content.packages.recommendedLabel" class="absolute -top-4 left-1/2 -translate-x-1/2 bg-detalle text-texto text-xs font-bold uppercase tracking-wide px-4 py-1.5 rounded-full shadow-button"></span>
-                <div class="card-body p-8">
-                  <h3 class="card-title text-principal" x-text="pkg.nombre"></h3>
-                  <p class="text-sm text-texto/70" x-text="pkg.resumen"></p>
-                  <ul class="flex flex-col gap-3 my-4 flex-grow">
-                    <template x-for="f in pkg.caracteristicas" :key="f">
-                      <li class="flex gap-2 text-sm text-texto">
-                        <span x-html="checkIcon()"></span>
-                        <span x-text="f"></span>
-                      </li>
-                    </template>
-                  </ul>
-                  <p class="text-xs text-texto/50 mb-4" x-text="pkg.precioNota"></p>
-                  <span class="inline-flex items-center justify-center rounded-full font-semibold px-6 py-3 text-sm transition-all duration-300 cursor-pointer"
-                        :class="selectedPackage === pkg.id ? 'bg-detalle text-texto shadow-button' : 'bg-principal text-white'"
-                        x-text="selectedPackage === pkg.id ? 'Selected ✓' : pkg.ctaTexto"></span>
-                </div>
-              </div>
-            </template>
-          </div>
-
-          <template x-if="content">
-            <div x-show="packageJustSelected" style="display:none"
-                 x-transition:enter="transition ease-out duration-400" x-transition:enter-start="opacity-0 translate-y-3" x-transition:enter-end="opacity-100 translate-y-0"
-                 class="mt-10 flex flex-col items-center gap-3 text-center">
-              <p class="text-sm text-texto/70" x-text="continueCtaText"></p>
-              <button type="button" @click="goToContact()"
-                      x-text="content.packages.continueCtaTexto"
-                      class="btn rounded-full border-none bg-principal text-white shadow-[0_8px_20px_rgba(7,58,124,0.25)] cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:bg-secundario"></button>
-            </div>
-          </template>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================================================
-         PACKAGE BENEFITS — what you get with the currently selected package
-         ========================================================================== -->
-    <section class="py-20 md:py-28 bg-header/40" id="package-benefits">
-      <div class="max-w-[1180px] mx-auto px-6">
-        <template x-if="content && currentPackage">
-          <div class="max-w-3xl mx-auto">
-            <div data-aos="fade-up" class="text-center mb-10">
-              <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-principal" x-text="content.packageBenefits.titulo"></h2>
-              <p class="mt-4 text-lg text-texto/70" x-text="packageBenefitsSubtitle"></p>
-            </div>
-
-            <div class="rounded-lg border border-principal/10 bg-white shadow-card p-8 md:p-12" data-aos="fade-up" data-aos-delay="100">
-              <div class="grid sm:grid-cols-2 gap-4">
-                <template x-for="f in currentPackage.caracteristicas" :key="f">
-                  <div class="flex items-start gap-3">
-                    <span x-html="checkIcon()"></span>
-                    <span class="text-texto" x-text="f"></span>
+              <!-- What participants take away — one slide per outcome. -->
+              <div class="max-w-xl mx-auto">
+                <h4 class="text-sm font-semibold text-principal mb-4 text-center">What participants take away</h4>
+                <div class="relative">
+                  <div class="overflow-hidden rounded-md">
+                    <div class="flex transition-transform duration-500 ease-premium" :style="'transform: translateX(-' + (takeawaySlide * 100) + '%)'">
+                      <template x-for="(r, ri) in p.resultados" :key="ri">
+                        <div class="w-full flex-shrink-0 px-1">
+                          <div class="flex flex-col items-center text-center gap-4 bg-bg rounded-md p-8 md:p-10">
+                            <!-- Real photo when available at r.imagen; falls back to the icon
+                                 automatically (via onerror) if the file hasn't been added yet. -->
+                            <div class="relative w-full h-48 md:h-56 rounded-md overflow-hidden bg-secundario/10 text-principal flex items-center justify-center [&>svg]:w-10 [&>svg]:h-10">
+                              <span x-html="icon(r.icon)"></span>
+                              <template x-if="r.imagen">
+                                <img :src="r.imagen" :alt="r.texto" loading="lazy"
+                                     class="absolute inset-0 w-full h-full object-cover"
+                                     onerror="this.remove()" />
+                              </template>
+                            </div>
+                            <p class="text-base text-texto font-medium" x-text="r.texto"></p>
+                          </div>
+                        </div>
+                      </template>
+                    </div>
                   </div>
-                </template>
+
+                  <button type="button" @click="takeawaySlide = (takeawaySlide - 1 + p.resultados.length) % p.resultados.length"
+                          class="btn btn-circle btn-sm absolute left-1 top-1/2 -translate-y-1/2 border-2 border-principal bg-surface text-principal shadow-card cursor-pointer transition-all duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:scale-110 active:scale-[0.97]"
+                          aria-label="Previous outcome">‹</button>
+                  <button type="button" @click="takeawaySlide = (takeawaySlide + 1) % p.resultados.length"
+                          class="btn btn-circle btn-sm absolute right-1 top-1/2 -translate-y-1/2 border-2 border-principal bg-surface text-principal shadow-card cursor-pointer transition-all duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:scale-110 active:scale-[0.97]"
+                          aria-label="Next outcome">›</button>
+                </div>
+
+                <div class="flex justify-center gap-2 mt-5">
+                  <template x-for="(r, ri) in p.resultados" :key="ri">
+                    <button type="button" @click="takeawaySlide = ri"
+                            class="h-2 rounded-full transition-all duration-[0.4s] cursor-pointer"
+                            :class="takeawaySlide === ri ? 'bg-detalle w-6' : 'bg-principal/20 w-2 hover:bg-principal/40'"
+                            :aria-label="'Go to outcome ' + (ri + 1)"></button>
+                  </template>
+                </div>
               </div>
 
-              <div class="mt-10 flex flex-col sm:flex-row items-center justify-between gap-5 pt-8 border-t border-principal/10">
-                <p class="text-sm text-texto/60" x-text="currentPackage.precioNota"></p>
-                <button type="button" @click="choosePackage(currentPackage); goToContact()" x-text="content.packageBenefits.ctaTexto"
-                        class="btn rounded-full border-none bg-detalle text-texto shadow-button cursor-pointer transition-all duration-300 hover:-translate-y-0.5"></button>
+              <!-- Packages for this level — live in the same card, right below the description. -->
+              <div id="packages" class="mt-10 pt-10 border-t-2 border-principal/15">
+                <div class="text-center mb-8">
+                  <h4 class="text-xl md:text-2xl font-extrabold tracking-tight text-principal" x-text="content.packages.titulo"></h4>
+                  <p class="mt-2 text-texto/70" x-text="content.packages.subtitulo"></p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                  <template x-for="(pkg, i) in p.paquetes" :key="pkg.id">
+                    <div role="button" tabindex="0" :aria-pressed="selectedPackage === pkg.id"
+                         @click="choosePackage(pkg)" @keydown.enter="choosePackage(pkg)" @keydown.space.prevent="choosePackage(pkg)"
+                         class="relative flex flex-col h-full rounded-lg border-[1.5px] transition-all duration-[0.4s] ease-premium cursor-pointer hover:-translate-y-1.5 hover:shadow-card-hover"
+                         :class="[pkg.destacado ? 'md:-translate-y-2' : '', selectedPackage === pkg.id ? 'bg-detalle/10 border-detalle ring-2 ring-detalle shadow-card-hover' : 'bg-bg border-principal hover:border-acento hover:bg-acento/[0.03]']"
+                         data-aos="fade-up" :data-aos-delay="i * 100">
+                      <span x-show="pkg.destacado" x-text="content.packages.recommendedLabel" class="absolute -top-4 left-1/2 -translate-x-1/2 bg-detalle text-texto text-xs font-bold uppercase tracking-wide px-4 py-1.5 rounded-full shadow-button"></span>
+                      <div class="p-6">
+                        <h5 class="text-lg font-bold text-principal" x-text="pkg.nombre"></h5>
+                        <p class="text-sm text-texto/70" x-text="pkg.resumen"></p>
+                        <ul class="flex flex-col gap-3 my-4 flex-grow">
+                          <template x-for="f in pkg.caracteristicas" :key="f">
+                            <li class="flex gap-2 text-sm text-texto">
+                              <span x-html="checkIcon()"></span>
+                              <span x-text="f"></span>
+                            </li>
+                          </template>
+                        </ul>
+                        <p class="text-xs text-texto/50 mb-4" x-text="pkg.precioNota"></p>
+                        <span class="inline-flex items-center justify-center rounded-full font-semibold px-6 py-3 text-sm border-2 transition-all duration-[0.4s]"
+                              :class="selectedPackage === pkg.id ? 'bg-detalle border-detalle text-texto shadow-button' : 'bg-principal border-principal text-white'"
+                              x-text="selectedPackage === pkg.id ? 'Selected ✓' : pkg.ctaTexto"></span>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+
+                <div x-show="packageJustSelected" style="display:none"
+                     x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-3" x-transition:enter-end="opacity-100 translate-y-0"
+                     class="mt-10 flex flex-col items-center gap-3 text-center">
+                  <p class="text-sm text-texto/70" x-text="continueCtaText"></p>
+                  <button type="button" @click="goToContact()"
+                          x-text="content.packages.continueCtaTexto"
+                          class="btn rounded-full border-2 border-principal bg-principal text-white cursor-pointer transition-all duration-[0.4s] ease-premium hover:bg-acento hover:border-acento hover:scale-[1.04] active:scale-[0.99]"></button>
+                </div>
               </div>
             </div>
           </div>
@@ -337,15 +334,15 @@
 
         <template x-if="content">
           <div data-aos="fade-up" data-aos-delay="100" class="max-w-2xl mx-auto text-center mb-14">
-            <span class="badge badge-outline border-secundario/30 bg-secundario/10 text-secundario font-semibold py-3 px-4"
-                  x-text="content.programs.items[selectedLevel].nivelCorto + ' — ' + content.programs.items[selectedLevel].nombre"></span>
+            <span class="badge badge-outline border-2 border-secundario bg-secundario/10 text-secundario font-semibold py-3 px-4"
+                  x-text="content.programs.items[selectedLevel].nivelCorto + ': ' + content.programs.items[selectedLevel].nombre"></span>
             <p class="mt-4 text-sm text-texto/70" x-text="content.programs.items[selectedLevel].metodoNota"></p>
           </div>
         </template>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <template x-for="(etapa, i) in (content ? content.method.etapas : [])" :key="etapa.numero">
-            <div class="rounded-md border border-principal/10 bg-white p-8 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card" data-aos="fade-up" :data-aos-delay="i * 80">
+            <div class="rounded-md border-[1.5px] border-principal bg-surface p-8 transition-all duration-[0.4s] ease-premium hover:-translate-y-1.5 hover:border-acento hover:shadow-card-hover hover:bg-acento/[0.03]" data-aos="fade-up" :data-aos-delay="i * 80">
               <div class="flex items-center gap-3 mb-3">
                 <span class="text-2xl font-extrabold text-detalle" x-text="etapa.numero"></span>
                 <h3 class="text-lg font-semibold text-principal" x-text="etapa.nombre"></h3>
@@ -356,14 +353,15 @@
                   <li class="badge badge-ghost text-xs text-secundario bg-secundario/10 border-none" x-text="a"></li>
                 </template>
               </ul>
-              <p class="text-sm italic text-principal/80 border-t border-principal/10 pt-3" x-text="'“' + etapa.pregunta + '”'"></p>
+              <p class="text-sm italic text-principal/80 border-t border-principal/15 pt-3" x-text="'“' + etapa.pregunta + '”'"></p>
             </div>
           </template>
         </div>
 
         <template x-if="content">
           <div class="flex justify-center mt-14">
-            <a href="#contact" x-text="content.method.ctaTexto" class="btn rounded-full border-none bg-principal text-white shadow-[0_8px_20px_rgba(7,58,124,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-secundario"></a>
+            <a href="#contact" x-text="content.method.ctaTexto"
+               class="btn rounded-full border-2 border-principal bg-principal text-white cursor-pointer transition-all duration-[0.4s] ease-premium hover:bg-acento hover:border-acento hover:scale-[1.04] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle"></a>
           </div>
         </template>
       </div>
@@ -372,7 +370,7 @@
     <!-- ==========================================================================
          TESTIMONIALS — auto-playing carousel, pauses on hover
          ========================================================================== -->
-    <section class="py-20 md:py-28 bg-header/40" id="testimonials">
+    <section class="py-20 md:py-28" id="testimonials">
       <div class="max-w-[1180px] mx-auto px-6">
         <template x-if="content">
           <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-14">
@@ -387,13 +385,13 @@
                @focusin="testimonialsPaused = true" @focusout="testimonialsPaused = false">
 
             <div class="overflow-hidden rounded-md">
-              <div class="flex transition-transform duration-700 ease-out" :style="'transform: translateX(-' + (testimonialIndex * 100) + '%)'">
+              <div class="flex transition-transform duration-700 ease-premium" :style="'transform: translateX(-' + (testimonialIndex * 100) + '%)'">
                 <template x-for="(item, i) in content.testimonials.items" :key="i">
                   <div class="w-full flex-shrink-0 px-1">
-                    <div class="rounded-md border border-principal/10 bg-white p-8 md:p-10 shadow-card flex flex-col items-center text-center">
+                    <div class="rounded-md border-[1.5px] border-principal bg-surface p-8 md:p-10 shadow-card flex flex-col items-center text-center">
                       <svg viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-detalle mb-4"><path d="M7.5 6C4.5 6 2 8.5 2 11.5S4.5 17 7.5 17c.3 0 .6 0 .9-.1C7.6 19 5.9 20.4 4 21l1 2c4-1.5 6.5-5 6.5-9.5C11.5 9 9.7 6 7.5 6zm11 0c-3 0-5.5 2.5-5.5 5.5S15.5 17 18.5 17c.3 0 .6 0 .9-.1-.8 2.1-2.5 3.5-4.4 4.1l1 2c4-1.5 6.5-5 6.5-9.5 0-4-1.8-7-4-7z"/></svg>
                       <p class="text-lg text-texto/80" x-text="item.texto"></p>
-                      <div class="mt-6 pt-6 border-t border-principal/10 w-full">
+                      <div class="mt-6 pt-6 border-t border-principal/15 w-full">
                         <p class="font-semibold text-principal" x-text="item.nombre"></p>
                         <p class="text-sm text-texto/60" x-text="item.cargo"></p>
                       </div>
@@ -404,16 +402,16 @@
             </div>
 
             <button type="button" @click="prevTestimonial()"
-                    class="btn btn-circle btn-sm absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 md:-translate-x-12 border-none bg-white text-principal shadow-card hover:bg-principal hover:text-white transition-colors duration-300"
+                    class="btn btn-circle btn-sm absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 md:-translate-x-12 border-2 border-principal bg-surface text-principal shadow-card cursor-pointer transition-all duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:scale-110 active:scale-[0.97]"
                     aria-label="Previous testimonial">‹</button>
             <button type="button" @click="nextTestimonial()"
-                    class="btn btn-circle btn-sm absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 md:translate-x-12 border-none bg-white text-principal shadow-card hover:bg-principal hover:text-white transition-colors duration-300"
+                    class="btn btn-circle btn-sm absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 md:translate-x-12 border-2 border-principal bg-surface text-principal shadow-card cursor-pointer transition-all duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:scale-110 active:scale-[0.97]"
                     aria-label="Next testimonial">›</button>
 
             <div class="flex justify-center gap-2 mt-8">
               <template x-for="(item, i) in content.testimonials.items" :key="i">
                 <button type="button" @click="testimonialIndex = i"
-                        class="h-2.5 rounded-full transition-all duration-300"
+                        class="h-2.5 rounded-full transition-all duration-[0.4s] cursor-pointer"
                         :class="testimonialIndex === i ? 'bg-detalle w-6' : 'bg-principal/20 w-2.5 hover:bg-principal/40'"
                         :aria-label="'Go to testimonial ' + (i + 1)" :aria-current="testimonialIndex === i"></button>
               </template>
@@ -437,14 +435,14 @@
         </template>
 
         <template x-if="content">
-          <div data-aos="fade-up" data-aos-delay="100" class="max-w-3xl mx-auto rounded-lg bg-white border border-principal/10 p-8 md:p-10 mb-14">
+          <div data-aos="fade-up" data-aos-delay="100" class="max-w-3xl mx-auto rounded-lg bg-surface border-[1.5px] border-principal p-8 md:p-10 mb-14">
             <p class="text-xl md:text-2xl leading-relaxed text-principal font-medium text-center" x-text="content.about.parrafo2"></p>
           </div>
         </template>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-16">
           <template x-for="(pilar, i) in (content ? content.about.pilares : [])" :key="pilar.titulo">
-            <div class="rounded-md border border-principal/10 bg-white p-8 text-center transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card" data-aos="fade-up" :data-aos-delay="i * 100">
+            <div class="rounded-md border-[1.5px] border-principal bg-surface p-8 text-center transition-all duration-[0.4s] ease-premium hover:-translate-y-1.5 hover:border-acento hover:shadow-card-hover hover:bg-acento/[0.03]" data-aos="fade-up" :data-aos-delay="i * 100">
               <h3 class="text-lg font-semibold text-principal" x-text="pilar.titulo"></h3>
               <p class="mt-2 text-sm text-texto/70" x-text="pilar.descripcion"></p>
             </div>
@@ -460,7 +458,7 @@
 
         <div class="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
           <template x-for="(f, i) in (content ? content.about.facilitadores.items : [])" :key="f.nombre">
-            <div class="rounded-md border border-principal/10 bg-white p-8 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card" data-aos="fade-up" :data-aos-delay="i * 100">
+            <div class="rounded-md border-[1.5px] border-principal bg-surface p-8 transition-all duration-[0.4s] ease-premium hover:-translate-y-1.5 hover:border-acento hover:shadow-card-hover hover:bg-acento/[0.03]" data-aos="fade-up" :data-aos-delay="i * 100">
               <div class="flex items-center gap-4 mb-4">
                 <div class="avatar placeholder">
                   <div class="bg-principal text-white rounded-full w-14">
@@ -482,7 +480,7 @@
     <!-- ==========================================================================
          FAQ
          ========================================================================== -->
-    <section class="py-20 md:py-28 bg-header/40" id="faq">
+    <section class="py-20 md:py-28" id="faq">
       <div class="max-w-[1180px] mx-auto px-6">
         <template x-if="content">
           <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-14">
@@ -493,8 +491,8 @@
 
         <div class="max-w-3xl mx-auto flex flex-col gap-4">
           <template x-for="(item, i) in (content ? content.faq.items : [])" :key="item.pregunta">
-            <div class="collapse collapse-arrow bg-white rounded-md shadow-card"
-                 :class="openFaqIndex === i ? 'collapse-open' : 'collapse-close'"
+            <div class="collapse collapse-arrow bg-surface border-[1.5px] border-principal rounded-md shadow-card transition-colors duration-[0.4s]"
+                 :class="openFaqIndex === i ? 'collapse-open border-acento' : 'collapse-close'"
                  data-aos="fade-up" :data-aos-delay="i * 60">
               <div class="collapse-title text-lg font-semibold text-principal cursor-pointer select-none"
                    tabindex="0" role="button" :aria-expanded="openFaqIndex === i"
@@ -512,15 +510,16 @@
     </section>
 
     <!-- ==========================================================================
-         FINAL CTA
+         FINAL CTA — solid brand blue, no gradient; a thin gold rule stands in for one.
          ========================================================================== -->
-    <section class="py-24 md:py-32 text-center bg-gradient-to-br from-principal to-secundario">
+    <section class="py-24 md:py-32 text-center bg-principal border-y-4 border-detalle">
       <template x-if="content">
         <div data-aos="zoom-in" class="max-w-xl mx-auto px-6">
           <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white" x-text="content.finalCta.titulo"></h2>
           <p class="mt-4 text-lg text-header/90" x-text="content.finalCta.subtitulo"></p>
           <!-- TODO: replace href with the real booking/calendar link (e.g. Calendly) -->
-          <a href="#contact" x-text="content.finalCta.ctaTexto" class="btn btn-lg mt-10 rounded-full border-none bg-detalle text-texto shadow-button transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(246,180,14,0.45)]"></a>
+          <a href="#contact" x-text="content.finalCta.ctaTexto"
+             class="btn btn-lg mt-10 rounded-full border-2 border-detalle bg-detalle text-texto shadow-button cursor-pointer transition-all duration-[0.4s] ease-premium hover:scale-[1.04] hover:shadow-[0_12px_28px_rgba(246,180,14,0.4)] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"></a>
         </div>
       </template>
     </section>
@@ -534,18 +533,18 @@
           <div data-aos="fade-right" class="text-left">
             <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-principal" x-text="content.formulario.titulo"></h2>
             <p class="mt-4 text-lg text-texto/70" x-text="content.formulario.subtitulo"></p>
-            <p x-show="currentPackage" x-text="'Booking: ' + content.programs.items[selectedLevel].nombre + ' — ' + currentPackage.nombre + ' package'" class="mt-6 inline-flex items-center gap-2 rounded-full bg-secundario/10 text-secundario text-sm font-semibold px-4 py-2"></p>
+            <p x-show="currentPackage" x-text="'Booking: ' + content.programs.items[selectedLevel].nombre + ', ' + currentPackage.nombre + ' package'" class="mt-6 inline-flex items-center gap-2 rounded-full border-2 border-secundario bg-secundario/10 text-secundario text-sm font-semibold px-4 py-2"></p>
           </div>
         </template>
 
         <template x-if="content">
           <!-- TODO: replace action with the real Formspree/Getform endpoint -->
-          <form data-aos="fade-left" class="grid grid-cols-1 sm:grid-cols-2 gap-5 bg-white p-8 rounded-lg shadow-card"
+          <form data-aos="fade-left" class="grid grid-cols-1 sm:grid-cols-2 gap-5 bg-surface border-[1.5px] border-principal p-8 rounded-lg shadow-card"
                 x-ref="contactForm" action="https://formspree.io/f/REPLACE_ME" method="POST" novalidate
                 @submit.prevent="submitForm()">
             <!-- Level/Package are visible, editable selects, kept in sync with the
                  Programs section above via the shared selectedLevel/selectedPackage
-                 state — these hidden inputs mirror their human-readable labels for
+                 state. These hidden inputs mirror their human-readable labels for
                  the actual form submission. -->
             <input type="hidden" name="level" :value="content.programs.items[selectedLevel].nombre" />
             <input type="hidden" name="package" :value="currentPackage ? currentPackage.nombre : ''" />
@@ -553,28 +552,28 @@
             <div class="flex flex-col gap-1.5">
               <label for="field-name" class="text-sm font-semibold text-principal" x-text="content.formulario.labelNombre"></label>
               <input type="text" id="field-name" name="name" required x-model="form.name" :placeholder="content.formulario.placeholderNombre" autocomplete="name"
-                     class="input input-bordered w-full rounded-sm border-principal/10 bg-white text-texto focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10" />
+                     class="input input-bordered w-full rounded-sm border-2 border-principal/25 bg-surface text-texto transition-colors duration-[0.4s] focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10" />
             </div>
             <div class="flex flex-col gap-1.5">
               <label for="field-email" class="text-sm font-semibold text-principal" x-text="content.formulario.labelEmail"></label>
               <input type="email" id="field-email" name="email" required x-model="form.email" :placeholder="content.formulario.placeholderEmail" autocomplete="email"
-                     class="input input-bordered w-full rounded-sm border-principal/10 bg-white text-texto focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10" />
+                     class="input input-bordered w-full rounded-sm border-2 border-principal/25 bg-surface text-texto transition-colors duration-[0.4s] focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10" />
             </div>
             <div class="flex flex-col gap-1.5">
               <label for="field-level" class="text-sm font-semibold text-principal" x-text="content.formulario.labelNivel"></label>
               <select id="field-level" x-model.number="selectedLevel"
-                      class="select select-bordered w-full rounded-sm border-principal/10 bg-white text-texto cursor-pointer focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10">
+                      class="select select-bordered w-full rounded-sm border-2 border-principal/25 bg-surface text-texto cursor-pointer transition-colors duration-[0.4s] focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10">
                 <template x-for="(p, i) in content.programs.items" :key="p.nombre">
-                  <option :value="i" x-text="p.nivelCorto + ' — ' + p.nombre"></option>
+                  <option :value="i" x-text="p.nivelCorto + ': ' + p.nombre"></option>
                 </template>
               </select>
             </div>
             <div class="flex flex-col gap-1.5">
               <label for="field-package-select" class="text-sm font-semibold text-principal" x-text="content.formulario.labelPaquete"></label>
-              <select id="field-package-select" x-model="selectedPackage"
-                      class="select select-bordered w-full rounded-sm border-principal/10 bg-white text-texto cursor-pointer focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10">
+              <select id="field-package-select" x-model="selectedPackage" @change="form.message = ''"
+                      class="select select-bordered w-full rounded-sm border-2 border-principal/25 bg-surface text-texto cursor-pointer transition-colors duration-[0.4s] focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10">
                 <template x-for="pkg in content.programs.items[selectedLevel].paquetes" :key="pkg.id">
-                  <option :value="pkg.id" x-text="pkg.nombre + (pkg.destacado ? ' — ' + content.packages.recommendedLabel : '')"></option>
+                  <option :value="pkg.id" x-text="pkg.nombre + (pkg.destacado ? ' (' + content.packages.recommendedLabel + ')' : '')"></option>
                 </template>
               </select>
             </div>
@@ -582,21 +581,21 @@
               <label for="field-phone" class="text-sm font-semibold text-principal" x-text="content.formulario.labelTelefono"></label>
               <!-- Free text, no input mask/pattern — any format is accepted. -->
               <input type="tel" id="field-phone" name="phone" x-model="form.phone" :placeholder="content.formulario.placeholderTelefono" autocomplete="tel"
-                     class="input input-bordered w-full rounded-sm border-principal/10 bg-white text-texto focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10" />
+                     class="input input-bordered w-full rounded-sm border-2 border-principal/25 bg-surface text-texto transition-colors duration-[0.4s] focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10" />
             </div>
             <div class="flex flex-col gap-1.5 sm:col-span-2">
               <label for="field-message" class="text-sm font-semibold text-principal" x-text="content.formulario.labelMensaje"></label>
               <textarea id="field-message" name="message" rows="4" required x-model="form.message" :placeholder="content.formulario.placeholderMensaje"
-                        class="textarea textarea-bordered w-full rounded-sm border-principal/10 bg-white text-texto focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10"></textarea>
+                        class="textarea textarea-bordered w-full rounded-sm border-2 border-principal/25 bg-surface text-texto transition-colors duration-[0.4s] focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10"></textarea>
             </div>
             <div class="sm:col-span-2 mt-1">
               <button type="submit" :disabled="formStatus === 'sending'"
-                      class="btn btn-lg w-full rounded-full border-none bg-detalle text-texto shadow-button transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-60">
+                      class="btn btn-lg w-full rounded-full border-2 border-detalle bg-detalle text-texto shadow-button cursor-pointer transition-all duration-[0.4s] ease-premium hover:scale-[1.02] hover:shadow-[0_12px_28px_rgba(246,180,14,0.4)] active:scale-[0.99] disabled:opacity-60 disabled:hover:scale-100">
                 <span x-text="formStatus === 'sending' ? content.formulario.botonTextoEnviando : content.formulario.botonTexto"></span>
               </button>
             </div>
-            <p x-show="formStatus === 'done'" x-text="content.formulario.confirmacion" class="sm:col-span-2 text-center font-semibold text-principal bg-secundario/10 p-4 rounded-sm"></p>
-            <p x-show="formStatus === 'error'" class="sm:col-span-2 text-center font-semibold text-acento bg-acento/10 p-4 rounded-sm">Something went wrong sending your message. Please try again or email us directly.</p>
+            <p x-show="formStatus === 'done'" x-text="content.formulario.confirmacion" class="sm:col-span-2 text-center font-semibold text-principal bg-secundario/10 border-2 border-secundario p-4 rounded-sm"></p>
+            <p x-show="formStatus === 'error'" class="sm:col-span-2 text-center font-semibold text-acento bg-acento/10 border-2 border-acento p-4 rounded-sm">Something went wrong sending your message. Please try again or email us directly.</p>
           </form>
         </template>
       </div>
@@ -619,7 +618,7 @@
           <h3 class="text-sm font-semibold text-detalle mb-3" x-text="content.footer.columnaPrograms"></h3>
           <nav class="flex flex-col gap-2.5">
             <template x-for="p in content.programs.items" :key="p.nombre">
-              <a href="#programs" x-text="p.nombre" class="text-sm text-white/80 hover:text-detalle transition-colors duration-200"></a>
+              <a href="#programs" x-text="p.nombre" class="text-sm text-white/80 hover:text-detalle transition-colors duration-[0.4s]"></a>
             </template>
           </nav>
         </div>
@@ -628,7 +627,7 @@
           <h3 class="text-sm font-semibold text-detalle mb-3" x-text="content.footer.columnaCompany"></h3>
           <nav class="flex flex-col gap-2.5">
             <template x-for="item in content.header.nav" :key="item.href">
-              <a :href="item.href" x-text="item.label" class="text-sm text-white/80 hover:text-detalle transition-colors duration-200"></a>
+              <a :href="item.href" x-text="item.label" class="text-sm text-white/80 hover:text-detalle transition-colors duration-[0.4s]"></a>
             </template>
           </nav>
         </div>
@@ -636,7 +635,7 @@
         <div>
           <h3 class="text-sm font-semibold text-detalle mb-3" x-text="content.footer.contacto.emailLabel"></h3>
           <!-- TODO: confirm real contact email -->
-          <a :href="'mailto:' + content.footer.contacto.email" x-text="content.footer.contacto.email" class="block mb-4 text-sm text-white/80 hover:text-detalle transition-colors duration-200"></a>
+          <a :href="'mailto:' + content.footer.contacto.email" x-text="content.footer.contacto.email" class="block mb-4 text-sm text-white/80 hover:text-detalle transition-colors duration-[0.4s]"></a>
           <h3 class="text-sm font-semibold text-detalle mb-3" x-text="content.footer.contacto.telefonoLabel"></h3>
           <!-- TODO: confirm real contact phone -->
           <span class="block text-sm text-white/80" x-text="content.footer.contacto.telefono"></span>
