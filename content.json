@@ -9,28 +9,25 @@
   "header": {
     "logoAlt": "Tango MJ, Tango Para La Vida",
     "nav": [
-      { "label": "Benefits", "href": "#benefits" },
       { "label": "Programs", "href": "#programs" },
-      { "label": "Packages", "href": "#packages" },
-      { "label": "How It Works", "href": "#how-it-works" },
-      { "label": "Testimonials", "href": "#testimonials" },
+      { "label": "Method", "href": "#how-it-works" },
       { "label": "About", "href": "#about" },
-      { "label": "FAQ", "href": "#faq" },
-      { "label": "Contact", "href": "#contact" }
+      { "label": "FAQ", "href": "#faq" }
     ],
-    "ctaTexto": "Book a Call"
+    "ctaTexto": "Book a call"
   },
 
   "hero": {
     "eyebrow": "Tango Para La Vida Business Programs",
     "titulo": "Leadership learned through movement, not slides.",
     "subtitulo": "Tango Para La Vida uses Argentine Tango as a practical laboratory for leadership, communication, collaboration and self-awareness. It's a portfolio of experiential programs for organizations, leadership teams and professionals.",
-    "ctaPrincipal": "Book a Discovery Call",
-    "ctaSecundario": "Explore the Programs"
+    "ctaPrincipal": "Book a discovery call",
+    "ctaSecundario": "Explore the programs",
+    "nivelesLabel": "Or start from a level:"
   },
 
   "benefits": {
-    "titulo": "Why Choose Tango Para La Vida",
+    "titulo": "Why choose Tango Para La Vida",
     "subtitulo": "Every program rests on the same principle: what the body learns, the team keeps.",
     "items": [
       { "icon": "trust", "titulo": "Build trust within teams", "descripcion": "Shared physical experience creates trust faster than any workshop slide deck." },
@@ -40,13 +37,13 @@
       { "icon": "leadership", "titulo": "Enhance leadership skills", "descripcion": "Leaders discover that leadership is relational, not positional." },
       { "icon": "resilience", "titulo": "Foster adaptability & resilience", "descripcion": "Growth begins outside the comfort zone, and so does adaptability." }
     ],
-    "ctaTexto": "See How It Works"
+    "ctaTexto": "See how it works"
   },
 
   "about": {
     "_comment": "facilitadores bios are invented placeholder copy (explicitly requested); review and edit before publishing.",
     "eyebrow": "Who We Are",
-    "titulo": "Leadership Taught the Way It's Learned",
+    "titulo": "Leadership taught the way it's learned",
     "parrafo1": "Tango Para La Vida is a program by TangoMJ, a portfolio of experiential programs that use Argentine Tango as a practical laboratory for leadership, communication, collaboration and self-awareness, built for organizations, leadership teams and professionals who want stronger communication, trust and more effective collaboration.",
     "parrafo2": "We believe the most important lessons in leadership aren't learned from a slide deck. They're learned in the body, through real connection with another person. Every program we run is built around that idea: put people in an unfamiliar, embodied experience together, and watch communication, trust and leadership show up in ways a classroom never reveals.",
     "pilares": [
@@ -269,7 +266,7 @@
     "subtitulo": "Every level comes in three ways to book it. Not sure which one fits? Normal is the right starting point for most teams.",
     "recommendedLabel": "Recommended",
     "continueCtaTemplate": "You selected {{package}} for {{level}}.",
-    "continueCtaTexto": "Continue to Booking ↓"
+    "continueCtaTexto": "Continue to booking"
   },
 
   "method": {
@@ -320,12 +317,12 @@
         "pregunta": "Where does this show up? What will I do differently?"
       }
     ],
-    "ctaTexto": "Find Your Starting Point"
+    "ctaTexto": "Find your starting point"
   },
 
   "testimonials": {
     "_comment": "No real testimonials were available yet, so these are intentionally visible placeholders (not invented fake quotes); replace nombre/cargo/texto with real feedback from participants before publishing, and delete this _comment.",
-    "titulo": "What People Are Saying",
+    "titulo": "What people are saying",
     "subtitulo": "Real feedback from teams and leaders, coming soon. Replace these cards with quotes from your own participants.",
     "items": [
       { "texto": "Add a real quote from a participant, client or partner here: what changed for their team after the experience.", "nombre": "Client Name", "cargo": "Role, Company" },
@@ -368,7 +365,7 @@
   "finalCta": {
     "titulo": "Ready to build a stronger team?",
     "subtitulo": "Book a discovery call and we'll help you choose the right program for where your team is today.",
-    "ctaTexto": "Book a Discovery Call"
+    "ctaTexto": "Book a discovery call"
   },
 
   "formulario": {
@@ -376,7 +373,7 @@
     "subtitulo": "Not ready to book yet? Leave your details and we'll get back to you.",
     "labelNombre": "Name",
     "labelEmail": "Email",
-    "labelNivel": "Program Level",
+    "labelNivel": "Program level",
     "labelPaquete": "Package",
     "labelTelefono": "Phone (optional)",
     "labelMensaje": "Tell us about your team and what you're hoping to achieve",
@@ -384,9 +381,10 @@
     "placeholderEmail": "you@company.com",
     "placeholderTelefono": "Your phone number",
     "placeholderMensaje": "A few words about your team and your goals...",
-    "botonTexto": "Send Message",
+    "botonTexto": "Send message",
     "botonTextoEnviando": "Sending...",
-    "confirmacion": "Thanks! We've received your message and will be in touch soon."
+    "confirmacion": "Thanks! We've received your message and will be in touch soon.",
+    "emailAlternativa": "Rather write directly? Email us at "
   },
 
   "footer": {

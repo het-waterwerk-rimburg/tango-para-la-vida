@@ -19,12 +19,18 @@
        single source of truth. -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
+    // Motion is progressive: elements only start hidden when this class is present (see motion.css).
+    document.documentElement.classList.add('fx');
     tailwind.config = {
+      // Hover styles only where a real hover exists, so touch taps don't leave cards "stuck" lifted.
+      future: { hoverOnlyWhenSupported: true },
       theme: {
         extend: {
           colors: {
             principal: '#073a7c',
             secundario: '#3782d3',
+            // secundario darkened ~18% toward black for TEXT (5.5:1 on white); the raw blue is 3.97:1.
+            'secundario-ink': '#2d6bad',
             acento: '#7A1F2B',
             detalle: '#f6b40e',
             texto: '#2C2C2A',
@@ -69,49 +75,59 @@
        into daisyUI's own theme colors. -->
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4/dist/full.min.css" rel="stylesheet" type="text/css" />
 
-  <!-- AOS (Animate On Scroll) — powers every scroll-reveal animation via data-aos attributes. -->
-  <link href="https://unpkg.com/aos@2/dist/aos.css" rel="stylesheet" />
+  <!-- Motion system (replaces AOS): every scroll reveal and text animation lives in
+       motion.css + motion.js, driven by data-fx / data-text attributes. -->
+  <link href="motion.css" rel="stylesheet" />
 
   <style>
     html { scroll-behavior: smooth; scroll-padding-top: 90px; }
     body { font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif; }
     [x-cloak] { display: none !important; }
+    /* daisyUI paints the selected tab with its own primary (violet) at higher specificity than
+       our utilities; pin it to the brand navy so the selected level always matches the palette. */
+    .tabs-boxed .tab[aria-selected="true"]:not(.tab-disabled):not([disabled]) { --tw-bg-opacity: 1; background-color: #073a7c; border-color: #073a7c; color: #fff; }
+    /* Skip link: hidden until focused by keyboard. */
+    .skip-link { position: absolute; left: 16px; top: -64px; z-index: 100; padding: 10px 18px; border-radius: 9999px; background: #073a7c; color: #fff; font-weight: 700; font-size: 14px; transition: top 0.2s cubic-bezier(0.23, 1, 0.32, 1); }
+    .skip-link:focus { top: 12px; outline: 2px solid #f6b40e; outline-offset: 2px; }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      * { transition-duration: 0.01ms !important; }
     }
   </style>
 
   <!-- Order matters: script.js registers the Alpine component BEFORE Alpine's own
-       script runs (both deferred, so they execute in document order). -->
+       script runs (all deferred, so they execute in document order). motion.js only
+       defines window.TangoMotion; script.js starts it once the content has rendered. -->
   <script src="script.js" defer></script>
+  <script src="motion.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js" defer></script>
-  <script src="https://unpkg.com/aos@2/dist/aos.js" defer></script>
 </head>
 <body x-data="site()" x-init="init()" x-cloak class="bg-bg text-texto antialiased">
+  <a href="#main" class="skip-link">Skip to content</a>
 
   <!-- ==========================================================================
        HEADER
        ========================================================================== -->
   <header id="top" :class="{ 'shadow-sm': scrolled }" class="sticky top-0 z-50 bg-header/90 backdrop-blur-md backdrop-saturate-150 transition-shadow duration-500">
-    <div class="max-w-[1180px] mx-auto px-6 h-[76px] flex items-center justify-between gap-6">
+    <div class="hdr-in max-w-[1180px] mx-auto px-6 h-[76px] flex items-center justify-between gap-6">
       <a href="#top" class="flex items-center" aria-label="Tango Para La Vida home">
         <img src="assets/logo.png" :alt="content && content.header.logoAlt" class="h-8 w-auto" />
       </a>
 
       <template x-if="content">
-        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-principal" aria-label="Primary">
+        <nav class="hidden md:flex items-center gap-7 lg:gap-9 text-[15px] font-semibold text-principal" aria-label="Primary">
           <template x-for="item in content.header.nav" :key="item.href">
-            <a :href="item.href" x-text="item.label" class="hover:text-acento transition-colors duration-[0.4s]"></a>
+            <a :href="item.href" x-text="item.label" class="nav-link hover:text-acento transition-colors duration-[0.4s]"></a>
           </template>
         </nav>
       </template>
 
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Visible on every width: the booking CTA is the page's one conversion path. -->
         <a href="#contact" x-text="content && content.header.ctaTexto"
-           class="btn btn-sm hidden md:inline-flex rounded-full border-2 border-detalle bg-detalle text-texto shadow-button cursor-pointer transition-all duration-[0.4s] ease-premium hover:scale-[1.04] hover:shadow-[0_12px_28px_rgba(246,180,14,0.4)] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle">Book a Call</a>
+           class="btn btn-sm md:h-11 md:min-h-11 md:px-6 rounded-full border-2 border-detalle bg-detalle text-texto font-bold shadow-button cursor-pointer transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:scale-[1.04] hover:shadow-[0_12px_28px_rgba(246,180,14,0.4)] active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-principal">Book a Call</a>
 
-        <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden flex flex-col justify-center gap-1.5 w-10 h-10 cursor-pointer" aria-label="Open menu" :aria-expanded="mobileMenuOpen" aria-controls="mobile-nav">
+        <button @click="mobileMenuOpen = !mobileMenuOpen" @keydown.escape.window="mobileMenuOpen = false" class="md:hidden flex flex-col justify-center items-center gap-1.5 w-11 h-11 -mr-2 rounded-full cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle" :aria-label="mobileMenuOpen ? 'Close menu' : 'Open menu'" :aria-expanded="mobileMenuOpen" aria-controls="mobile-nav">
           <span class="block h-0.5 w-6 bg-principal rounded-full transition-transform duration-[0.4s]" :class="mobileMenuOpen && 'translate-y-2 rotate-45'"></span>
           <span class="block h-0.5 w-6 bg-principal rounded-full transition-opacity duration-[0.4s]" :class="mobileMenuOpen && 'opacity-0'"></span>
           <span class="block h-0.5 w-6 bg-principal rounded-full transition-transform duration-[0.4s]" :class="mobileMenuOpen && '-translate-y-2 -rotate-45'"></span>
@@ -119,43 +135,70 @@
       </div>
     </div>
 
+    <!-- Reading progress: a gold hairline that fills as the page scrolls (driven by motion.js). -->
+    <div id="scroll-progress" aria-hidden="true"></div>
+
     <div id="mobile-nav" x-show="mobileMenuOpen" @click.outside="mobileMenuOpen = false"
          x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-3" x-transition:enter-end="opacity-100 translate-y-0"
          x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-3"
-         class="md:hidden fixed top-[76px] inset-x-0 bg-header border-b-2 border-principal/15 flex flex-col gap-6 p-6 z-40" style="display:none">
+         class="md:hidden fixed top-[76px] inset-x-0 bg-header border-b-2 border-principal/15 shadow-[0_24px_40px_-24px_rgba(7,58,124,0.35)] flex flex-col px-6 pt-2 pb-4 z-40" style="display:none">
       <template x-if="content">
-        <nav class="flex flex-col gap-4 text-lg font-semibold text-principal" aria-label="Mobile">
-          <template x-for="item in content.header.nav" :key="item.href">
-            <a :href="item.href" x-text="item.label" @click="mobileMenuOpen = false"></a>
+        <nav class="flex flex-col text-xl font-bold tracking-tight text-principal" aria-label="Mobile">
+          <template x-for="(item, i) in content.header.nav" :key="item.href">
+            <a :href="item.href" x-text="item.label" @click="mobileMenuOpen = false"
+               class="mnav-link flex items-center justify-between py-3.5 border-b border-principal/10 last:border-b-0 active:text-acento" :style="'--i:' + i"></a>
           </template>
         </nav>
       </template>
-      <a href="#contact" x-text="content && content.header.ctaTexto" @click="mobileMenuOpen = false"
-         class="btn rounded-full border-2 border-detalle bg-detalle text-texto shadow-button cursor-pointer transition-all duration-[0.4s] ease-premium hover:scale-[1.04] active:scale-[0.99]">Book a Call</a>
     </div>
   </header>
 
-  <main>
+  <main id="main">
 
     <!-- ==========================================================================
          HERO — the one section allowed a (single, subtle, palette-only) glow.
          ========================================================================== -->
-    <section class="relative overflow-hidden pt-28 pb-20 md:pt-40 md:pb-28 text-center bg-surface">
-      <div aria-hidden="true" class="absolute -inset-x-10 -top-40 h-[640px] blur-[10px] opacity-60 animate-drift pointer-events-none"
-        style="background: radial-gradient(closest-side, rgba(246,180,14,0.22), transparent 70%) 50% 30% / 60% 60% no-repeat;">
+    <section id="hero" class="relative overflow-hidden pt-24 pb-36 md:pt-32 md:pb-40 text-center bg-surface">
+      <!-- The outer layer follows the pointer with inertia (motion.js); the inner one keeps the slow drift. -->
+      <div id="hero-glow" aria-hidden="true" class="absolute inset-0 pointer-events-none">
+        <div class="absolute -inset-x-10 -top-40 h-[640px] blur-[10px] opacity-60 animate-drift"
+          style="background: radial-gradient(closest-side, rgba(246,180,14,0.22), transparent 70%) 50% 30% / 60% 60% no-repeat;">
+        </div>
       </div>
 
+      <!-- Lead and follow: two floor trails, navy and gold, drawn once behind the headline.
+           Decorative only; static under reduced motion (motion.css). -->
+      <svg class="hero-trails absolute inset-x-0 bottom-0 w-full h-28 md:h-40 pointer-events-none" viewBox="0 0 1440 360" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path class="trail trail--lead" d="M-40 300 C 180 300, 260 140, 470 150 S 760 330, 980 250 S 1300 60, 1480 110" />
+        <path class="trail trail--follow" d="M-40 330 C 200 320, 300 200, 500 205 S 780 350, 1000 290 S 1320 120, 1480 160" />
+      </svg>
+
       <template x-if="content">
-        <div class="relative max-w-3xl mx-auto px-6">
-          <p data-aos="fade-up" class="inline-block text-sm font-semibold uppercase tracking-wider text-secundario mb-4" x-text="content.hero.eyebrow"></p>
-          <h1 data-aos="fade-up" data-aos-delay="100" class="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight text-principal" x-text="content.hero.titulo"></h1>
-          <p data-aos="fade-up" data-aos-delay="200" class="mt-6 text-lg text-texto/70 max-w-xl mx-auto" x-text="content.hero.subtitulo"></p>
-          <div data-aos="fade-up" data-aos-delay="300" class="mt-10 flex flex-wrap justify-center gap-4">
+        <div class="relative max-w-4xl mx-auto px-6">
+          <!-- Focal moment of the page: the headline steps in letter by letter. -->
+          <h1 data-text="rise" style="--d:120ms" class="text-[clamp(2.5rem,1.3rem+4.6vw,5.25rem)] font-extrabold leading-[1.02] tracking-[-0.035em] text-principal" x-text="content.hero.titulo"></h1>
+          <p data-fx="haze" style="--d:560ms" class="mt-7 text-lg md:text-xl leading-relaxed text-texto/75 max-w-2xl mx-auto" x-text="content.hero.subtitulo"></p>
+          <div data-fx="pop" style="--d:700ms" class="mt-10 flex flex-wrap justify-center gap-4">
             <!-- TODO: replace href with the real booking/calendar link (e.g. Calendly) -->
-            <a href="#contact" x-text="content.hero.ctaPrincipal"
-               class="btn btn-lg rounded-full border-2 border-detalle bg-detalle text-texto shadow-button cursor-pointer transition-all duration-[0.4s] ease-premium hover:scale-[1.04] hover:shadow-[0_12px_28px_rgba(246,180,14,0.4)] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle"></a>
+            <a href="#contact"
+               class="btn btn-lg rounded-full border-2 border-detalle bg-detalle text-texto font-bold shadow-button cursor-pointer transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:scale-[1.04] hover:shadow-[0_12px_28px_rgba(246,180,14,0.4)] active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-principal">
+              <span x-text="content.hero.ctaPrincipal"></span>
+              <svg class="cta-arrow w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
             <a href="#programs" x-text="content.hero.ctaSecundario"
-               class="btn btn-lg rounded-full border-2 border-principal bg-transparent text-principal cursor-pointer transition-all duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:bg-acento/5 hover:scale-[1.04] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle"></a>
+               class="btn btn-lg rounded-full border-2 border-principal bg-surface/60 text-principal font-bold cursor-pointer transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:bg-acento/5 hover:scale-[1.04] active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle"></a>
+          </div>
+
+          <!-- Shortcut into the level selector: picks the level and scrolls to Programs. -->
+          <div data-fx="rise" style="--d:840ms" class="mt-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm">
+            <span class="text-texto/70 font-medium" x-text="content.hero.nivelesLabel"></span>
+            <template x-for="(p, i) in content.programs.items" :key="p.nombre">
+              <button type="button" @click="jumpToLevel(i)"
+                      class="level-chip inline-flex items-center gap-2 rounded-full border-[1.5px] border-principal/25 bg-surface px-3.5 py-1.5 font-semibold text-principal cursor-pointer transition-[border-color,color,transform] duration-300 ease-premium hover:border-acento hover:text-acento active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle">
+                <span class="w-1.5 h-1.5 rounded-full bg-detalle" aria-hidden="true"></span>
+                <span x-text="p.nivelCorto"></span>
+              </button>
+            </template>
           </div>
         </div>
       </template>
@@ -167,19 +210,19 @@
     <section class="py-20 md:py-28" id="benefits">
       <div class="max-w-[1180px] mx-auto px-6">
         <template x-if="content">
-          <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-14">
-            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-principal" x-text="content.benefits.titulo"></h2>
-            <p class="mt-4 text-lg text-texto/70" x-text="content.benefits.subtitulo"></p>
+          <div class="max-w-2xl mx-auto text-center mb-14">
+            <h2 data-text="mask" class="text-[clamp(2rem,1.3rem+2.4vw,3.25rem)] leading-[1.08] font-extrabold tracking-[-0.025em] text-principal" x-text="content.benefits.titulo"></h2>
+            <p data-fx="haze" style="--d:350ms" class="mt-5 text-lg leading-relaxed text-texto/75" x-text="content.benefits.subtitulo"></p>
           </div>
         </template>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <template x-for="(item, i) in (content ? content.benefits.items : [])" :key="item.titulo">
-            <div class="card bg-surface border-[1.5px] border-principal rounded-md shadow-card transition-all duration-[0.4s] ease-premium hover:-translate-y-1.5 hover:border-acento hover:shadow-card-hover hover:bg-acento/[0.03]" data-aos="fade-up" :data-aos-delay="i * 70">
+            <div class="card bg-surface border-[1.5px] border-principal rounded-md shadow-card transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:-translate-y-1.5 hover:border-acento hover:shadow-card-hover hover:bg-acento/[0.03]" data-fx="curtain" :style="'--i:' + i">
               <div class="card-body p-8">
-                <div class="w-12 h-12 rounded-sm bg-secundario/10 text-principal flex items-center justify-center mb-4 [&>svg]:w-6 [&>svg]:h-6" x-html="icon(item.icon)"></div>
+                <div :style="'--d:' + (620 + i * 80) + 'ms'" class="fx-child w-12 h-12 rounded-sm bg-secundario/10 text-principal flex items-center justify-center mb-4 [&>svg]:w-6 [&>svg]:h-6" x-html="icon(item.icon)"></div>
                 <h3 class="text-xl font-semibold text-principal" x-text="item.titulo"></h3>
-                <p class="mt-2 text-sm text-texto/70" x-text="item.descripcion"></p>
+                <p class="mt-2 text-[15px] leading-relaxed text-texto/75" x-text="item.descripcion"></p>
               </div>
             </div>
           </template>
@@ -187,8 +230,12 @@
 
         <template x-if="content">
           <div class="flex justify-center mt-14">
-            <a href="#how-it-works" x-text="content.benefits.ctaTexto"
-               class="btn rounded-full border-2 border-principal bg-principal text-white cursor-pointer transition-all duration-[0.4s] ease-premium hover:bg-acento hover:border-acento hover:scale-[1.04] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle"></a>
+            <!-- In-page navigation, so it reads as secondary: outline + arrow. Gold stays reserved for booking. -->
+            <a href="#how-it-works" data-fx="rise"
+               class="btn rounded-full border-2 border-principal bg-transparent text-principal font-bold cursor-pointer transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:bg-acento/5 hover:scale-[1.04] active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle">
+              <span x-text="content.benefits.ctaTexto"></span>
+              <svg class="cta-arrow w-4 h-4 rotate-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
           </div>
         </template>
       </div>
@@ -199,52 +246,66 @@
          immediately pick a package for that same level right below.
          ========================================================================== -->
     <section class="py-20 md:py-28" id="programs">
-      <div class="max-w-[1180px] mx-auto px-6">
+      <!-- perspective: gives the main card's "unfold" a real 3D hinge -->
+      <div class="max-w-[1180px] mx-auto px-6" style="perspective: 1400px">
         <template x-if="content">
-          <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-principal" x-text="content.programs.titulo"></h2>
-            <p class="mt-4 text-lg text-texto/70" x-text="content.programs.subtitulo"></p>
+          <div class="max-w-2xl mx-auto text-center mb-12">
+            <h2 data-text="focus" class="text-[clamp(2rem,1.3rem+2.4vw,3.25rem)] leading-[1.08] font-extrabold tracking-[-0.025em] text-principal" x-text="content.programs.titulo"></h2>
+            <p data-fx="haze" style="--d:500ms" class="mt-5 text-lg leading-relaxed text-texto/75" x-text="content.programs.subtitulo"></p>
           </div>
         </template>
 
         <template x-if="content">
-          <div class="tabs tabs-boxed bg-transparent justify-center gap-3 mb-10" data-aos="fade-up" role="tablist">
-            <template x-for="(p, i) in content.programs.items" :key="p.nombre">
-              <a role="tab" href="javascript:void(0)" @click="selectedLevel = i" :aria-selected="selectedLevel === i"
-                 class="tab rounded-full font-semibold border-2 transition-all duration-[0.4s] ease-premium cursor-pointer hover:scale-[1.04] active:scale-[0.99]"
-                 :class="selectedLevel === i ? 'bg-principal border-principal text-white shadow-[0_8px_20px_rgba(7,58,124,0.25)]' : 'bg-surface border-principal/20 text-principal hover:border-acento hover:text-acento'"
-                 x-text="p.nivelCorto"></a>
-            </template>
+          <!-- Segmented level selector: the navy pill slides to the chosen level (a partner stepping
+               across), instead of each tab repainting on its own. Arrow keys move between levels. -->
+          <div class="flex justify-center mb-10" data-fx="rise" style="--d:250ms">
+            <div class="level-switch relative grid grid-cols-3 rounded-full border-[1.5px] border-principal/20 bg-surface p-1.5 shadow-card"
+                 role="tablist" :aria-label="content.programs.selectorHint"
+                 :style="'--sel:' + selectedLevel"
+                 @keydown.right.prevent="selectedLevel = (selectedLevel + 1) % content.programs.items.length; $nextTick(() => $el.querySelector('[aria-selected=true]').focus())"
+                 @keydown.left.prevent="selectedLevel = (selectedLevel - 1 + content.programs.items.length) % content.programs.items.length; $nextTick(() => $el.querySelector('[aria-selected=true]').focus())">
+              <span class="level-switch__pill" aria-hidden="true"></span>
+              <template x-for="(p, i) in content.programs.items" :key="p.nombre">
+                <button type="button" role="tab" @click="selectedLevel = i"
+                        :aria-selected="selectedLevel === i" :tabindex="selectedLevel === i ? 0 : -1"
+                        class="relative z-10 w-24 sm:w-32 rounded-full py-2.5 text-[15px] font-bold cursor-pointer transition-colors duration-300 active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle"
+                        :class="selectedLevel === i ? 'text-white' : 'text-principal hover:text-acento'"
+                        x-text="p.nivelCorto"></button>
+              </template>
+            </div>
           </div>
         </template>
 
         <template x-if="content">
-          <div class="card bg-surface border-[1.5px] border-principal rounded-lg shadow-card" data-aos="fade-up" data-aos-delay="100">
-            <div class="card-body p-8 md:p-12" x-data="{ get p() { return content.programs.items[selectedLevel]; } }">
-              <span class="inline-block text-xs font-semibold uppercase tracking-wide text-acento bg-acento/10 rounded-full px-3 py-1 mb-4 w-fit" x-text="p.nivel"></span>
-              <h3 class="text-2xl font-bold text-principal mb-3" x-text="p.nombre"></h3>
-              <p class="text-texto/70 mb-8 max-w-2xl" x-text="p.proposito"></p>
+          <div class="card bg-surface border-[1.5px] border-principal rounded-lg shadow-card" data-fx="unfold" style="--d:150ms">
+            <!-- data-swap: motion.js crossfades this panel when the level changes -->
+            <div data-swap class="card-body p-8 md:p-12" x-data="{ get p() { return content.programs.items[selectedLevel]; } }">
+              <span class="inline-block text-sm font-semibold text-acento bg-acento/10 rounded-full px-3.5 py-1 mb-5 w-fit" x-text="p.nivel"></span>
+              <h3 class="text-[clamp(1.6rem,1.25rem+1.3vw,2.25rem)] leading-tight font-extrabold tracking-[-0.02em] text-principal mb-4" x-text="p.nombre"></h3>
+              <p class="text-[17px] leading-relaxed text-texto/75 mb-10 max-w-2xl" x-text="p.proposito"></p>
 
-              <!-- What participants take away — one slide per outcome. -->
-              <div class="max-w-xl mx-auto">
-                <h4 class="text-sm font-semibold text-principal mb-4 text-center">What participants take away</h4>
+              <!-- What participants take away — one slide per outcome.
+                   w-full: card-body is a flex column, so without it this box shrink-wraps to the
+                   whole slide track and overflows the card on small screens. -->
+              <div class="w-full max-w-xl mx-auto">
+                <h4 class="text-base font-bold text-principal mb-4 text-center">What participants take away</h4>
                 <div class="relative">
                   <div class="overflow-hidden rounded-md">
                     <div class="flex transition-transform duration-500 ease-premium" :style="'transform: translateX(-' + (takeawaySlide * 100) + '%)'">
                       <template x-for="(r, ri) in p.resultados" :key="ri">
-                        <div class="w-full flex-shrink-0 px-1">
-                          <div class="flex flex-col items-center text-center gap-4 bg-bg rounded-md p-8 md:p-10">
+                        <div class="w-full flex-shrink-0 px-1 transition-opacity duration-500 ease-premium" :class="takeawaySlide === ri ? 'opacity-100' : 'opacity-0'">
+                          <div class="flex flex-col items-center text-center gap-5 bg-bg rounded-md p-5 md:p-8">
                             <!-- Real photo when available at r.imagen; falls back to the icon
                                  automatically (via onerror) if the file hasn't been added yet. -->
-                            <div class="relative w-full h-48 md:h-56 rounded-md overflow-hidden bg-secundario/10 text-principal flex items-center justify-center [&>svg]:w-10 [&>svg]:h-10">
-                              <span x-html="icon(r.icon)"></span>
+                            <div class="takeaway-media relative w-full h-44 md:h-52 rounded-md overflow-hidden bg-principal/[0.06] text-principal flex items-center justify-center">
+                              <span class="takeaway-icon relative flex items-center justify-center w-20 h-20 rounded-full bg-surface border-[1.5px] border-detalle/70 shadow-card [&_svg]:w-9 [&_svg]:h-9" x-html="icon(r.icon)"></span>
                               <template x-if="r.imagen">
                                 <img :src="r.imagen" :alt="r.texto" loading="lazy"
                                      class="absolute inset-0 w-full h-full object-cover"
                                      onerror="this.remove()" />
                               </template>
                             </div>
-                            <p class="text-base text-texto font-medium" x-text="r.texto"></p>
+                            <p class="text-lg md:text-xl leading-snug font-bold tracking-[-0.01em] text-principal max-w-sm" x-text="r.texto"></p>
                           </div>
                         </div>
                       </template>
@@ -252,19 +313,22 @@
                   </div>
 
                   <button type="button" @click="takeawaySlide = (takeawaySlide - 1 + p.resultados.length) % p.resultados.length"
-                          class="btn btn-circle btn-sm absolute left-1 top-1/2 -translate-y-1/2 border-2 border-principal bg-surface text-principal shadow-card cursor-pointer transition-all duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:scale-110 active:scale-[0.97]"
-                          aria-label="Previous outcome">‹</button>
+                          class="btn btn-circle btn-sm absolute left-2 top-[38%] -translate-y-1/2 border-2 border-principal bg-surface text-principal shadow-card cursor-pointer transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:scale-110 active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle"
+                          aria-label="Previous outcome"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
                   <button type="button" @click="takeawaySlide = (takeawaySlide + 1) % p.resultados.length"
-                          class="btn btn-circle btn-sm absolute right-1 top-1/2 -translate-y-1/2 border-2 border-principal bg-surface text-principal shadow-card cursor-pointer transition-all duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:scale-110 active:scale-[0.97]"
-                          aria-label="Next outcome">›</button>
+                          class="btn btn-circle btn-sm absolute right-2 top-[38%] -translate-y-1/2 border-2 border-principal bg-surface text-principal shadow-card cursor-pointer transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:scale-110 active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle"
+                          aria-label="Next outcome"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
                 </div>
 
-                <div class="flex justify-center gap-2 mt-5">
+                <!-- Each dot is a 24px-tall hit area (WCAG 2.2 target size) around a smaller visible dot. -->
+                <div class="flex justify-center mt-4">
                   <template x-for="(r, ri) in p.resultados" :key="ri">
                     <button type="button" @click="takeawaySlide = ri"
-                            class="h-2 rounded-full transition-all duration-[0.4s] cursor-pointer"
-                            :class="takeawaySlide === ri ? 'bg-detalle w-6' : 'bg-principal/20 w-2 hover:bg-principal/40'"
-                            :aria-label="'Go to outcome ' + (ri + 1)"></button>
+                            class="group flex h-6 items-center justify-center rounded-full px-2 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-detalle"
+                            :aria-label="'Go to outcome ' + (ri + 1)" :aria-current="takeawaySlide === ri">
+                      <span class="block h-2 rounded-full transition-[width,background-color] duration-[0.4s]"
+                            :class="takeawaySlide === ri ? 'bg-detalle w-6' : 'bg-principal/20 w-2 group-hover:bg-principal/40'"></span>
+                    </button>
                   </template>
                 </div>
               </div>
@@ -280,14 +344,14 @@
                   <template x-for="(pkg, i) in p.paquetes" :key="pkg.id">
                     <div role="button" tabindex="0" :aria-pressed="selectedPackage === pkg.id"
                          @click="choosePackage(pkg)" @keydown.enter="choosePackage(pkg)" @keydown.space.prevent="choosePackage(pkg)"
-                         class="relative flex flex-col h-full rounded-lg border-[1.5px] transition-all duration-[0.4s] ease-premium cursor-pointer hover:-translate-y-1.5 hover:shadow-card-hover"
+                         class="relative flex flex-col h-full rounded-lg border-[1.5px] transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium cursor-pointer hover:-translate-y-1.5 hover:shadow-card-hover"
                          :class="[pkg.destacado ? 'md:-translate-y-2' : '', selectedPackage === pkg.id ? 'bg-detalle/10 border-detalle ring-2 ring-detalle shadow-card-hover' : 'bg-bg border-principal hover:border-acento hover:bg-acento/[0.03]']"
-                         data-aos="fade-up" :data-aos-delay="i * 100">
+                         :data-fx="['fan-l', 'fan-c', 'fan-r'][i]" :style="'--d:' + (i === 1 ? 0 : 140) + 'ms'">
                       <span x-show="pkg.destacado" x-text="content.packages.recommendedLabel" class="absolute -top-4 left-1/2 -translate-x-1/2 bg-detalle text-texto text-xs font-bold uppercase tracking-wide px-4 py-1.5 rounded-full shadow-button"></span>
-                      <div class="p-6">
-                        <h5 class="text-lg font-bold text-principal" x-text="pkg.nombre"></h5>
-                        <p class="text-sm text-texto/70" x-text="pkg.resumen"></p>
-                        <ul class="flex flex-col gap-3 my-4 flex-grow">
+                      <div class="flex flex-col flex-1 p-6 md:p-7">
+                        <h5 class="text-xl font-extrabold tracking-[-0.01em] text-principal" x-text="pkg.nombre"></h5>
+                        <p class="mt-1 text-[15px] leading-relaxed text-texto/75" x-text="pkg.resumen"></p>
+                        <ul class="flex flex-col gap-3 my-5 flex-grow">
                           <template x-for="f in pkg.caracteristicas" :key="f">
                             <li class="flex gap-2 text-sm text-texto">
                               <span x-html="checkIcon()"></span>
@@ -295,10 +359,13 @@
                             </li>
                           </template>
                         </ul>
-                        <p class="text-xs text-texto/50 mb-4" x-text="pkg.precioNota"></p>
-                        <span class="inline-flex items-center justify-center rounded-full font-semibold px-6 py-3 text-sm border-2 transition-all duration-[0.4s]"
-                              :class="selectedPackage === pkg.id ? 'bg-detalle border-detalle text-texto shadow-button' : 'bg-principal border-principal text-white'"
-                              x-text="selectedPackage === pkg.id ? 'Selected ✓' : pkg.ctaTexto"></span>
+                        <p class="text-xs text-texto/70 mb-4" x-text="pkg.precioNota"></p>
+                        <!-- mt-auto + w-full: the three CTAs line up at the bottom whatever the list length. -->
+                        <span class="mt-auto w-full inline-flex items-center justify-center gap-2 rounded-full font-bold px-6 py-3 text-[15px] border-2 transition-[background-color,border-color,color,box-shadow] duration-300"
+                              :class="selectedPackage === pkg.id ? 'bg-detalle border-detalle text-texto shadow-button' : 'bg-transparent border-principal text-principal'">
+                          <svg x-show="selectedPackage === pkg.id" class="pkg-check w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                          <span x-text="selectedPackage === pkg.id ? 'Selected' : pkg.ctaTexto"></span>
+                        </span>
                       </div>
                     </div>
                   </template>
@@ -310,7 +377,7 @@
                   <p class="text-sm text-texto/70" x-text="continueCtaText"></p>
                   <button type="button" @click="goToContact()"
                           x-text="content.packages.continueCtaTexto"
-                          class="btn rounded-full border-2 border-principal bg-principal text-white cursor-pointer transition-all duration-[0.4s] ease-premium hover:bg-acento hover:border-acento hover:scale-[1.04] active:scale-[0.99]"></button>
+                          class="btn rounded-full border-2 border-principal bg-principal text-white cursor-pointer transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:bg-acento hover:border-acento hover:scale-[1.04] active:scale-[0.97]"></button>
                 </div>
               </div>
             </div>
@@ -322,35 +389,38 @@
     <!-- ==========================================================================
          THE TANGO PARA LA VIDA METHOD — six-stage structure, depth adapts per level
          ========================================================================== -->
-    <section class="py-20 md:py-28" id="how-it-works">
+    <!-- White band: breaks the long run of grey sections so the Method reads as its own chapter. -->
+    <section class="py-20 md:py-28 bg-surface border-y border-principal/10" id="how-it-works">
       <div class="max-w-[1180px] mx-auto px-6">
         <template x-if="content">
-          <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-6">
-            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-principal" x-text="content.method.titulo"></h2>
-            <p class="mt-4 text-lg font-medium text-secundario" x-text="content.method.tagline"></p>
-            <p class="mt-4 text-texto/70" x-text="content.method.subtitulo"></p>
+          <div class="max-w-2xl mx-auto text-center mb-6">
+            <!-- wipe: the title is drawn left to right, like a stroke across the floor -->
+            <h2 data-fx="wipe" class="text-[clamp(2rem,1.3rem+2.4vw,3.25rem)] leading-[1.08] font-extrabold tracking-[-0.025em] text-principal" x-text="content.method.titulo"></h2>
+            <p data-fx="haze" style="--d:700ms" class="mt-4 text-lg font-medium text-secundario-ink" x-text="content.method.tagline"></p>
+            <p data-fx="haze" style="--d:900ms" class="mt-4 text-texto/70" x-text="content.method.subtitulo"></p>
           </div>
         </template>
 
         <template x-if="content">
-          <div data-aos="fade-up" data-aos-delay="100" class="max-w-2xl mx-auto text-center mb-14">
-            <span class="badge badge-outline border-2 border-secundario bg-secundario/10 text-secundario font-semibold py-3 px-4"
+          <div data-fx="pop" style="--d:150ms" data-swap class="max-w-2xl mx-auto text-center mb-14">
+            <span class="badge badge-outline border-2 border-secundario bg-secundario/10 text-secundario-ink font-semibold py-3 px-4"
                   x-text="content.programs.items[selectedLevel].nivelCorto + ': ' + content.programs.items[selectedLevel].nombre"></span>
             <p class="mt-4 text-sm text-texto/70" x-text="content.programs.items[selectedLevel].metodoNota"></p>
           </div>
         </template>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Stages turn in like partners: the left column swings in from the left, the right from the right, the middle rises. -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" style="perspective: 1400px">
           <template x-for="(etapa, i) in (content ? content.method.etapas : [])" :key="etapa.numero">
-            <div class="rounded-md border-[1.5px] border-principal bg-surface p-8 transition-all duration-[0.4s] ease-premium hover:-translate-y-1.5 hover:border-acento hover:shadow-card-hover hover:bg-acento/[0.03]" data-aos="fade-up" :data-aos-delay="i * 80">
+            <div class="rounded-md border-[1.5px] border-principal bg-bg p-8 transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:-translate-y-1.5 hover:border-acento hover:shadow-card-hover hover:bg-surface" :data-fx="i % 3 === 0 ? 'flip-l' : (i % 3 === 1 ? 'rise' : 'flip-r')" :style="'--i:' + i">
               <div class="flex items-center gap-3 mb-3">
                 <span class="text-2xl font-extrabold text-detalle" x-text="etapa.numero"></span>
                 <h3 class="text-lg font-semibold text-principal" x-text="etapa.nombre"></h3>
               </div>
-              <p class="text-sm text-texto/70 mb-4" x-text="etapa.objetivo"></p>
+              <p class="text-[15px] leading-relaxed text-texto/75 mb-4" x-text="etapa.objetivo"></p>
               <ul class="flex flex-wrap gap-1.5 mb-4">
                 <template x-for="a in etapa.actividades" :key="a">
-                  <li class="badge badge-ghost text-xs text-secundario bg-secundario/10 border-none" x-text="a"></li>
+                  <li class="badge badge-ghost text-xs text-secundario-ink bg-secundario/10 border-none" x-text="a"></li>
                 </template>
               </ul>
               <p class="text-sm italic text-principal/80 border-t border-principal/15 pt-3" x-text="'“' + etapa.pregunta + '”'"></p>
@@ -360,8 +430,12 @@
 
         <template x-if="content">
           <div class="flex justify-center mt-14">
-            <a href="#contact" x-text="content.method.ctaTexto"
-               class="btn rounded-full border-2 border-principal bg-principal text-white cursor-pointer transition-all duration-[0.4s] ease-premium hover:bg-acento hover:border-acento hover:scale-[1.04] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle"></a>
+            <!-- Leads to booking, so it gets the gold primary treatment. -->
+            <a href="#contact" data-fx="rise"
+               class="btn btn-lg rounded-full border-2 border-detalle bg-detalle text-texto font-bold shadow-button cursor-pointer transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:scale-[1.04] hover:shadow-[0_12px_28px_rgba(246,180,14,0.4)] active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-principal">
+              <span x-text="content.method.ctaTexto"></span>
+              <svg class="cta-arrow w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
           </div>
         </template>
       </div>
@@ -373,27 +447,28 @@
     <section class="py-20 md:py-28" id="testimonials">
       <div class="max-w-[1180px] mx-auto px-6">
         <template x-if="content">
-          <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-14">
-            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-principal" x-text="content.testimonials.titulo"></h2>
-            <p class="mt-4 text-lg text-texto/70" x-text="content.testimonials.subtitulo"></p>
+          <div class="max-w-2xl mx-auto text-center mb-14">
+            <h2 data-fx="haze" class="text-[clamp(2rem,1.3rem+2.4vw,3.25rem)] leading-[1.08] font-extrabold tracking-[-0.025em] text-principal" x-text="content.testimonials.titulo"></h2>
+            <p data-fx="haze" style="--d:250ms" class="mt-5 text-lg leading-relaxed text-texto/75" x-text="content.testimonials.subtitulo"></p>
           </div>
         </template>
 
         <template x-if="content">
-          <div class="relative max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100"
+          <div class="relative max-w-2xl mx-auto" data-fx="settle" style="--d:200ms"
                @mouseenter="testimonialsPaused = true" @mouseleave="testimonialsPaused = false"
                @focusin="testimonialsPaused = true" @focusout="testimonialsPaused = false">
 
             <div class="overflow-hidden rounded-md">
               <div class="flex transition-transform duration-700 ease-premium" :style="'transform: translateX(-' + (testimonialIndex * 100) + '%)'">
                 <template x-for="(item, i) in content.testimonials.items" :key="i">
-                  <div class="w-full flex-shrink-0 px-1">
+                  <!-- inactive slides fade and soften while the track slides, so the hand-off reads as one move -->
+                  <div class="w-full flex-shrink-0 px-1 transition-[opacity,filter] duration-700 ease-premium" :class="testimonialIndex === i ? 'opacity-100' : 'opacity-0 blur-[2px]'">
                     <div class="rounded-md border-[1.5px] border-principal bg-surface p-8 md:p-10 shadow-card flex flex-col items-center text-center">
                       <svg viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-detalle mb-4"><path d="M7.5 6C4.5 6 2 8.5 2 11.5S4.5 17 7.5 17c.3 0 .6 0 .9-.1C7.6 19 5.9 20.4 4 21l1 2c4-1.5 6.5-5 6.5-9.5C11.5 9 9.7 6 7.5 6zm11 0c-3 0-5.5 2.5-5.5 5.5S15.5 17 18.5 17c.3 0 .6 0 .9-.1-.8 2.1-2.5 3.5-4.4 4.1l1 2c4-1.5 6.5-5 6.5-9.5 0-4-1.8-7-4-7z"/></svg>
                       <p class="text-lg text-texto/80" x-text="item.texto"></p>
                       <div class="mt-6 pt-6 border-t border-principal/15 w-full">
                         <p class="font-semibold text-principal" x-text="item.nombre"></p>
-                        <p class="text-sm text-texto/60" x-text="item.cargo"></p>
+                        <p class="text-sm text-texto/70" x-text="item.cargo"></p>
                       </div>
                     </div>
                   </div>
@@ -402,19 +477,29 @@
             </div>
 
             <button type="button" @click="prevTestimonial()"
-                    class="btn btn-circle btn-sm absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 md:-translate-x-12 border-2 border-principal bg-surface text-principal shadow-card cursor-pointer transition-all duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:scale-110 active:scale-[0.97]"
+                    class="btn btn-circle btn-sm absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 md:-translate-x-12 border-2 border-principal bg-surface text-principal shadow-card cursor-pointer transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:scale-110 active:scale-[0.97]"
                     aria-label="Previous testimonial">‹</button>
             <button type="button" @click="nextTestimonial()"
-                    class="btn btn-circle btn-sm absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 md:translate-x-12 border-2 border-principal bg-surface text-principal shadow-card cursor-pointer transition-all duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:scale-110 active:scale-[0.97]"
+                    class="btn btn-circle btn-sm absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 md:translate-x-12 border-2 border-principal bg-surface text-principal shadow-card cursor-pointer transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:border-acento hover:text-acento hover:scale-110 active:scale-[0.97]"
                     aria-label="Next testimonial">›</button>
 
-            <div class="flex justify-center gap-2 mt-8">
+            <!-- Dots are 24px-tall hit areas; the play/pause button gives control over the auto-rotation
+                 (WCAG 2.2.2). Rotation also stops on hover, on focus and when reduced motion is requested. -->
+            <div class="flex items-center justify-center mt-6">
               <template x-for="(item, i) in content.testimonials.items" :key="i">
                 <button type="button" @click="testimonialIndex = i"
-                        class="h-2.5 rounded-full transition-all duration-[0.4s] cursor-pointer"
-                        :class="testimonialIndex === i ? 'bg-detalle w-6' : 'bg-principal/20 w-2.5 hover:bg-principal/40'"
-                        :aria-label="'Go to testimonial ' + (i + 1)" :aria-current="testimonialIndex === i"></button>
+                        class="group flex h-6 items-center justify-center rounded-full px-2 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-detalle"
+                        :aria-label="'Go to testimonial ' + (i + 1)" :aria-current="testimonialIndex === i">
+                  <span class="block h-2.5 rounded-full transition-[width,background-color] duration-[0.4s]"
+                        :class="testimonialIndex === i ? 'bg-detalle w-6' : 'bg-principal/20 w-2.5 group-hover:bg-principal/40'"></span>
+                </button>
               </template>
+              <button type="button" @click="testimonialsUserPaused = !testimonialsUserPaused"
+                      :aria-label="testimonialsUserPaused ? 'Play testimonial rotation' : 'Pause testimonial rotation'"
+                      class="ml-3 flex h-8 w-8 items-center justify-center rounded-full border-2 border-principal/25 text-principal cursor-pointer transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:border-acento hover:text-acento active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle">
+                <svg x-show="!testimonialsUserPaused" viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+                <svg x-show="testimonialsUserPaused" style="display:none" viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+              </button>
             </div>
           </div>
         </template>
@@ -427,38 +512,38 @@
     <section class="py-20 md:py-28" id="about">
       <div class="max-w-[1180px] mx-auto px-6">
         <template x-if="content">
-          <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-10">
-            <p class="inline-block text-sm font-semibold uppercase tracking-wider text-secundario mb-4" x-text="content.about.eyebrow"></p>
-            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-principal" x-text="content.about.titulo"></h2>
-            <p class="mt-6 text-lg text-texto/70" x-text="content.about.parrafo1"></p>
+          <div class="max-w-2xl mx-auto text-center mb-10">
+            <h2 data-text="glide" class="text-[clamp(2rem,1.3rem+2.4vw,3.25rem)] leading-[1.08] font-extrabold tracking-[-0.025em] text-principal" x-text="content.about.titulo"></h2>
+            <p data-fx="haze" style="--d:500ms" class="mt-6 text-lg text-texto/70" x-text="content.about.parrafo1"></p>
           </div>
         </template>
 
         <template x-if="content">
-          <div data-aos="fade-up" data-aos-delay="100" class="max-w-3xl mx-auto rounded-lg bg-surface border-[1.5px] border-principal p-8 md:p-10 mb-14">
-            <p class="text-xl md:text-2xl leading-relaxed text-principal font-medium text-center" x-text="content.about.parrafo2"></p>
+          <div data-fx="settle" class="max-w-3xl mx-auto rounded-lg bg-surface border-[1.5px] border-principal p-8 md:p-10 mb-14">
+            <!-- scrub: the statement lights up word by word as it scrolls through the viewport -->
+            <p data-text="scrub" class="text-xl md:text-2xl leading-relaxed text-principal font-medium text-center" x-text="content.about.parrafo2"></p>
           </div>
         </template>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-16">
           <template x-for="(pilar, i) in (content ? content.about.pilares : [])" :key="pilar.titulo">
-            <div class="rounded-md border-[1.5px] border-principal bg-surface p-8 text-center transition-all duration-[0.4s] ease-premium hover:-translate-y-1.5 hover:border-acento hover:shadow-card-hover hover:bg-acento/[0.03]" data-aos="fade-up" :data-aos-delay="i * 100">
+            <div class="rounded-md border-[1.5px] border-principal bg-surface p-8 text-center transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:-translate-y-1.5 hover:border-acento hover:shadow-card-hover hover:bg-acento/[0.03]" data-fx="settle" :style="'--i:' + i">
               <h3 class="text-lg font-semibold text-principal" x-text="pilar.titulo"></h3>
-              <p class="mt-2 text-sm text-texto/70" x-text="pilar.descripcion"></p>
+              <p class="mt-2 text-[15px] leading-relaxed text-texto/75" x-text="pilar.descripcion"></p>
             </div>
           </template>
         </div>
 
         <template x-if="content">
-          <div class="max-w-3xl mx-auto text-center mb-10" data-aos="fade-up">
-            <h3 class="text-2xl md:text-3xl font-extrabold tracking-tight text-principal" x-text="content.about.facilitadores.titulo"></h3>
-            <p class="mt-4 text-texto/70" x-text="content.about.facilitadores.intro"></p>
+          <div class="max-w-3xl mx-auto text-center mb-10">
+            <h3 data-text="mask" class="text-[clamp(1.6rem,1.2rem+1.4vw,2.25rem)] leading-[1.12] font-extrabold tracking-[-0.02em] text-principal" x-text="content.about.facilitadores.titulo"></h3>
+            <p data-fx="haze" style="--d:300ms" class="mt-4 text-texto/70" x-text="content.about.facilitadores.intro"></p>
           </div>
         </template>
 
         <div class="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
           <template x-for="(f, i) in (content ? content.about.facilitadores.items : [])" :key="f.nombre">
-            <div class="rounded-md border-[1.5px] border-principal bg-surface p-8 transition-all duration-[0.4s] ease-premium hover:-translate-y-1.5 hover:border-acento hover:shadow-card-hover hover:bg-acento/[0.03]" data-aos="fade-up" :data-aos-delay="i * 100">
+            <div class="rounded-md border-[1.5px] border-principal bg-surface p-8 transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:-translate-y-1.5 hover:border-acento hover:shadow-card-hover hover:bg-acento/[0.03]" :data-fx="i % 2 ? 'follow' : 'lead'">
               <div class="flex items-center gap-4 mb-4">
                 <div class="avatar placeholder">
                   <div class="bg-principal text-white rounded-full w-14">
@@ -467,10 +552,10 @@
                 </div>
                 <div>
                   <p class="font-semibold text-principal" x-text="f.nombre"></p>
-                  <p class="text-sm text-texto/60" x-text="f.cargo"></p>
+                  <p class="text-sm text-texto/70" x-text="f.cargo"></p>
                 </div>
               </div>
-              <p class="text-sm text-texto/70" x-text="f.bio"></p>
+              <p class="text-[15px] leading-relaxed text-texto/75" x-text="f.bio"></p>
             </div>
           </template>
         </div>
@@ -483,9 +568,10 @@
     <section class="py-20 md:py-28" id="faq">
       <div class="max-w-[1180px] mx-auto px-6">
         <template x-if="content">
-          <div data-aos="fade-up" class="max-w-2xl mx-auto text-center mb-14">
-            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-principal" x-text="content.faq.titulo"></h2>
-            <p class="mt-4 text-lg text-texto/70" x-text="content.faq.subtitulo"></p>
+          <div class="max-w-2xl mx-auto text-center mb-14">
+            <!-- pairs: neighbouring letters enter from opposite sides, lead and follow -->
+            <h2 data-text="pairs" class="text-[clamp(2rem,1.3rem+2.4vw,3.25rem)] leading-[1.08] font-extrabold tracking-[-0.025em] text-principal" x-text="content.faq.titulo"></h2>
+            <p data-fx="haze" style="--d:450ms" class="mt-5 text-lg leading-relaxed text-texto/75" x-text="content.faq.subtitulo"></p>
           </div>
         </template>
 
@@ -493,7 +579,7 @@
           <template x-for="(item, i) in (content ? content.faq.items : [])" :key="item.pregunta">
             <div class="collapse collapse-arrow bg-surface border-[1.5px] border-principal rounded-md shadow-card transition-colors duration-[0.4s]"
                  :class="openFaqIndex === i ? 'collapse-open border-acento' : 'collapse-close'"
-                 data-aos="fade-up" :data-aos-delay="i * 60">
+                 :data-fx="i % 2 ? 'follow' : 'lead'" :style="'--i:' + i">
               <div class="collapse-title text-lg font-semibold text-principal cursor-pointer select-none"
                    tabindex="0" role="button" :aria-expanded="openFaqIndex === i"
                    @click="openFaqIndex = openFaqIndex === i ? null : i"
@@ -512,14 +598,18 @@
     <!-- ==========================================================================
          FINAL CTA — solid brand blue, no gradient; a thin gold rule stands in for one.
          ========================================================================== -->
-    <section class="py-24 md:py-32 text-center bg-principal border-y-4 border-detalle">
+    <!-- iris: the blue band opens from the bottom edge like a spotlight on the stage -->
+    <section data-fx="iris" class="py-24 md:py-32 text-center bg-principal border-y-4 border-detalle">
       <template x-if="content">
-        <div data-aos="zoom-in" class="max-w-xl mx-auto px-6">
-          <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white" x-text="content.finalCta.titulo"></h2>
-          <p class="mt-4 text-lg text-header/90" x-text="content.finalCta.subtitulo"></p>
+        <div class="max-w-xl mx-auto px-6">
+          <h2 data-text="mask" style="--d:400ms" class="text-[clamp(2rem,1.3rem+2.4vw,3.25rem)] leading-[1.08] font-extrabold tracking-[-0.025em] text-white" x-text="content.finalCta.titulo"></h2>
+          <p data-fx="haze" style="--d:950ms" class="mt-4 text-lg text-header/90" x-text="content.finalCta.subtitulo"></p>
           <!-- TODO: replace href with the real booking/calendar link (e.g. Calendly) -->
-          <a href="#contact" x-text="content.finalCta.ctaTexto"
-             class="btn btn-lg mt-10 rounded-full border-2 border-detalle bg-detalle text-texto shadow-button cursor-pointer transition-all duration-[0.4s] ease-premium hover:scale-[1.04] hover:shadow-[0_12px_28px_rgba(246,180,14,0.4)] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"></a>
+          <a href="#contact" data-fx="pop" style="--d:1000ms"
+             class="cta-ring btn btn-lg mt-10 rounded-full border-2 border-detalle bg-detalle text-texto font-bold shadow-button cursor-pointer transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:scale-[1.04] hover:shadow-[0_12px_28px_rgba(246,180,14,0.4)] active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+            <span x-text="content.finalCta.ctaTexto"></span>
+            <svg class="cta-arrow w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
         </div>
       </template>
     </section>
@@ -530,16 +620,23 @@
     <section class="py-20 md:py-28" id="contact">
       <div class="max-w-[1180px] mx-auto px-6 grid md:grid-cols-[0.9fr_1.4fr] gap-12 items-start">
         <template x-if="content">
-          <div data-aos="fade-right" class="text-left">
-            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-principal" x-text="content.formulario.titulo"></h2>
-            <p class="mt-4 text-lg text-texto/70" x-text="content.formulario.subtitulo"></p>
-            <p x-show="currentPackage" x-text="'Booking: ' + content.programs.items[selectedLevel].nombre + ', ' + currentPackage.nombre + ' package'" class="mt-6 inline-flex items-center gap-2 rounded-full border-2 border-secundario bg-secundario/10 text-secundario text-sm font-semibold px-4 py-2"></p>
+          <!-- Contact converges: the copy leads in from the left, the form follows from the right. -->
+          <div data-fx="lead" class="text-left">
+            <h2 class="text-[clamp(2rem,1.3rem+2.4vw,3.25rem)] leading-[1.08] font-extrabold tracking-[-0.025em] text-principal" x-text="content.formulario.titulo"></h2>
+            <p class="mt-5 text-lg leading-relaxed text-texto/75" x-text="content.formulario.subtitulo"></p>
+            <p x-show="currentPackage" x-text="'Booking: ' + content.programs.items[selectedLevel].nombre + ', ' + currentPackage.nombre + ' package'" class="mt-6 inline-flex items-center gap-2 rounded-full border-2 border-secundario bg-secundario/10 text-secundario-ink text-sm font-semibold px-4 py-2"></p>
+            <!-- A second route for people who'd rather write directly. -->
+            <p class="mt-8 text-[15px] text-texto/75">
+              <span x-text="content.formulario.emailAlternativa"></span>
+              <a :href="'mailto:' + content.footer.contacto.email" x-text="content.footer.contacto.email"
+                 class="font-bold text-principal underline decoration-detalle decoration-2 underline-offset-4 transition-colors duration-300 hover:text-acento focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-detalle rounded-sm"></a>
+            </p>
           </div>
         </template>
 
         <template x-if="content">
           <!-- TODO: replace action with the real Formspree/Getform endpoint -->
-          <form data-aos="fade-left" class="grid grid-cols-1 sm:grid-cols-2 gap-5 bg-surface border-[1.5px] border-principal p-8 rounded-lg shadow-card"
+          <form data-fx="follow" class="grid grid-cols-1 sm:grid-cols-2 gap-5 bg-surface border-[1.5px] border-principal p-8 rounded-lg shadow-card"
                 x-ref="contactForm" action="https://formspree.io/f/REPLACE_ME" method="POST" novalidate
                 @submit.prevent="submitForm()">
             <!-- Level/Package are visible, editable selects, kept in sync with the
@@ -549,17 +646,17 @@
             <input type="hidden" name="level" :value="content.programs.items[selectedLevel].nombre" />
             <input type="hidden" name="package" :value="currentPackage ? currentPackage.nombre : ''" />
 
-            <div class="flex flex-col gap-1.5">
+            <div data-fx="cascade" style="--i:0;--d:350ms" class="flex flex-col gap-1.5">
               <label for="field-name" class="text-sm font-semibold text-principal" x-text="content.formulario.labelNombre"></label>
               <input type="text" id="field-name" name="name" required x-model="form.name" :placeholder="content.formulario.placeholderNombre" autocomplete="name"
                      class="input input-bordered w-full rounded-sm border-2 border-principal/25 bg-surface text-texto transition-colors duration-[0.4s] focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10" />
             </div>
-            <div class="flex flex-col gap-1.5">
+            <div data-fx="cascade" style="--i:1;--d:350ms" class="flex flex-col gap-1.5">
               <label for="field-email" class="text-sm font-semibold text-principal" x-text="content.formulario.labelEmail"></label>
               <input type="email" id="field-email" name="email" required x-model="form.email" :placeholder="content.formulario.placeholderEmail" autocomplete="email"
                      class="input input-bordered w-full rounded-sm border-2 border-principal/25 bg-surface text-texto transition-colors duration-[0.4s] focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10" />
             </div>
-            <div class="flex flex-col gap-1.5">
+            <div data-fx="cascade" style="--i:2;--d:350ms" class="flex flex-col gap-1.5">
               <label for="field-level" class="text-sm font-semibold text-principal" x-text="content.formulario.labelNivel"></label>
               <select id="field-level" x-model.number="selectedLevel"
                       class="select select-bordered w-full rounded-sm border-2 border-principal/25 bg-surface text-texto cursor-pointer transition-colors duration-[0.4s] focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10">
@@ -568,7 +665,7 @@
                 </template>
               </select>
             </div>
-            <div class="flex flex-col gap-1.5">
+            <div data-fx="cascade" style="--i:3;--d:350ms" class="flex flex-col gap-1.5">
               <label for="field-package-select" class="text-sm font-semibold text-principal" x-text="content.formulario.labelPaquete"></label>
               <select id="field-package-select" x-model="selectedPackage" @change="form.message = ''"
                       class="select select-bordered w-full rounded-sm border-2 border-principal/25 bg-surface text-texto cursor-pointer transition-colors duration-[0.4s] focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10">
@@ -577,25 +674,29 @@
                 </template>
               </select>
             </div>
-            <div class="flex flex-col gap-1.5 sm:col-span-2">
+            <div data-fx="cascade" style="--i:4;--d:350ms" class="flex flex-col gap-1.5 sm:col-span-2">
               <label for="field-phone" class="text-sm font-semibold text-principal" x-text="content.formulario.labelTelefono"></label>
               <!-- Free text, no input mask/pattern — any format is accepted. -->
               <input type="tel" id="field-phone" name="phone" x-model="form.phone" :placeholder="content.formulario.placeholderTelefono" autocomplete="tel"
                      class="input input-bordered w-full rounded-sm border-2 border-principal/25 bg-surface text-texto transition-colors duration-[0.4s] focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10" />
             </div>
-            <div class="flex flex-col gap-1.5 sm:col-span-2">
+            <div data-fx="cascade" style="--i:5;--d:350ms" class="flex flex-col gap-1.5 sm:col-span-2">
               <label for="field-message" class="text-sm font-semibold text-principal" x-text="content.formulario.labelMensaje"></label>
               <textarea id="field-message" name="message" rows="4" required x-model="form.message" :placeholder="content.formulario.placeholderMensaje"
                         class="textarea textarea-bordered w-full rounded-sm border-2 border-principal/25 bg-surface text-texto transition-colors duration-[0.4s] focus:outline-none focus:border-secundario focus:ring-4 focus:ring-secundario/10"></textarea>
             </div>
-            <div class="sm:col-span-2 mt-1">
+            <div data-fx="pop" style="--d:900ms" class="sm:col-span-2 mt-1">
               <button type="submit" :disabled="formStatus === 'sending'"
-                      class="btn btn-lg w-full rounded-full border-2 border-detalle bg-detalle text-texto shadow-button cursor-pointer transition-all duration-[0.4s] ease-premium hover:scale-[1.02] hover:shadow-[0_12px_28px_rgba(246,180,14,0.4)] active:scale-[0.99] disabled:opacity-60 disabled:hover:scale-100">
+                      class="btn btn-lg w-full rounded-full border-2 border-detalle bg-detalle text-texto shadow-button cursor-pointer transition-[transform,box-shadow,background-color,border-color,color,opacity] duration-[0.4s] ease-premium hover:scale-[1.02] hover:shadow-[0_12px_28px_rgba(246,180,14,0.4)] active:scale-[0.97] disabled:opacity-60 disabled:hover:scale-100">
                 <span x-text="formStatus === 'sending' ? content.formulario.botonTextoEnviando : content.formulario.botonTexto"></span>
               </button>
             </div>
-            <p x-show="formStatus === 'done'" x-text="content.formulario.confirmacion" class="sm:col-span-2 text-center font-semibold text-principal bg-secundario/10 border-2 border-secundario p-4 rounded-sm"></p>
-            <p x-show="formStatus === 'error'" class="sm:col-span-2 text-center font-semibold text-acento bg-acento/10 border-2 border-acento p-4 rounded-sm">Something went wrong sending your message. Please try again or email us directly.</p>
+            <!-- Screen readers hear the result through this persistent live region (visually hidden, so it
+                 takes no grid cell); the visible messages below are aria-hidden to avoid a double read. -->
+            <p class="sr-only" role="status" aria-live="polite"
+               x-text="formStatus === 'done' ? content.formulario.confirmacion : (formStatus === 'error' ? 'Something went wrong sending your message. Please try again or email us directly.' : '')"></p>
+            <p aria-hidden="true" x-show="formStatus === 'done'" x-text="content.formulario.confirmacion" class="status-in sm:col-span-2 text-center font-semibold text-principal bg-secundario/10 border-2 border-secundario p-4 rounded-sm"></p>
+            <p aria-hidden="true" x-show="formStatus === 'error'" class="status-in sm:col-span-2 text-center font-semibold text-acento bg-acento/10 border-2 border-acento p-4 rounded-sm">Something went wrong sending your message. Please try again or email us directly.</p>
           </form>
         </template>
       </div>
@@ -609,12 +710,12 @@
   <footer class="bg-principal text-white pt-20 pb-6">
     <template x-if="content">
       <div class="max-w-[1180px] mx-auto px-6 grid grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1fr] gap-8 pb-10">
-        <div class="col-span-2 md:col-span-1">
+        <div data-fx="rise" style="--i:0" class="col-span-2 md:col-span-1">
           <img src="assets/logo.png" :alt="content.header.logoAlt" class="h-7 mb-4 brightness-0 invert" />
           <p class="text-sm text-header/70 max-w-xs" x-text="content.footer.tagline"></p>
         </div>
 
-        <div>
+        <div data-fx="rise" style="--i:1">
           <h3 class="text-sm font-semibold text-detalle mb-3" x-text="content.footer.columnaPrograms"></h3>
           <nav class="flex flex-col gap-2.5">
             <template x-for="p in content.programs.items" :key="p.nombre">
@@ -623,7 +724,7 @@
           </nav>
         </div>
 
-        <div>
+        <div data-fx="rise" style="--i:2">
           <h3 class="text-sm font-semibold text-detalle mb-3" x-text="content.footer.columnaCompany"></h3>
           <nav class="flex flex-col gap-2.5">
             <template x-for="item in content.header.nav" :key="item.href">
@@ -632,7 +733,7 @@
           </nav>
         </div>
 
-        <div>
+        <div data-fx="rise" style="--i:3">
           <h3 class="text-sm font-semibold text-detalle mb-3" x-text="content.footer.contacto.emailLabel"></h3>
           <!-- TODO: confirm real contact email -->
           <a :href="'mailto:' + content.footer.contacto.email" x-text="content.footer.contacto.email" class="block mb-4 text-sm text-white/80 hover:text-detalle transition-colors duration-[0.4s]"></a>
@@ -645,7 +746,8 @@
 
     <template x-if="content">
       <div class="max-w-[1180px] mx-auto px-6 pt-6 border-t border-white/10 text-xs text-white/60">
-        <p><span x-text="new Date().getFullYear()"></span> <span x-text="content.footer.copyright"></span></p>
+        <p>&copy; <span x-text="new Date().getFullYear()"></span> <span x-text="content.footer.copyright"></span></p>
+        <p class="mt-1">Website by <a href="https://www.waterwerk-websolutions.nl" target="_blank" rel="noopener" class="underline underline-offset-2 hover:text-detalle transition-colors duration-[0.4s]">Waterwerk Websolutions</a></p>
       </div>
     </template>
   </footer>

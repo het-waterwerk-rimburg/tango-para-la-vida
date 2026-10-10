@@ -1,9 +1,11 @@
 /**
  * Tango Para La Vida — landing page behavior.
  * Alpine.js owns all interactivity (mobile menu, level selector, package
- * selector, FAQ accordion, contact form); AOS owns scroll-reveal animation
- * via data-aos attributes in index.html. This file only registers the
- * Alpine component and the raw icon markup it renders with x-html.
+ * selector, FAQ accordion, contact form); motion.js/motion.css own every
+ * scroll reveal and text animation via data-fx / data-text attributes in
+ * index.html. This file only registers the Alpine component, the raw icon
+ * markup it renders with x-html, and hands off to the motion engine once
+ * the content has rendered.
  */
 
 const ICONS = {
@@ -29,7 +31,8 @@ document.addEventListener('alpine:init', () => {
     takeawaySlide: 0, // current slide in the "What participants take away" slider
     openFaqIndex: null,
     testimonialIndex: 0,
-    testimonialsPaused: false,
+    testimonialsPaused: false, // transient: hover / keyboard focus inside the carousel
+    testimonialsUserPaused: false, // deliberate: the play/pause button (starts paused under reduced motion)
     form: { name: '', email: '', phone: '', message: '' },
     formStatus: 'idle', // idle | sending | done | error
 
@@ -53,22 +56,24 @@ document.addEventListener('alpine:init', () => {
         this.selectedPackage = this.defaultPackageIdForLevel(this.selectedLevel);
         this.packageJustSelected = false;
         this.takeawaySlide = 0;
+        // Soft crossfade of the level panel once Alpine has swapped its content.
+        this.$nextTick(() => { if (window.TangoMotion) window.TangoMotion.swap(); });
       });
 
       this.startTestimonialAutoplay();
 
+      // Content is rendered by Alpine, so the motion engine starts after it lands.
       await this.$nextTick();
-      if (window.AOS) {
-        window.AOS.init({ once: true, duration: 600, easing: 'ease-out-cubic', offset: 60 });
-      }
+      if (window.TangoMotion) window.TangoMotion.mount();
+      else document.documentElement.classList.add('fx-off'); // motion.js missing: never leave content hidden
     },
 
     startTestimonialAutoplay() {
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (prefersReducedMotion) return;
+      // Reduced motion: never auto-rotate unless the visitor presses play themselves.
+      this.testimonialsUserPaused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       setInterval(() => {
-        if (this.testimonialsPaused || !this.content) return;
+        if (this.testimonialsPaused || this.testimonialsUserPaused || document.hidden || !this.content) return;
         this.nextTestimonial();
       }, 5000);
     },
@@ -127,6 +132,14 @@ document.addEventListener('alpine:init', () => {
 
     goToContact() {
       document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+    },
+
+    // Hero level shortcuts: pick the level, then bring the level selector into view.
+    jumpToLevel(i) {
+      this.selectedLevel = i;
+      this.$nextTick(() => {
+        document.getElementById('programs').scrollIntoView({ behavior: 'smooth' });
+      });
     },
 
     async submitForm() {

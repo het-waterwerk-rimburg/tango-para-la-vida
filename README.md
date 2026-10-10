@@ -10,21 +10,24 @@ navegador). Stack:
   daisyUI.
 - **Alpine.js** — toda la interacción: carga de `content.json`, menú móvil, selector de
   niveles, selector de paquetes, acordeón de FAQ y el formulario de contacto.
-- **AOS (Animate On Scroll)** — todas las animaciones de aparición al hacer scroll, vía
-  atributos `data-aos` en el HTML.
+- **Motor de movimiento propio (`motion.css` + `motion.js`)** — todas las animaciones de
+  aparición al hacer scroll y las animaciones de texto (letras, palabras), vía atributos
+  `data-fx` y `data-text` en el HTML. Sin dependencias; reemplaza a AOS. Ver la sección
+  "Sistema de movimiento" de `CLAUDE.md` para el vocabulario completo.
 
 ## Estructura
 
 ```
 index.html      # Todo el markup, con directivas Alpine (x-data, x-for, x-text, x-show...)
-                 # y atributos data-aos para las animaciones
+                 # y atributos data-fx / data-text para las animaciones
 content.json    # TODOS los textos editables de la página (incluye programas y paquetes)
 script.js       # Registra el componente Alpine `site()`: fetch de content.json, estado
                  # (menú, nivel seleccionado, paquete seleccionado, FAQ abierta, formulario)
 assets/         # Logos (copiados desde ./logo/)
 ```
 
-No hay `styles.css`: todos los estilos son clases de Tailwind/daisyUI directamente en el HTML.
+Además, `motion.css` y `motion.js` contienen el sistema de movimiento (animaciones de aparición y
+de texto). Los estilos de layout siguen siendo clases de Tailwind/daisyUI directamente en el HTML.
 
 ## Cómo editar los textos
 
@@ -151,7 +154,7 @@ Luego abrí [http://localhost:8000](http://localhost:8000) en el navegador.
 npx serve .
 ```
 
-También necesitás conexión a internet, porque Tailwind, daisyUI, Alpine.js, AOS y la fuente
+También necesitás conexión a internet, porque Tailwind, daisyUI, Alpine.js y la fuente
 Manrope se cargan desde sus CDN.
 
 ## Responsive
