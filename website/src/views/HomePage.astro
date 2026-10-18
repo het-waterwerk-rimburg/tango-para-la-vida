@@ -1,0 +1,35 @@
+---
+/**
+ * Home page (one long page), in any language. Route files only choose the language.
+ * Sections in the order of web-info/estructura.md, copy from src/content/<language>.json.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Press from '../components/Press.astro';
+import Benefits from '../components/Benefits.astro';
+import Programs from '../components/Programs.astro';
+import Method from '../components/Method.astro';
+import About from '../components/About.astro';
+import Testimonials from '../components/Testimonials.astro';
+import Faq from '../components/Faq.astro';
+import Contact from '../components/Contact.astro';
+import type { Language } from '../i18n/languages';
+
+interface Props {
+  language: Language;
+}
+
+const { language } = Astro.props;
+---
+
+<BaseLayout language={language}>
+  <Hero language={language} />
+  <Press language={language} />
+  <Benefits language={language} />
+  <Programs language={language} />
+  <Method language={language} />
+  <About language={language} />
+  <Testimonials language={language} />
+  <Faq language={language} />
+  <Contact language={language} />
+</BaseLayout>

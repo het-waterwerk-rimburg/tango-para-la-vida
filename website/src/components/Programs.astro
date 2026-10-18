@@ -1,0 +1,307 @@
+---
+/**
+ * Programs and packages (#programs): one level selector (tabs), then for the chosen level
+ * its purpose, focus and takeaways (typographic, no slider) and its three packages.
+ * The level + package choice is shared with the rest of the page:
+ *  - stored in sessionStorage ("tplv-selection") and announced with the "tplv:selection" event,
+ *    so the contact form can pre-fill level and package;
+ *  - links with data-select-level="<level>" (hero index) choose a level;
+ *  - a "tplv:set-selection" event ({ level?, package? }) changes it from elsewhere (the form).
+ * Without JavaScript every level is shown, one after another.
+ * Copy: content/<language>.json → programs and packages. Prices pending: precioNota only.
+ */
+import { LANGUAGE_DETAILS, SECTION_IDS, type Language } from '../i18n/languages';
+import { getContent, levelId } from '../i18n/content';
+
+interface Props {
+  language: Language;
+}
+
+const { language } = Astro.props;
+const content = getContent(language);
+const programs = content.programs;
+const packages = content.packages;
+const home = LANGUAGE_DETAILS[language].home;
+
+const levels = programs.items.map((program) => ({ ...program, id: levelId(program) }));
+const defaultLevel = levels[0].id;
+const defaultPackage = levels[0].paquetes.find((pkg) => pkg.destacado)?.id ?? levels[0].paquetes[0].id;
+
+// Names used by the script to write the summary line ("You selected Normal for …").
+const names = {
+  levels: Object.fromEntries(levels.map((level) => [level.id, level.nombre])),
+  packages: Object.fromEntries(levels[0].paquetes.map((pkg) => [pkg.id, pkg.nombre])),
+};
+const summaryText = (levelKey: string, packageKey: string) =>
+  packages.continueCtaTemplate.replace('{{package}}', names.packages[packageKey]).replace('{{level}}', names.levels[levelKey]);
+
+const checkPath = 'M3.5 8.5 6.5 11.5 12.5 4.5';
+---
+
+<section
+  id={SECTION_IDS.programs}
+  aria-labelledby="programs-title"
+  class="section-y bg-bg-alt"
+  data-programs
+  data-default-level={defaultLevel}
+  data-default-package={defaultPackage}
+  data-template={packages.continueCtaTemplate}
+  data-names={JSON.stringify(names)}
+>
+  <div class="container-site">
+    <div class="max-w-[46rem]">
+      <h2 id="programs-title" class="text-h2">{programs.titulo}</h2>
+      <p class="mt-5 max-w-[56ch] text-lead text-texto-muted">{programs.subtitulo}</p>
+    </div>
+
+    <!-- Level selector: a segmented control with tab semantics. -->
+    <div
+      role="tablist"
+      aria-label={programs.selectorHint}
+      class="mt-10 grid max-w-[40rem] grid-cols-3 gap-1 rounded-[calc(var(--radius-card)+4px)] border border-line bg-surface p-1 shadow-rest"
+      data-level-tabs
+    >
+      {
+        levels.map((level) => (
+          <button
+            type="button"
+            role="tab"
+            id={`level-tab-${level.id}`}
+            aria-controls={`level-panel-${level.id}`}
+            aria-selected={level.id === defaultLevel ? 'true' : 'false'}
+            tabindex={level.id === defaultLevel ? 0 : -1}
+            data-level-tab={level.id}
+            class="flex min-h-14 min-w-0 flex-col items-center justify-center rounded-[var(--radius-card)] px-2 py-2 text-center text-principal transition-colors duration-200 hover:bg-principal/5 aria-selected:bg-principal aria-selected:text-white"
+          >
+            <span class="text-label font-semibold">{level.nivelCorto}</span>
+            <span class="mt-1 text-[0.8125rem] tabular-nums opacity-80">{level.duracion}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    {
+      levels.map((level) => (
+        <div
+          role="tabpanel"
+          id={`level-panel-${level.id}`}
+          aria-labelledby={`level-tab-${level.id}`}
+          data-level-panel={level.id}
+          hidden={level.id !== defaultLevel}
+          class="mt-12 focus-visible:outline-offset-8"
+          tabindex="0"
+        >
+          <!-- Program: what it is, what it works on, what people keep. -->
+          <div class="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
+            <div class="min-w-0">
+              <p class="text-small font-semibold tabular-nums text-secundario-ink">
+                {level.nivelCorto} · {level.duracion}
+              </p>
+              <h3 class="mt-2 text-h2">{level.nombre}</h3>
+              <p class="mt-2 text-body font-medium text-texto">{level.nivel.split(':').slice(1).join(':').trim()}</p>
+              <p class="mt-5 max-w-[60ch] text-texto-muted">{level.proposito}</p>
+
+              <p class="mt-8 text-small font-semibold text-texto">{programs.focusLabel}</p>
+              <ul class="mt-3 flex flex-wrap gap-2">
+                {level.focus.map((topic) => (
+                  <li class="rounded-full border border-line bg-surface px-3.5 py-1.5 text-small text-principal">{topic}</li>
+                ))}
+              </ul>
+
+              <div class="mt-8 max-w-[60ch] border-t border-line pt-5">
+                <p class="text-small font-semibold text-texto">{programs.metodoLabel}</p>
+                <p class="mt-2 text-small text-texto-muted">{level.metodoNota}</p>
+              </div>
+            </div>
+
+            <div class="min-w-0 rounded-[var(--radius-card)] border border-line bg-surface p-7 md:p-8 lg:self-start">
+              <p class="text-small font-semibold text-texto">{programs.resultadosLabel}</p>
+              <ul class="mt-4">
+                {level.resultados.map((result) => (
+                  <li class="flex gap-4 border-t border-line py-4 first:border-t-0 first:pt-2 last:pb-0">
+                    <span aria-hidden="true" class="mt-[0.8em] h-px w-5 shrink-0 bg-secundario" />
+                    <span class="text-lead font-medium text-principal">{result.texto}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <!-- Packages of this level. -->
+          <div class="mt-16 border-t border-line pt-12 lg:mt-20">
+            <div class="max-w-[46rem]">
+              <h3 class="text-h3">{packages.titulo}</h3>
+              <p class="mt-3 max-w-[60ch] text-texto-muted">{packages.subtitulo}</p>
+            </div>
+
+            <ul class="mt-8 grid gap-6 md:grid-cols-3">
+              {level.paquetes.map((pkg) => (
+                <li class="min-w-0">
+                  <article
+                    class="group flex h-full flex-col rounded-[var(--radius-card)] border-[1.5px] border-line bg-surface p-7 transition-[border-color,box-shadow] duration-200 data-[selected]:border-principal data-[selected]:shadow-hover"
+                    data-package-card={pkg.id}
+                    data-selected={pkg.id === defaultPackage ? '' : undefined}
+                  >
+                    <div class="flex min-h-7 items-center justify-between gap-3">
+                      <h4 class="text-h3 font-semibold text-principal">{pkg.nombre}</h4>
+                      {pkg.destacado && (
+                        <span class="rounded-full bg-crema px-3 py-1 text-[0.8125rem] font-semibold text-principal">
+                          {packages.recommendedLabel}
+                        </span>
+                      )}
+                    </div>
+                    <p class="mt-3 text-small text-texto-muted">{pkg.resumen}</p>
+
+                    <ul class="mt-6 grid gap-3 border-t border-line pt-6">
+                      {pkg.caracteristicas.map((feature) => (
+                        <li class="flex gap-3 text-small text-texto">
+                          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" class="mt-0.5 shrink-0 text-secundario-ink">
+                            <path d={checkPath} fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+                          </svg>
+                          <span class="tabular-nums">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <p class="mt-auto pt-8 text-small text-texto-muted">{pkg.precioNota}</p>
+                    <button
+                      type="button"
+                      data-package-choice={pkg.id}
+                      aria-pressed={pkg.id === defaultPackage ? 'true' : 'false'}
+                      class="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border-[1.5px] border-line-strong px-6 text-label font-semibold text-principal transition-colors duration-200 hover:border-principal active:scale-[0.98] aria-pressed:border-principal aria-pressed:bg-principal aria-pressed:text-white"
+                    >
+                      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" class="hidden group-data-[selected]:block">
+                        <path d={checkPath} fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                      {pkg.ctaTexto}
+                    </button>
+                  </article>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))
+    }
+
+    <!-- Summary of the choice and the way to booking (the gold action of this screen). -->
+    <div class="mt-10 flex flex-col gap-4 rounded-[var(--radius-card)] bg-principal p-6 text-crema sm:flex-row sm:items-center sm:justify-between md:px-8">
+      <p class="text-body" aria-live="polite" data-selection-summary>{summaryText(defaultLevel, defaultPackage)}</p>
+      <a
+        href={`${home}#${SECTION_IDS.contact}`}
+        class="group inline-flex min-h-12 shrink-0 items-center justify-center gap-2.5 self-start rounded-full bg-detalle px-6 text-label font-semibold text-texto transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--color-detalle)_88%,#000)] active:scale-[0.98] sm:self-auto"
+      >
+        {packages.continueCtaTexto}
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">
+          <path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <noscript>
+    <style>
+      [data-level-tabs] { display: none !important; }
+      [data-level-panel][hidden] { display: block !important; }
+    </style>
+  </noscript>
+</section>
+
+<script>
+  const STORAGE_KEY = 'tplv-selection';
+
+  const section = document.querySelector<HTMLElement>('[data-programs]');
+  if (section) {
+    const tabs = [...section.querySelectorAll<HTMLButtonElement>('[data-level-tab]')];
+    const panels = [...section.querySelectorAll<HTMLElement>('[data-level-panel]')];
+    const summary = section.querySelector<HTMLElement>('[data-selection-summary]');
+    const names = JSON.parse(section.dataset.names ?? '{}') as { levels: Record<string, string>; packages: Record<string, string> };
+    const template = section.dataset.template ?? '';
+
+    const state = { level: section.dataset.defaultLevel ?? '', package: section.dataset.defaultPackage ?? '' };
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? 'null');
+      if (saved && names.levels[saved.level]) state.level = saved.level;
+      if (saved && names.packages[saved.package]) state.package = saved.package;
+    } catch {
+      /* storage unavailable: keep the defaults */
+    }
+
+    const render = () => {
+      tabs.forEach((tab) => {
+        const active = tab.dataset.levelTab === state.level;
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach((panel) => (panel.hidden = panel.dataset.levelPanel !== state.level));
+      section.querySelectorAll<HTMLElement>('[data-package-card]').forEach((card) => {
+        card.toggleAttribute('data-selected', card.dataset.packageCard === state.package);
+      });
+      section.querySelectorAll<HTMLButtonElement>('[data-package-choice]').forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.dataset.packageChoice === state.package));
+      });
+      if (summary) {
+        summary.textContent = template
+          .replace('{{package}}', names.packages[state.package] ?? '')
+          .replace('{{level}}', names.levels[state.level] ?? '');
+      }
+    };
+
+    const commit = () => {
+      render();
+      try {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch {
+        /* storage unavailable: the choice still works on this page */
+      }
+      window.dispatchEvent(new CustomEvent('tplv:selection', { detail: { ...state } }));
+    };
+
+    const selectLevel = (level: string, focusTab = false) => {
+      if (!names.levels[level]) return;
+      state.level = level;
+      commit();
+      if (focusTab) tabs.find((tab) => tab.dataset.levelTab === level)?.focus();
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => selectLevel(tab.dataset.levelTab ?? ''));
+      tab.addEventListener('keydown', (event) => {
+        const last = tabs.length - 1;
+        const target =
+          event.key === 'ArrowRight' ? (index === last ? 0 : index + 1)
+          : event.key === 'ArrowLeft' ? (index === 0 ? last : index - 1)
+          : event.key === 'Home' ? 0
+          : event.key === 'End' ? last
+          : null;
+        if (target === null) return;
+        event.preventDefault();
+        selectLevel(tabs[target].dataset.levelTab ?? '', true);
+      });
+    });
+
+    section.addEventListener('click', (event) => {
+      const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-package-choice]');
+      if (!button) return;
+      state.package = button.dataset.packageChoice ?? state.package;
+      commit();
+    });
+
+    // Hero index (and any other link) choosing a level before scrolling to #programs.
+    document.addEventListener('click', (event) => {
+      const link = (event.target as HTMLElement).closest<HTMLElement>('[data-select-level]');
+      if (link) selectLevel(link.dataset.selectLevel ?? '');
+    });
+
+    // The contact form (or anything else) changing the choice.
+    window.addEventListener('tplv:set-selection', (event) => {
+      const detail = (event as CustomEvent<{ level?: string; package?: string }>).detail ?? {};
+      if (detail.level && names.levels[detail.level]) state.level = detail.level;
+      if (detail.package && names.packages[detail.package]) state.package = detail.package;
+      commit();
+    });
+
+    render();
+    window.dispatchEvent(new CustomEvent('tplv:selection', { detail: { ...state } }));
+  }
+</script>

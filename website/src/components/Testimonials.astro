@@ -1,0 +1,44 @@
+---
+/**
+ * Testimonials (#testimonials). Hidden until there are real quotes (web-info/estructura.md):
+ * nothing is invented. To publish: put real quotes in content/<language>.json → testimonials.items
+ * (texto, nombre, cargo), remove the placeholders and set SHOW_TESTIMONIALS to true.
+ */
+import type { Language } from '../i18n/languages';
+import { getContent } from '../i18n/content';
+
+const SHOW_TESTIMONIALS = false;
+
+interface Props {
+  language: Language;
+}
+
+const { language } = Astro.props;
+const testimonials = getContent(language).testimonials;
+// Never show the template placeholders, even if the switch is turned on by mistake.
+const quotes = testimonials.items.filter((item) => item.nombre !== 'Client Name');
+const visible = SHOW_TESTIMONIALS && quotes.length > 0;
+---
+
+{
+  visible && (
+    <section id="testimonials" aria-labelledby="testimonials-title" class="section-y">
+      <div class="container-site">
+        <h2 id="testimonials-title" class="max-w-[18ch] text-h2">{testimonials.titulo}</h2>
+        <ul class="mt-12 grid gap-x-12 gap-y-10 md:grid-cols-2">
+          {quotes.map((quote) => (
+            <li class="min-w-0 border-t border-line pt-8">
+              <figure>
+                <blockquote class="font-serif text-quote italic text-principal">“{quote.texto}”</blockquote>
+                <figcaption class="mt-5 text-small">
+                  <span class="font-semibold text-texto">{quote.nombre}</span>
+                  <span class="text-texto-muted"> · {quote.cargo}</span>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

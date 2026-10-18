@@ -1,0 +1,101 @@
+---
+/**
+ * About (#about): who is behind the programs. The idea (title + two paragraphs),
+ * the three pillars as ruled statements ("Embodied," in navy, "not theoretical" muted),
+ * then the two facilitators. Portraits are shown small on purpose: Maddie's only
+ * portrait is 231×213 px (TODO: a high-resolution one, web-info/estructura.md).
+ * Copy: content/<language>.json → about.
+ */
+import { Image } from 'astro:assets';
+import joelPortrait from '../assets/images/joel-retrato.webp';
+import maddiePortrait from '../assets/images/maddie-retrato.png';
+import { SECTION_IDS, type Language } from '../i18n/languages';
+import { getContent } from '../i18n/content';
+
+interface Props {
+  language: Language;
+}
+
+const { language } = Astro.props;
+const about = getContent(language).about;
+
+// Facilitator name → portrait and the point of the photo that holds the face.
+const portraits: Record<string, { src: ImageMetadata; position: string }> = {
+  Maddalena: { src: maddiePortrait, position: '68% 38%' },
+  Joel: { src: joelPortrait, position: '52% 28%' },
+};
+
+// "Embodied, not theoretical" → ["Embodied,", "not theoretical"]
+const splitPillar = (title: string) => {
+  const comma = title.indexOf(',');
+  return comma === -1 ? [title, ''] : [title.slice(0, comma + 1), title.slice(comma + 1).trim()];
+};
+---
+
+<section id={SECTION_IDS.about} aria-labelledby="about-title" class="section-y bg-bg-alt">
+  <div class="container-site">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
+      <h2 id="about-title" class="max-w-[16ch] text-h2">{about.titulo}</h2>
+      <div class="min-w-0 max-w-[64ch] space-y-5 text-texto-muted">
+        <p>{about.parrafo1}</p>
+        <p>{about.parrafo2}</p>
+      </div>
+    </div>
+
+    <ul class="mt-14 grid border-t border-line md:grid-cols-3">
+      {
+        about.pilares.map((pillar, index) => {
+          const [lead, rest] = splitPillar(pillar.titulo);
+          return (
+            <li class:list={['min-w-0 border-b border-line py-8 md:border-b-0', index > 0 && 'md:border-l md:pl-8', index < about.pilares.length - 1 && 'md:pr-8']}>
+              <h3 class="text-h3">
+                {lead} {rest && <span class="font-normal text-texto-muted">{rest}</span>}
+              </h3>
+              <p class="mt-3 text-texto-muted">{pillar.descripcion}</p>
+            </li>
+          );
+        })
+      }
+    </ul>
+
+    <div class="mt-16 lg:mt-20">
+      <div class="max-w-[46rem]">
+        <h3 class="text-h3">{about.facilitadores.titulo}</h3>
+        <p class="mt-3 max-w-[60ch] text-texto-muted">{about.facilitadores.intro}</p>
+      </div>
+
+      <ul class="mt-10 grid gap-6 md:grid-cols-2">
+        {
+          about.facilitadores.items.map((person) => {
+            const portrait = portraits[person.nombre];
+            return (
+              <li class="min-w-0">
+                <article class="flex h-full flex-col gap-6 rounded-[var(--radius-card)] border border-line bg-surface p-7 sm:flex-row md:p-8">
+                  {portrait ? (
+                    <Image
+                      src={portrait.src}
+                      alt={`${person.nombre}, ${person.cargo}`}
+                      widths={[112, 224]}
+                      sizes="112px"
+                      class="h-28 w-28 shrink-0 rounded-[var(--radius-image)] object-cover"
+                      style={`object-position: ${portrait.position}`}
+                    />
+                  ) : (
+                    <span aria-hidden="true" class="grid h-28 w-28 shrink-0 place-items-center rounded-[var(--radius-image)] bg-crema text-h2 font-semibold text-principal">
+                      {person.iniciales}
+                    </span>
+                  )}
+                  <div class="min-w-0">
+                    <h4 class="text-h3 font-semibold text-principal">{person.nombre}</h4>
+                    <p class="mt-1 text-small font-medium text-secundario-ink">{person.cargo}</p>
+                    <p class="mt-4 text-texto-muted">{person.bio}</p>
+                  </div>
+                </article>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,12 @@
+---
+// Unknown URLs (English, the default language). Kept out of search results and the sitemap.
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout language="en" title="Page not found" noindex>
+  <section class="container-site section-y">
+    <h1 class="text-h2">This page does not exist.</h1>
+    <p class="mt-4 text-lead text-texto-muted">It may have been moved. Start again from the home page.</p>
+    <a href="/" class="mt-8 inline-flex min-h-11 items-center rounded-full border-[1.5px] border-line-strong px-6 text-label font-semibold text-principal hover:border-principal">Back to home</a>
+  </section>
+</BaseLayout>

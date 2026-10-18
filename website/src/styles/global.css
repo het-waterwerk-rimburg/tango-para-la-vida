@@ -1,0 +1,128 @@
+/*
+ * Design tokens — single source: web-info/diseno.md (Fase 1, opción B "Sobrio moderno").
+ * Change a value there first, then here. No new hues: variants use opacity or color-mix.
+ */
+@import 'tailwindcss';
+
+@theme {
+  /* Brand palette (identical to tangomj.nl) */
+  --color-principal: #073a7c;
+  --color-secundario: #3782d3; /* decorative only, never text (3.97:1 on white) */
+  --color-secundario-ink: #2b65a5; /* color-mix(#3782d3 78%, #000): text in mid blue, 5.99:1 */
+  --color-acento: #7a1f2b;
+  --color-detalle: #f6b40e; /* primary CTA background and focus ring only */
+  --color-texto: #2c2c2a;
+  --color-texto-muted: rgb(44 44 42 / 0.7); /* never below 70% (5.10:1 on cream) */
+  --color-crema: #f2eee6;
+  --color-bg: #ffffff;
+  --color-bg-alt: #f6f6f6;
+  --color-surface: #ffffff;
+  --color-line: rgb(7 58 124 / 0.14);
+  --color-line-strong: rgb(7 58 124 / 0.35);
+
+  /* Typography */
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-plex-serif), ui-serif, Georgia, serif;
+
+  --text-display: clamp(2.5rem, 1.6rem + 3.6vw, 4rem);
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.03em;
+  --text-h2: clamp(1.875rem, 1.4rem + 1.8vw, 2.75rem);
+  --text-h2--line-height: 1.12;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h3: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  --text-h3--line-height: 1.25;
+  --text-h3--letter-spacing: -0.01em;
+  --text-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --text-lead--line-height: 1.6;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.65;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-label: 0.96875rem;
+  --text-label--line-height: 1;
+  --text-quote: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+  --text-quote--line-height: 1.45;
+
+  /* Radii */
+  --radius-card: 16px;
+  --radius-input: 12px;
+  --radius-image: 16px;
+
+  /* Shadows */
+  --shadow-rest: 0 1px 2px rgb(7 58 124 / 0.04);
+  --shadow-hover: 0 16px 36px rgb(7 58 124 / 0.1);
+
+  /* Motion (applied in Fase 4) */
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+    overflow-x: clip;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-texto);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: var(--color-principal);
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: rgb(246 180 14 / 0.35);
+    color: var(--color-texto);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-detalle);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  input,
+  textarea,
+  select {
+    caret-color: var(--color-principal);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ---------- Layout helpers ---------- */
+@utility container-site {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 4rem);
+}
+
+@utility section-y {
+  padding-block: clamp(4rem, 3rem + 5vw, 8rem);
+}

@@ -1,0 +1,581 @@
+{
+  "_comment": "Nederlandse vertaling (u-vorm), Fase 3. Vertaald: alle zichtbare secties (testimonials blijft verborgen tot er echte citaten zijn).",
+  "meta": {
+    "siteTitle": "Tango Para La Vida | Leadership & Team Development Through Argentine Tango",
+    "siteDescription": "Experiential leadership, communication and team-building programs for organizations, using Argentine Tango as a practical laboratory for connection and self-awareness."
+  },
+  "header": {
+    "logoAlt": "Tango MJ, Tango Para La Vida",
+    "nav": [
+      {
+        "label": "Programs",
+        "href": "#programs"
+      },
+      {
+        "label": "Method",
+        "href": "#how-it-works"
+      },
+      {
+        "label": "About",
+        "href": "#about"
+      },
+      {
+        "label": "FAQ",
+        "href": "#faq"
+      }
+    ],
+    "ctaTexto": "Book a call"
+  },
+  "hero": {
+    "eyebrow": "Tango Para La Vida Business Programs",
+    "titulo": "Leiderschap, geleerd door beweging, niet door slides.",
+    "subtitulo": "Tango Para La Vida gebruikt de Argentijnse tango als praktisch laboratorium voor leiderschap, communicatie, samenwerking en zelfinzicht. Een portfolio van ervaringsgerichte programma's voor organisaties, leiderschapsteams en professionals.",
+    "ctaPrincipal": "Plan een kennismakingsgesprek",
+    "ctaSecundario": "Bekijk de programma's",
+    "nivelesLabel": "Of begin bij een niveau:"
+  },
+  "prensa": {
+    "_comment": "Alleen echte, gepubliceerde vermeldingen. TODO: eventueel de datum van het artikel in De Limburger toevoegen.",
+    "titulo": "In de media",
+    "items": [
+      {
+        "medio": "RTV Parkstad",
+        "contexto": "Cultuur Agenda · 6 mei 2026",
+        "titular": "The Passion for the Argentine Tango",
+        "idiomaTitular": "en",
+        "traduccion": "",
+        "enlace": "https://rtvparkstad.nl/gemist/radiofragmenten-gemist/cultuur-agenda-6-mei-2026-the-passion-for-the-argentine-tango/",
+        "enlaceTexto": "Bekijk het interview"
+      },
+      {
+        "medio": "De Limburger",
+        "contexto": "Krantenartikel · Rimburg",
+        "titular": "Tango is krachtig middel voor verbinding",
+        "idiomaTitular": "nl",
+        "traduccion": "",
+        "enlace": "https://www.limburger.nl/regio/kerkrade/maddie-32-en-joel-35-brengen-tango-vanuit-argentinie-naar-limburg-wij-geloven-dat-tango-een-krachtig-middel-is-om-mensen-te-verbinden/151239008.html",
+        "enlaceTexto": "Lees het artikel"
+      }
+    ]
+  },
+  "benefits": {
+    "titulo": "Waarom Tango Para La Vida",
+    "subtitulo": "Elk programma rust op hetzelfde principe: wat het lichaam leert, houdt het team vast.",
+    "items": [
+      {
+        "icon": "trust",
+        "titulo": "Bouw vertrouwen op binnen teams",
+        "descripcion": "Een gedeelde fysieke ervaring bouwt sneller vertrouwen op dan welke presentatie met slides ook."
+      },
+      {
+        "icon": "communication",
+        "titulo": "Verbeter de communicatie",
+        "descripcion": "Deelnemers ontdekken dat communicatie veel verder gaat dan woorden."
+      },
+      {
+        "icon": "collaboration",
+        "titulo": "Versterk de samenwerking",
+        "descripcion": "Lichamelijk oefenen in leiden en volgen creëert een echte teamdynamiek."
+      },
+      {
+        "icon": "awareness",
+        "titulo": "Ontwikkel zelfinzicht",
+        "descripcion": "Beweging laat persoonlijke patronen zien die in een vergaderruimte onzichtbaar blijven."
+      },
+      {
+        "icon": "leadership",
+        "titulo": "Laat leiderschap groeien",
+        "descripcion": "Leidinggevenden ontdekken dat leiderschap relationeel is, niet positioneel."
+      },
+      {
+        "icon": "resilience",
+        "titulo": "Stimuleer aanpassingsvermogen en veerkracht",
+        "descripcion": "Groei begint buiten de comfortzone, en aanpassingsvermogen ook."
+      }
+    ],
+    "ctaTexto": "Zo werkt het"
+  },
+  "about": {
+    "_comment": "Biografieën herschreven op basis van tangomj.nl. TODO: controle door de klant; NLP in de intro bevestigen.",
+    "eyebrow": "Who We Are",
+    "titulo": "Leiderschap, onderwezen zoals het geleerd wordt",
+    "parrafo1": "Tango Para La Vida is een programma van TangoMJ: een portfolio van ervaringsgerichte programma's die de Argentijnse tango gebruiken als praktisch laboratorium voor leiderschap, communicatie, samenwerking en zelfinzicht. Het is gemaakt voor organisaties, leiderschapsteams en professionals die sterkere communicatie, meer vertrouwen en een effectievere samenwerking willen.",
+    "parrafo2": "Wij geloven dat de belangrijkste lessen in leiderschap niet uit een presentatie komen. Ze worden geleerd in het lichaam, door echte verbinding met een ander mens. Elk programma is rond dat idee gebouwd: breng mensen samen in een onbekende, lichamelijke ervaring en zie hoe communicatie, vertrouwen en leiderschap zich tonen op een manier die een klaslokaal nooit laat zien.",
+    "pilares": [
+      {
+        "titulo": "Belichaamd, niet theoretisch",
+        "descripcion": "Beweging en verbinding zijn het klaslokaal, geen slides."
+      },
+      {
+        "titulo": "Praktisch, niet abstract",
+        "descripcion": "Elke sessie vertaalt zich direct naar hoe uw team communiceert en leidt op het werk."
+      },
+      {
+        "titulo": "Ervaringsgericht, geen hoorcollege",
+        "descripcion": "Mensen onthouden wat ze voelen. Groei gebeurt buiten de comfortzone, samen."
+      }
+    ],
+    "facilitadores": {
+      "titulo": "Maak kennis met uw begeleiders",
+      "intro": "Tango Para La Vida is ontwikkeld en wordt begeleid door Maddalena en Joel, professionele tangodocenten die coaching, NLP en non-verbale communicatie in elke sessie brengen.",
+      "items": [
+        {
+          "nombre": "Maddalena",
+          "cargo": "Tangodocent en begeleider",
+          "iniciales": "M",
+          "bio": "Maddalena (Maddie) komt oorspronkelijk uit Duitsland en danst sinds 2013 Argentijnse tango. Ze woonde vier jaar in Buenos Aires, waar ze bij verschillende docenten studeerde, in zowel traditionele als hedendaagse stijlen. In haar sessies zet ze haar achtergrond als coach en haar talenkennis in. Voor haar is tango een oefening in persoonlijke groei: in contact komen met je gevoelens, je creativiteit en de mensen om je heen."
+        },
+        {
+          "nombre": "Joel",
+          "cargo": "Tangodocent en begeleider",
+          "iniciales": "J",
+          "bio": "Joel is een Argentijnse tangodanser uit Buenos Aires. Hij danst sinds 2012 en studeerde Tango Salón en podiumtango. Hij danste in de show van Café Homero Manzi, nam deel aan het tangofestival in Brno en aan het Tango Mundial (2018 en 2019) en het Metropolitan Championship van Buenos Aires. Vandaag ligt zijn focus op lesgeven: het delen van een kunst die zijn eigen leven zoveel vreugde heeft gebracht."
+        }
+      ]
+    }
+  },
+  "programs": {
+    "titulo": "Drie niveaus van belichaamd leren",
+    "subtitulo": "Kies hieronder een niveau en zie precies wat het inhoudt: van een vonk van verbinding in twee uur tot een volledige dag leiderschapsontwikkeling.",
+    "selectorHint": "Kies een niveau",
+    "focusLabel": "Focus",
+    "resultadosLabel": "Wat deelnemers meenemen",
+    "metodoLabel": "De methode op dit niveau",
+    "items": [
+      {
+        "nombre": "Tango Connection Experience™",
+        "nivelCorto": "Fun",
+        "nivel": "Fun: Ervaringsgerichte teambuilding",
+        "proposito": "Creëer verbinding, energie en vertrouwen met beweging geïnspireerd op de tango, in een leuke en inspirerende omgeving. Ideaal voor bedrijfsevenementen, congressen, teamuitjes en bedrijfsfeesten.",
+        "focus": [
+          "Verbinding",
+          "Communicatie",
+          "Vertrouwen",
+          "Gedeelde ervaring"
+        ],
+        "resultados": [
+          {
+            "texto": "Communicatie gaat verder dan woorden.",
+            "icon": "communication",
+            "imagen": "assets/takeaways/fun-1.jpg"
+          },
+          {
+            "texto": "Kwetsbaarheid versterkt verbinding.",
+            "icon": "connection",
+            "imagen": "assets/takeaways/fun-2.jpg"
+          },
+          {
+            "texto": "Vertrouwen ontstaat door gedeelde ervaringen.",
+            "icon": "trust",
+            "imagen": "assets/takeaways/fun-3.jpg"
+          },
+          {
+            "texto": "Groei begint buiten de comfortzone.",
+            "icon": "resilience",
+            "imagen": "assets/takeaways/fun-4.jpg"
+          }
+        ],
+        "metodoNota": "Op dit niveau gaat de methode snel: een lichte, energieke doorloop van alle zes fases, gericht op verbinding en plezier in plaats van diepe analyse.",
+        "paquetes": [
+          {
+            "id": "basic",
+            "nombre": "Basic",
+            "resumen": "Eén gerichte sessie die verbinding brengt op uw volgende evenement.",
+            "caracteristicas": [
+              "Eén sessie van 2 uur",
+              "Tot 20 deelnemers",
+              "Eén vaste begeleider",
+              "Samenvatting na de sessie voor uw team"
+            ],
+            "precioNota": "Offerte op maat, afgestemd op de grootte van uw team.",
+            "destacado": false,
+            "ctaTexto": "Kies Basic"
+          },
+          {
+            "id": "normal",
+            "nombre": "Normal",
+            "resumen": "De volledige Connection Experience, met extra aandacht vooraf en achteraf.",
+            "caracteristicas": [
+              "Volledige sessie van 2 uur",
+              "Tot 40 deelnemers",
+              "Voorbereidend gesprek vóór het evenement",
+              "Digitale terugblik voor uw team",
+              "Eén opvolgmoment"
+            ],
+            "precioNota": "Offerte op maat, afgestemd op de grootte van uw team.",
+            "destacado": true,
+            "ctaTexto": "Kies Normal"
+          },
+          {
+            "id": "premium",
+            "nombre": "Premium",
+            "resumen": "Een volledig op maat gemaakte ervaring voor grotere of bijzondere evenementen.",
+            "caracteristicas": [
+              "Volledige sessie van 2 uur",
+              "Onbeperkt aantal deelnemers",
+              "Thema afgestemd op uw evenement",
+              "Professionele foto- en videoterugblik",
+              "Managementsamenvatting"
+            ],
+            "precioNota": "Offerte op maat, afgestemd op de grootte van uw team.",
+            "destacado": false,
+            "ctaTexto": "Kies Premium"
+          }
+        ],
+        "duracion": "2 uur"
+      },
+      {
+        "nombre": "Dance of Collaboration™",
+        "nivelCorto": "Team",
+        "nivel": "Team: Workshop teamontwikkeling",
+        "proposito": "Een ervaringsgerichte workshop waarin teams communicatie, vertrouwen en samenwerking verkennen via belichaamd leren. Ideaal voor teams, afdelingen, mkb-bedrijven en familiebedrijven.",
+        "focus": [
+          "Communicatie",
+          "Vertrouwen",
+          "Teamdynamiek",
+          "Samenwerking",
+          "Relationeel bewustzijn"
+        ],
+        "resultados": [
+          {
+            "texto": "Ervaar zowel leiden als volgen.",
+            "icon": "leadership",
+            "imagen": "assets/takeaways/team-1.jpg"
+          },
+          {
+            "texto": "Verbeter helderheid, timing en responsiviteit.",
+            "icon": "communication",
+            "imagen": "assets/takeaways/team-2.jpg"
+          },
+          {
+            "texto": "Begrijp hoe vertrouwen ontstaat.",
+            "icon": "trust",
+            "imagen": "assets/takeaways/team-3.jpg"
+          },
+          {
+            "texto": "Ontwikkel aanpassingsvermogen in samenwerking.",
+            "icon": "collaboration",
+            "imagen": "assets/takeaways/team-4.jpg"
+          },
+          {
+            "texto": "Vergroot uw bewustzijn om betere keuzes te maken.",
+            "icon": "awareness",
+            "imagen": "assets/takeaways/team-5.jpg"
+          }
+        ],
+        "metodoNota": "Hier is echt ruimte om te vertragen in Observeren en Begrijpen, zodat teams de oefeningen kunnen koppelen aan hun eigen communicatiepatronen op het werk.",
+        "paquetes": [
+          {
+            "id": "basic",
+            "nombre": "Basic",
+            "resumen": "Een lichtere versie van de workshop voor kleinere teams.",
+            "caracteristicas": [
+              "Workshop van 3 uur",
+              "Tot 20 deelnemers",
+              "Eén vaste begeleider",
+              "Samenvatting na de sessie voor uw team"
+            ],
+            "precioNota": "Offerte op maat, afgestemd op de grootte van uw team.",
+            "destacado": false,
+            "ctaTexto": "Kies Basic"
+          },
+          {
+            "id": "normal",
+            "nombre": "Normal",
+            "resumen": "Onze meest gekozen route: de volledige workshop plus hulpmiddelen die uw team blijft gebruiken.",
+            "caracteristicas": [
+              "Volledige workshop van 3–4 uur",
+              "Tot 40 deelnemers",
+              "Adviesgesprek vooraf",
+              "Digitale handleiding voor deelnemers",
+              "Eén opvolggesprek"
+            ],
+            "precioNota": "Offerte op maat, afgestemd op de grootte van uw team.",
+            "destacado": true,
+            "ctaTexto": "Kies Normal"
+          },
+          {
+            "id": "premium",
+            "nombre": "Premium",
+            "resumen": "Een dieper, persoonlijker samenwerkingstraject voor het hele team.",
+            "caracteristicas": [
+              "Volledige workshop van 3–4 uur",
+              "Onbeperkt aantal deelnemers",
+              "Programma op maat voor uw organisatie",
+              "Individuele nabespreking met teamleiders",
+              "Twee coachingsgesprekken ter opvolging"
+            ],
+            "precioNota": "Offerte op maat, afgestemd op de grootte van uw team.",
+            "destacado": false,
+            "ctaTexto": "Kies Premium"
+          }
+        ],
+        "duracion": "3–4 uur"
+      },
+      {
+        "nombre": "Embodied Leadership Lab™",
+        "nivelCorto": "Leaders",
+        "nivel": "Leaders: Leiderschapsontwikkeling",
+        "proposito": "Een leiderschapservaring waarin deelnemers ontdekken hoe hun leiderschapsstijl zichtbaar wordt in hun lichaamstaal, communicatie, besluitvorming en relaties. Ideaal voor leiderschapsteams, managers en ondernemers.",
+        "focus": [
+          "Leiderschap",
+          "Zelfleiderschap",
+          "Besluitvorming",
+          "Invloed",
+          "Communicatie"
+        ],
+        "resultados": [
+          {
+            "texto": "Leiderschap is relationeel, niet positioneel.",
+            "icon": "leadership",
+            "imagen": "assets/takeaways/leaders-1.jpg"
+          },
+          {
+            "texto": "Breng helderheid en zorg in balans.",
+            "icon": "awareness",
+            "imagen": "assets/takeaways/leaders-2.jpg"
+          },
+          {
+            "texto": "Herken uw eigen leiderschapspatronen.",
+            "icon": "resilience",
+            "imagen": "assets/takeaways/leaders-3.jpg"
+          },
+          {
+            "texto": "Ontwikkel duurzaam zelfleiderschap.",
+            "icon": "leadership",
+            "imagen": "assets/takeaways/leaders-4.jpg"
+          }
+        ],
+        "metodoNota": "Dit is de meest volledige versie van de methode: meer tijd voor Begrijpen en Experimenteren, met echte ruimte voor persoonlijke reflectie tijdens Integreren.",
+        "paquetes": [
+          {
+            "id": "basic",
+            "nombre": "Basic",
+            "resumen": "Het kernlab voor leiderschap, voor een kleinere groep leidinggevenden.",
+            "caracteristicas": [
+              "Lab van een halve dag (5–6 uur)",
+              "Tot 15 leidinggevenden",
+              "Eén vaste begeleider",
+              "Samenvatting na de sessie voor uw team"
+            ],
+            "precioNota": "Offerte op maat, afgestemd op de grootte van uw team.",
+            "destacado": false,
+            "ctaTexto": "Kies Basic"
+          },
+          {
+            "id": "normal",
+            "nombre": "Normal",
+            "resumen": "Het volledige leiderschapslab plus hulpmiddelen die uw leidinggevenden blijven gebruiken.",
+            "caracteristicas": [
+              "Volledig leiderschapslab van 5–6 uur",
+              "Tot 30 leidinggevenden",
+              "Adviesgesprek vooraf",
+              "Persoonlijke leiderschapsgids",
+              "Eén coachingsgesprek ter opvolging"
+            ],
+            "precioNota": "Offerte op maat, afgestemd op de grootte van uw team.",
+            "destacado": true,
+            "ctaTexto": "Kies Normal"
+          },
+          {
+            "id": "premium",
+            "nombre": "Premium",
+            "resumen": "Een compleet leiderschapstraject met blijvende ondersteuning.",
+            "caracteristicas": [
+              "Volledig leiderschapslab van 5–6 uur",
+              "Onbeperkt aantal leidinggevenden",
+              "Curriculum op maat",
+              "Individuele nabespreking voor elke leidinggevende",
+              "Twee coachingsgesprekken plus een check-in na 90 dagen"
+            ],
+            "precioNota": "Offerte op maat, afgestemd op de grootte van uw team.",
+            "destacado": false,
+            "ctaTexto": "Kies Premium"
+          }
+        ],
+        "duracion": "5–6 uur"
+      }
+    ]
+  },
+  "packages": {
+    "_comment": "The 3 package options themselves now live per-level, inside each programs.items[].paquetes array; they change depending on the level selected in the Programs section. This object only holds the shared section copy.",
+    "titulo": "Kies uw pakket",
+    "subtitulo": "Elk niveau kunt u op drie manieren boeken. Twijfelt u welk pakket past? Voor de meeste teams is Normal het juiste vertrekpunt.",
+    "recommendedLabel": "Aanbevolen",
+    "continueCtaTemplate": "U hebt {{package}} gekozen voor {{level}}.",
+    "continueCtaTexto": "Verder naar boeken",
+    "selectedLabel": "Gekozen"
+  },
+  "method": {
+    "titulo": "De Tango Para La Vida Methode™",
+    "tagline": "Beweging onthult. Bewustzijn schept keuze. Oefening brengt verandering.",
+    "subtitulo": "Elke workshop volgt, op elk niveau, dezelfde structuur in zes fases. Alleen de diepgang en de verhouding tussen tango en reflectie veranderen.",
+    "labelObjetivo": "Doel",
+    "labelActividades": "Activiteiten",
+    "labelPregunta": "Kernvraag",
+    "etapas": [
+      {
+        "numero": "01",
+        "nombre": "Aankomen",
+        "objetivo": "Creëer veiligheid. Breng mensen in de ruimte en in hun lichaam.",
+        "actividades": [
+          "Welkom",
+          "Context",
+          "Lichte beweging",
+          "Speelse verbindingsoefeningen"
+        ],
+        "pregunta": "Waar sta ik nu?"
+      },
+      {
+        "numero": "02",
+        "nombre": "Ervaren",
+        "objetivo": "Creëer een lichamelijke ervaring vóór elke uitleg.",
+        "actividades": [
+          "Spiegelen",
+          "Lopen",
+          "Leiden/volgen",
+          "Partneroefeningen"
+        ],
+        "pregunta": "Wat gebeurt er vanzelf?"
+      },
+      {
+        "numero": "03",
+        "nombre": "Observeren",
+        "objetivo": "Ontwikkel bewustzijn door reflectie, zonder oordeel.",
+        "actividades": [
+          "Individuele reflectie",
+          "Groepsreflectie",
+          "Feedback van de partner"
+        ],
+        "pregunta": "Wat viel me op?"
+      },
+      {
+        "numero": "04",
+        "nombre": "Begrijpen",
+        "objetivo": "Verbind de ervaring met relevante concepten en modellen.",
+        "actividades": [
+          "Communicatie",
+          "Leiderschap",
+          "Vertrouwen",
+          "Triggers",
+          "Wilskracht",
+          "Samenwerking"
+        ],
+        "pregunta": "Wat betekent dit?"
+      },
+      {
+        "numero": "05",
+        "nombre": "Experimenteren",
+        "objetivo": "Probeer iets anders. Test nieuwe benaderingen.",
+        "actividades": [
+          "Rollen wisselen",
+          "Partnerwissel",
+          "Aangepaste oefeningen"
+        ],
+        "pregunta": "Wat is er nog meer mogelijk?"
+      },
+      {
+        "numero": "06",
+        "nombre": "Integreren",
+        "objetivo": "Vertaal het geleerde naar het dagelijks leven en werk.",
+        "actividades": [
+          "Schrijven (journaling)",
+          "Gesprek",
+          "Actiestappen"
+        ],
+        "pregunta": "Waar komt dit terug? Wat ga ik anders doen?"
+      }
+    ],
+    "ctaTexto": "Vind uw startpunt"
+  },
+  "testimonials": {
+    "_comment": "No real testimonials were available yet, so these are intentionally visible placeholders (not invented fake quotes); replace nombre/cargo/texto with real feedback from participants before publishing, and delete this _comment.",
+    "titulo": "What people are saying",
+    "subtitulo": "Real feedback from teams and leaders, coming soon. Replace these cards with quotes from your own participants.",
+    "items": [
+      {
+        "texto": "Add a real quote from a participant, client or partner here: what changed for their team after the experience.",
+        "nombre": "Client Name",
+        "cargo": "Role, Company"
+      },
+      {
+        "texto": "Add a real quote from a participant, client or partner here: what changed for their team after the experience.",
+        "nombre": "Client Name",
+        "cargo": "Role, Company"
+      },
+      {
+        "texto": "Add a real quote from a participant, client or partner here: what changed for their team after the experience.",
+        "nombre": "Client Name",
+        "cargo": "Role, Company"
+      }
+    ]
+  },
+  "faq": {
+    "titulo": "Veelgestelde vragen",
+    "subtitulo": "Alles wat u wilt weten voordat u contact opneemt.",
+    "items": [
+      {
+        "pregunta": "Wat is Tango Para La Vida?",
+        "respuesta": "Tango Para La Vida is een portfolio van ervaringsgerichte programma's die de Argentijnse tango gebruiken als praktisch laboratorium voor leiderschap, communicatie, samenwerking en zelfinzicht, ontworpen voor organisaties, leiderschapsteams en professionals."
+      },
+      {
+        "pregunta": "Welk programma past bij onze organisatie?",
+        "respuesta": "Dat hangt af van uw doel en de tijd die u hebt. Tango Connection Experience (2 uur) is ideaal voor één evenement, Dance of Collaboration (3–4 uur) past bij een teamworkshop en Embodied Leadership Lab (5–6 uur) is een volledige dag leiderschapsontwikkeling."
+      },
+      {
+        "pregunta": "Welk pakket kiezen we?",
+        "respuesta": "Voor de meeste teams is Normal het juiste vertrekpunt. Het omvat een volledige workshop plus een gesprek vooraf en een opvolging. Basic werkt goed voor één lichtere sessie, en Premium past bij organisaties die een leiderschapstraject met meerdere sessies plannen."
+      },
+      {
+        "pregunta": "Voor wie zijn deze programma's bedoeld?",
+        "respuesta": "Vooral voor leiderschapsteams, ondernemers, IT-bedrijven, mkb-bedrijven en familiebedrijven, maar ook voor zorgorganisaties, fysiotherapiepraktijken, welzijnsorganisaties, yoga- en mindfulnessgemeenschappen en onderwijsinstellingen."
+      },
+      {
+        "pregunta": "Wat neemt mijn team echt mee?",
+        "respuesta": "Een directe, lichamelijke ervaring van vertrouwen, communicatie en samenwerking, met inzichten als ‘vertrouwen ontstaat door gedeelde ervaringen’ en ‘communicatie gaat verder dan woorden’, die deelnemers lang na de sessie bijblijven."
+      },
+      {
+        "pregunta": "Hoe boeken we een programma?",
+        "respuesta": "Neem contact op via het formulier hieronder of plan een kennismakingsgesprek. Wij helpen u het juiste niveau, pakket en moment voor uw team te kiezen."
+      }
+    ]
+  },
+  "finalCta": {
+    "titulo": "Klaar om een sterker team te bouwen?",
+    "subtitulo": "Plan een kennismakingsgesprek en wij helpen u het programma te kiezen dat past bij waar uw team nu staat.",
+    "ctaTexto": "Plan een kennismakingsgesprek"
+  },
+  "formulario": {
+    "titulo": "Liever dat wij contact met u opnemen?",
+    "subtitulo": "Nog niet klaar om te boeken? Laat uw gegevens achter, dan nemen wij contact met u op.",
+    "labelNombre": "Naam",
+    "labelEmail": "E-mail",
+    "labelNivel": "Programmaniveau",
+    "labelPaquete": "Pakket",
+    "labelTelefono": "Telefoon (optioneel)",
+    "labelMensaje": "Vertel ons over uw team en wat u wilt bereiken",
+    "placeholderNombre": "Uw naam",
+    "placeholderEmail": "u@bedrijf.nl",
+    "placeholderTelefono": "Uw telefoonnummer",
+    "placeholderMensaje": "Een paar woorden over uw team en uw doelen…",
+    "botonTexto": "Verstuur bericht",
+    "botonTextoEnviando": "Versturen…",
+    "confirmacion": "Bedankt! We hebben uw bericht ontvangen en nemen snel contact met u op.",
+    "emailAlternativa": "Liever direct mailen? Schrijf ons op ",
+    "consentimiento": "Ik heb de {link} gelezen.",
+    "consentimientoLink": "privacyverklaring",
+    "error": "Er ging iets mis bij het versturen van uw bericht. Probeer het opnieuw of mail ons rechtstreeks."
+  },
+  "footer": {
+    "tagline": "Using Argentine Tango as a practical laboratory for leadership, communication, collaboration and self-awareness.",
+    "columnaPrograms": "Programs",
+    "columnaCompany": "Company",
+    "contacto": {
+      "emailLabel": "Email",
+      "email": "info@tangomj.nl",
+      "telefonoLabel": "Phone",
+      "telefono": "+1 (000) 000-0000"
+    },
+    "copyright": "Tango Para La Vida. All rights reserved."
+  }
+}

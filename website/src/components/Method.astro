@@ -1,0 +1,136 @@
+---
+/**
+ * Method (#how-it-works): the six stages every workshop follows, as ruled rows
+ * (number, stage and goal, activities, key question). The numbers carry the order.
+ * Below, the note on how deep the method goes for the level chosen in #programs
+ * (listens to the "tplv:selection" event), and the way to a discovery call.
+ * Copy: content/<language>.json → method (and programs.items[].metodoNota).
+ */
+import { LANGUAGE_DETAILS, SECTION_IDS, type Language } from '../i18n/languages';
+import { getContent, levelId } from '../i18n/content';
+
+interface Props {
+  language: Language;
+}
+
+const { language } = Astro.props;
+const content = getContent(language);
+const method = content.method;
+const home = LANGUAGE_DETAILS[language].home;
+
+const levels = content.programs.items.map((program) => ({
+  id: levelId(program),
+  name: program.nombre,
+  note: program.metodoNota,
+}));
+const firstLevel = levels[0];
+
+const columns = 'lg:grid-cols-[4.5rem_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1fr)] lg:gap-10';
+---
+
+<section id={SECTION_IDS.method} aria-labelledby="method-title" class="section-y">
+  <div class="container-site">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end lg:gap-16">
+      <div class="min-w-0">
+        <h2 id="method-title" class="max-w-[18ch] text-h2">{method.titulo}</h2>
+        <p class="mt-5 max-w-[52ch] text-lead text-texto-muted">{method.subtitulo}</p>
+      </div>
+      <p class="min-w-0 max-w-[30ch] font-serif text-quote text-balance italic text-principal lg:justify-self-end">
+        {method.tagline}
+      </p>
+    </div>
+
+    <!-- Column labels (wide screens); on small screens each row labels its own parts. -->
+    <div class:list={['mt-14 hidden border-b border-line pb-3 text-small font-medium text-texto-muted lg:grid', columns]} aria-hidden="true">
+      <span></span>
+      <span>{method.labelObjetivo}</span>
+      <span>{method.labelActividades}</span>
+      <span>{method.labelPregunta}</span>
+    </div>
+
+    <ol class="mt-10 border-t border-line lg:mt-0 lg:border-t-0">
+      {
+        method.etapas.map((stage) => (
+          <li class:list={['grid gap-4 border-b border-line py-8', columns]}>
+            <span class="text-h3 font-semibold tabular-nums text-secundario-ink" aria-hidden="true">
+              {stage.numero}
+            </span>
+
+            <div class="min-w-0">
+              <h3 class="text-h3">
+                <span class="sr-only">{stage.numero}. </span>
+                {stage.nombre}
+              </h3>
+              <p class="mt-2 max-w-[42ch] text-texto-muted">
+                <span class="sr-only">{method.labelObjetivo}: </span>
+                {stage.objetivo}
+              </p>
+            </div>
+
+            <div class="min-w-0">
+              <p class="text-small font-medium text-texto-muted lg:sr-only">{method.labelActividades}</p>
+              <ul class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-small text-texto lg:mt-1">
+                {stage.actividades.map((activity) => (
+                  <li class="flex items-center gap-2">
+                    <span aria-hidden="true" class="h-1 w-1 shrink-0 rounded-full bg-secundario" />
+                    {activity}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="min-w-0">
+              <p class="text-small font-medium text-texto-muted lg:sr-only">{method.labelPregunta}</p>
+              <p class="mt-2 font-serif text-lead italic text-principal lg:mt-0">“{stage.pregunta}”</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <!-- How deep the method goes at the chosen level, and the next step. -->
+    <div
+      class="mt-12 flex flex-col gap-6 rounded-[var(--radius-card)] bg-bg-alt p-6 md:flex-row md:items-center md:justify-between md:p-8"
+      data-method-note
+      data-levels={JSON.stringify(levels)}
+    >
+      <div class="min-w-0 max-w-[64ch]" aria-live="polite">
+        <p class="text-small font-semibold text-principal">
+          {content.programs.metodoLabel}: <span data-method-level>{firstLevel.name}</span>
+        </p>
+        <p class="mt-2 text-small text-texto-muted" data-method-text>{firstLevel.note}</p>
+      </div>
+      <a
+        href={`${home}#${SECTION_IDS.contact}`}
+        class="group inline-flex min-h-12 shrink-0 items-center justify-center gap-2.5 self-start rounded-full bg-detalle px-6 text-label font-semibold text-texto transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--color-detalle)_88%,#000)] active:scale-[0.98] md:self-auto"
+      >
+        {method.ctaTexto}
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">
+          <path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const box = document.querySelector<HTMLElement>('[data-method-note]');
+  if (box) {
+    const levels = JSON.parse(box.dataset.levels ?? '[]') as { id: string; name: string; note: string }[];
+    const name = box.querySelector<HTMLElement>('[data-method-level]');
+    const text = box.querySelector<HTMLElement>('[data-method-text]');
+    const show = (levelKey?: string) => {
+      const level = levels.find((item) => item.id === levelKey);
+      if (!level || !name || !text) return;
+      name.textContent = level.name;
+      text.textContent = level.note;
+    };
+    // The programs section may have announced the choice before this script ran.
+    try {
+      show(JSON.parse(sessionStorage.getItem('tplv-selection') ?? 'null')?.level);
+    } catch {
+      /* storage unavailable: keep the first level */
+    }
+    window.addEventListener('tplv:selection', (event) => show((event as CustomEvent<{ level: string }>).detail?.level));
+  }
+</script>

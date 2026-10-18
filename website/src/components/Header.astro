@@ -1,0 +1,203 @@
+---
+/**
+ * Sticky header: emblem + wordmark, four section links, language switch (keeps
+ * the #section) and the gold "Book a call" button, which stays visible on mobile.
+ * Below 1024px the section links move into a menu opened with the toggle button.
+ */
+import { Image } from 'astro:assets';
+import emblem from '../assets/images/favicon.png';
+import { LANGUAGES, LANGUAGE_DETAILS, SECTION_IDS, UI_TEXT, type Language } from '../i18n/languages';
+
+interface Props {
+  language: Language;
+}
+
+const { language } = Astro.props;
+const texts = UI_TEXT[language];
+const home = LANGUAGE_DETAILS[language].home;
+
+const links = [
+  { id: SECTION_IDS.programs, label: texts.navigation.programs },
+  { id: SECTION_IDS.method, label: texts.navigation.method },
+  { id: SECTION_IDS.about, label: texts.navigation.about },
+  { id: SECTION_IDS.faq, label: texts.navigation.faq },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-line bg-bg/90 backdrop-blur-md">
+  <div class="container-site flex min-h-[72px] items-center gap-4">
+    <a href={home} class="flex shrink-0 items-center gap-3 rounded-md" aria-label={texts.brand.homeLink}>
+      <Image src={emblem} alt="" widths={[40, 80]} sizes="40px" class="h-9 w-9" loading="eager" />
+      <span class="flex flex-col leading-none">
+        <span class="text-[1.0625rem] font-semibold tracking-[-0.01em] text-principal">{texts.brand.name}</span>
+        <span class="mt-1 text-[0.75rem] text-texto-muted">{texts.brand.byline}</span>
+      </span>
+    </a>
+
+    <nav
+      id="site-nav"
+      aria-label={texts.navigation.label}
+      class="site-nav ml-auto"
+      data-nav
+    >
+      <ul class="flex flex-col gap-1 lg:flex-row lg:items-center lg:gap-8">
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={`${home}#${link.id}`}
+                class="block py-3 text-label font-medium text-texto transition-colors duration-200 hover:text-principal lg:py-2"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mt-4 flex items-center justify-between gap-4 border-t border-line pt-4 lg:hidden">
+        <div class="flex items-center gap-1 sm:hidden" role="group" aria-label={texts.navigation.language}>
+          {
+            LANGUAGES.map((code) => (
+              <a
+                href={LANGUAGE_DETAILS[code].home}
+                hreflang={LANGUAGE_DETAILS[code].htmlLang}
+                lang={LANGUAGE_DETAILS[code].htmlLang}
+                aria-current={code === language ? 'true' : undefined}
+                data-lang-link
+                class:list={[
+                  'grid min-h-11 min-w-11 place-items-center rounded-full text-small font-semibold',
+                  code === language ? 'text-principal' : 'text-texto-muted',
+                ]}
+              >
+                <span class="sr-only">{LANGUAGE_DETAILS[code].name}</span>
+                <span aria-hidden="true">{LANGUAGE_DETAILS[code].label}</span>
+              </a>
+            ))
+          }
+        </div>
+        <a
+          href={`${home}#${SECTION_IDS.contact}`}
+          class="inline-flex min-h-11 items-center whitespace-nowrap rounded-full bg-detalle px-5 text-label font-semibold text-texto min-[520px]:hidden"
+        >
+          {texts.navigation.cta}
+        </a>
+      </div>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-2 lg:ml-6">
+      <div class="hidden items-center gap-1 sm:flex" role="group" aria-label={texts.navigation.language}>
+        {
+          LANGUAGES.map((code) => (
+            <a
+              href={LANGUAGE_DETAILS[code].home}
+              hreflang={LANGUAGE_DETAILS[code].htmlLang}
+              lang={LANGUAGE_DETAILS[code].htmlLang}
+              aria-current={code === language ? 'true' : undefined}
+              data-lang-link
+              class:list={[
+                'grid min-h-11 min-w-11 place-items-center rounded-full text-small font-semibold transition-colors duration-200',
+                code === language ? 'text-principal' : 'text-texto-muted hover:text-principal',
+              ]}
+            >
+              <span class="sr-only">{LANGUAGE_DETAILS[code].name}</span>
+              <span aria-hidden="true">{LANGUAGE_DETAILS[code].label}</span>
+            </a>
+          ))
+        }
+      </div>
+
+      <a
+        href={`${home}#${SECTION_IDS.contact}`}
+        class="hidden min-h-11 items-center whitespace-nowrap rounded-full bg-detalle px-5 min-[520px]:inline-flex text-label font-semibold text-texto transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--color-detalle)_88%,#000)] active:scale-[0.98]"
+      >
+        {texts.navigation.cta}
+      </a>
+
+      <button
+        type="button"
+        class="grid h-11 w-11 place-items-center rounded-full border border-line-strong text-principal lg:hidden"
+        aria-controls="site-nav"
+        aria-expanded="false"
+        aria-label={texts.navigation.openMenu}
+        data-label-open={texts.navigation.openMenu}
+        data-label-close={texts.navigation.closeMenu}
+        data-nav-toggle
+      >
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  /* Mobile: the section links drop down below the header. Desktop: inline. */
+  @media (max-width: 1023.98px) {
+    .site-nav {
+      position: absolute;
+      inset: 100% 0 auto 0;
+      margin: 0;
+      padding: 0.5rem clamp(1.25rem, 5vw, 4rem) 1.25rem;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-line);
+      box-shadow: var(--shadow-hover);
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition:
+        opacity 0.2s var(--ease-exit),
+        transform 0.2s var(--ease-exit),
+        visibility 0.2s;
+    }
+
+    .site-nav[data-open='true'] {
+      visibility: visible;
+      opacity: 1;
+      transform: none;
+      transition-timing-function: var(--ease-enter);
+    }
+
+    .site-nav li + li {
+      border-top: 1px solid var(--color-line);
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+
+  if (toggle && nav) {
+    const setOpen = (open: boolean) => {
+      nav.dataset.open = String(open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', (open ? toggle.dataset.labelClose : toggle.dataset.labelOpen) ?? '');
+    };
+    setOpen(false);
+    toggle.addEventListener('click', () => setOpen(nav.dataset.open !== 'true'));
+    nav.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).closest('a')) setOpen(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && nav.dataset.open === 'true') {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+    window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
+      if (event.matches) setOpen(false);
+    });
+  }
+
+  // Keep the current #section when switching language (both languages share the section IDs).
+  const syncLanguageLinks = () => {
+    document.querySelectorAll<HTMLAnchorElement>('[data-lang-link]').forEach((link) => {
+      const url = new URL(link.href);
+      url.hash = window.location.hash;
+      link.href = url.toString();
+    });
+  };
+  syncLanguageLinks();
+  window.addEventListener('hashchange', syncLanguageLinks);
+</script>

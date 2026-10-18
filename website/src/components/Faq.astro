@@ -1,0 +1,41 @@
+---
+/**
+ * FAQ (#faq): native <details> disclosures (keyboard and screen reader friendly,
+ * no JavaScript), intro on the left on wide screens.
+ * Copy: content/<language>.json → faq.
+ */
+import { SECTION_IDS, type Language } from '../i18n/languages';
+import { getContent } from '../i18n/content';
+
+interface Props {
+  language: Language;
+}
+
+const { language } = Astro.props;
+const faq = getContent(language).faq;
+---
+
+<section id={SECTION_IDS.faq} aria-labelledby="faq-title" class="section-y">
+  <div class="container-site grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.6fr)] lg:gap-20">
+    <div class="min-w-0">
+      <h2 id="faq-title" class="max-w-[14ch] text-h2">{faq.titulo}</h2>
+      <p class="mt-5 max-w-[36ch] text-lead text-texto-muted">{faq.subtitulo}</p>
+    </div>
+
+    <div class="min-w-0 border-t border-line">
+      {
+        faq.items.map((item) => (
+          <details class="group border-b border-line">
+            <summary class="flex min-h-11 cursor-pointer list-none items-start justify-between gap-6 py-6 text-lead font-semibold text-principal [&::-webkit-details-marker]:hidden">
+              <span class="min-w-0 text-balance">{item.pregunta}</span>
+              <svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true" class="mt-1.5 shrink-0 text-secundario-ink transition-transform duration-200 group-open:rotate-45">
+                <path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+              </svg>
+            </summary>
+            <p class="max-w-[64ch] pb-7 text-texto-muted">{item.respuesta}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

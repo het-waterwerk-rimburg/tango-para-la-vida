@@ -1,0 +1,67 @@
+---
+/**
+ * Press: real, published mentions only (names, headlines and links; no third-party
+ * screenshots). A quiet cream band right after the hero: social proof without testimonials.
+ * Headlines are quoted in their original language, in the serif italic reserved for quotes.
+ * Copy: content/<language>.json → prensa.
+ */
+import { UI_TEXT, type Language } from '../i18n/languages';
+import { getContent } from '../i18n/content';
+
+interface Props {
+  language: Language;
+}
+
+const { language } = Astro.props;
+const press = getContent(language).prensa;
+const ui = UI_TEXT[language];
+---
+
+<section aria-labelledby="press-title" class="bg-crema">
+  <div class="container-site grid gap-6 py-12 md:py-14 lg:grid-cols-[minmax(0,0.3fr)_minmax(0,1fr)] lg:gap-16 lg:py-16">
+    <h2 id="press-title" class="text-h3 lg:pt-1">{press.titulo}</h2>
+
+    <ul class="grid border-t border-line md:grid-cols-2 md:border-t-0">
+      {
+        press.items.map((item, index) => (
+          <li
+            class:list={[
+              'min-w-0 py-6 md:py-0',
+              index > 0 && 'border-t border-line md:border-t-0 md:border-l md:pl-10',
+              index < press.items.length - 1 && 'md:pr-10',
+            ]}
+          >
+            <article class="flex h-full flex-col">
+              <h3 class="text-small font-semibold text-principal">
+                {item.medio}
+                <span class="font-normal text-texto-muted"> · {item.contexto}</span>
+              </h3>
+
+              <p class="mt-3 font-serif text-quote text-balance italic text-principal" lang={item.idiomaTitular}>
+                “{item.titular}”
+              </p>
+              {item.traduccion && <p class="mt-2 text-small text-texto-muted">{item.traduccion}</p>}
+
+              {
+                item.enlace && (
+                  <a
+                    href={item.enlace}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group mt-auto inline-flex min-h-11 items-center gap-2 self-start pt-4 text-label font-semibold text-secundario-ink underline decoration-transparent underline-offset-4 transition-colors duration-200 hover:text-acento hover:decoration-current"
+                  >
+                    {item.enlaceTexto}
+                    <span class="sr-only"> {ui.footer.newTab}</span>
+                    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" class="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+                      <path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </a>
+                )
+              }
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

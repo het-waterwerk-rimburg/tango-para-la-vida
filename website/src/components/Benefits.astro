@@ -1,0 +1,47 @@
+---
+/**
+ * Why it works (#benefits): the six outcomes as an editorial list, not six icon cards.
+ * Intro on the left (sticky on wide screens), outcomes in two columns of ruled rows.
+ * The CTA is an outline button: the only gold button stays the hero's.
+ * Copy: content/<language>.json → benefits.
+ */
+import { LANGUAGE_DETAILS, SECTION_IDS, type Language } from '../i18n/languages';
+import { getContent } from '../i18n/content';
+
+interface Props {
+  language: Language;
+}
+
+const { language } = Astro.props;
+const benefits = getContent(language).benefits;
+const home = LANGUAGE_DETAILS[language].home;
+---
+
+<section id={SECTION_IDS.benefits} aria-labelledby="benefits-title" class="section-y">
+  <div class="container-site grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.6fr)] lg:gap-20">
+    <div class="min-w-0 lg:sticky lg:top-28 lg:self-start">
+      <h2 id="benefits-title" class="max-w-[16ch] text-h2">{benefits.titulo}</h2>
+      <p class="mt-5 max-w-[40ch] text-lead text-texto-muted">{benefits.subtitulo}</p>
+      <a
+        href={`${home}#${SECTION_IDS.method}`}
+        class="group mt-8 inline-flex min-h-12 items-center gap-2.5 rounded-full border-[1.5px] border-line-strong px-6 text-label font-semibold text-principal transition-colors duration-200 hover:border-principal active:scale-[0.98]"
+      >
+        {benefits.ctaTexto}
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">
+          <path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+    </div>
+
+    <ul class="grid min-w-0 gap-x-12 sm:grid-cols-2">
+      {
+        benefits.items.map((item) => (
+          <li class="min-w-0 border-t border-line pt-6 pb-10">
+            <h3 class="text-h3">{item.titulo}</h3>
+            <p class="mt-3 max-w-[36ch] text-pretty text-texto-muted">{item.descripcion}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

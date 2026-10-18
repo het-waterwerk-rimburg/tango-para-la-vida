@@ -1,0 +1,242 @@
+---
+/**
+ * Final call to action + contact (#contact), on a navy band:
+ *  - left: the closing question, the discovery call (gold, the only gold here) and direct details;
+ *  - right: the "we reach out to you" form, with program level and package kept in sync
+ *    with #programs (reads "tplv:selection" / sessionStorage, sends "tplv:set-selection").
+ * The form posts JSON to the Make.com webhook shared with tangomj.nl, with the payload that
+ * scenario already handles (name, email, subject, message, website); level, package, phone
+ * and language travel inside the message and as extra fields. Without JavaScript the form
+ * posts form-encoded to the same webhook.
+ * Copy: content/<language>.json → finalCta and formulario.
+ */
+import { CONTACT, LANGUAGE_DETAILS, UI_TEXT, SECTION_IDS, type Language } from '../i18n/languages';
+import { getContent, levelId } from '../i18n/content';
+
+interface Props {
+  language: Language;
+}
+
+const { language } = Astro.props;
+const content = getContent(language);
+const cta = content.finalCta;
+const form = content.formulario;
+const ui = UI_TEXT[language];
+
+// Options read like the level tabs in #programs ("Fun · 2 hours"); the full program name is what gets sent.
+const levels = content.programs.items.map((program) => ({ id: levelId(program), name: program.nombre, short: `${program.nivelCorto} · ${program.duracion}` }));
+const packageOptions = content.programs.items[0].paquetes.map((pkg) => ({ id: pkg.id, name: pkg.nombre, recommended: pkg.destacado }));
+const defaultPackage = packageOptions.find((pkg) => pkg.recommended)?.id ?? packageOptions[0].id;
+
+const discoveryHref = CONTACT.bookingUrl || `mailto:${CONTACT.email}?subject=${encodeURIComponent(ui.footer.discoverySubject)}`;
+const [consentBefore, consentAfter = ''] = form.consentimiento.split('{link}');
+
+const field = 'mt-2 block min-h-12 w-full rounded-[var(--radius-input)] border border-line-strong bg-white px-4 text-body text-texto transition-colors duration-200 placeholder:text-texto-muted hover:border-principal/60 focus:border-principal user-invalid:border-acento';
+const label = 'block text-small font-semibold text-principal';
+const chevron = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%23073a7c' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`;
+---
+
+<section id={SECTION_IDS.contact} aria-labelledby="contact-title" class="section-y bg-principal text-crema">
+  <div class="container-site grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
+    <div class="min-w-0 lg:pt-4">
+      <h2 id="contact-title" class="max-w-[16ch] text-h2 text-white">{cta.titulo}</h2>
+      <p class="mt-5 max-w-[44ch] text-lead text-crema/85">{cta.subtitulo}</p>
+
+      <a
+        href={discoveryHref}
+        class="group mt-8 inline-flex min-h-12 items-center gap-2.5 rounded-full bg-detalle px-6 text-label font-semibold text-texto transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--color-detalle)_88%,#fff)] active:scale-[0.98]"
+      >
+        {cta.ctaTexto}
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">
+          <path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+
+      <dl class="mt-12 grid max-w-[28rem] gap-y-4 border-t border-crema/20 pt-8 text-small sm:grid-cols-[7rem_minmax(0,1fr)]">
+        <dt class="text-crema/70">{ui.footer.email}</dt>
+        <dd class="-mt-3 sm:mt-0">
+          <a href={`mailto:${CONTACT.email}`} class="font-semibold text-white underline decoration-crema/40 underline-offset-4 hover:decoration-detalle">{CONTACT.email}</a>
+        </dd>
+        <dt class="text-crema/70">{ui.footer.phone}</dt>
+        <dd class="-mt-3 sm:mt-0">
+          <a href={CONTACT.phone.href} class="font-semibold tabular-nums text-white underline decoration-crema/40 underline-offset-4 hover:decoration-detalle">{CONTACT.phone.display}</a>
+        </dd>
+        <dt class="text-crema/70">{ui.footer.whatsapp}</dt>
+        <dd class="-mt-3 sm:mt-0">
+          <a href={CONTACT.whatsappUrl} target="_blank" rel="noopener noreferrer" class="font-semibold tabular-nums text-white underline decoration-crema/40 underline-offset-4 hover:decoration-detalle">
+            {CONTACT.phone.display}<span class="sr-only"> {ui.footer.newTab}</span>
+          </a>
+        </dd>
+      </dl>
+    </div>
+
+    <div class="min-w-0 rounded-[var(--radius-card)] bg-surface p-6 text-texto shadow-hover sm:p-8 md:p-10">
+      <h3 class="text-h3">{form.titulo}</h3>
+      <p class="mt-2 text-texto-muted">{form.subtitulo}</p>
+
+      <form
+        class="mt-8 grid gap-5 sm:grid-cols-2"
+        action={CONTACT.formEndpoint}
+        method="post"
+        data-contact-form
+        data-sending={form.botonTextoEnviando}
+        data-success={form.confirmacion}
+        data-error={form.error}
+        data-language={language}
+        data-subject={CONTACT.formSubject}
+        data-website={CONTACT.formWebsite}
+        data-levels={JSON.stringify(levels)}
+        data-packages={JSON.stringify(packageOptions)}
+      >
+        <div class="min-w-0">
+          <label for="cf-name" class={label}>{form.labelNombre}</label>
+          <input id="cf-name" name="name" type="text" autocomplete="name" required placeholder={form.placeholderNombre} class={field} />
+        </div>
+        <div class="min-w-0">
+          <label for="cf-email" class={label}>{form.labelEmail}</label>
+          <input id="cf-email" name="email" type="email" autocomplete="email" inputmode="email" required spellcheck="false" placeholder={form.placeholderEmail} class={field} />
+        </div>
+
+        <div class="min-w-0 sm:col-span-2">
+          <label for="cf-level" class={label}>{form.labelNivel}</label>
+          <select id="cf-level" name="level" class={`${field} appearance-none bg-[length:16px] bg-[right_1rem_center] bg-no-repeat pr-11`} style={`background-image: ${chevron}`} data-level-select>
+            {levels.map((level, index) => <option value={level.id} selected={index === 0}>{level.short}</option>)}
+          </select>
+        </div>
+        <div class="min-w-0">
+          <label for="cf-package" class={label}>{form.labelPaquete}</label>
+          <select id="cf-package" name="package" class={`${field} appearance-none bg-[length:16px] bg-[right_1rem_center] bg-no-repeat pr-11`} style={`background-image: ${chevron}`} data-package-select>
+            {packageOptions.map((pkg) => <option value={pkg.id} selected={pkg.id === defaultPackage}>{pkg.name}</option>)}
+          </select>
+        </div>
+
+        <div class="min-w-0">
+          <label for="cf-phone" class={label}>{form.labelTelefono}</label>
+          <input id="cf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder={form.placeholderTelefono} class={field} />
+        </div>
+
+        <div class="min-w-0 sm:col-span-2">
+          <label for="cf-message" class={label}>{form.labelMensaje}</label>
+          <textarea id="cf-message" name="message" rows="5" required minlength="10" placeholder={form.placeholderMensaje} class={`${field} min-h-32 py-3`}></textarea>
+        </div>
+
+        <input type="hidden" name="subject" value={CONTACT.formSubject} />
+        <input type="hidden" name="website" value={CONTACT.formWebsite} />
+
+        <div class="flex items-start gap-3 sm:col-span-2">
+          <input id="cf-privacy" name="privacy" type="checkbox" required class="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded accent-principal" />
+          <label for="cf-privacy" class="text-small text-texto-muted">
+            {consentBefore}<a href={CONTACT.privacyUrl[language]} target="_blank" rel="noopener noreferrer" class="font-medium text-secundario-ink underline underline-offset-4 hover:text-acento">{form.consentimientoLink}<span class="sr-only"> {ui.footer.newTab}</span></a>{consentAfter}
+          </label>
+        </div>
+
+        <div class="flex flex-col gap-4 sm:col-span-2">
+          <button
+            type="submit"
+            data-submit
+            class="inline-flex min-h-12 items-center justify-center gap-2.5 self-start rounded-full bg-principal px-7 text-label font-semibold text-white transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--color-principal)_85%,#000)] active:scale-[0.98] disabled:cursor-progress disabled:opacity-70"
+          >
+            {form.botonTexto}
+          </button>
+          <p data-status role="status" aria-live="polite" hidden class="rounded-[var(--radius-input)] px-4 py-3 text-small data-[state=error]:bg-acento/10 data-[state=error]:text-acento data-[state=success]:bg-crema data-[state=success]:text-principal"></p>
+          <p class="text-small text-texto-muted">
+            {form.emailAlternativa}<a href={`mailto:${CONTACT.email}`} class="font-medium text-secundario-ink underline underline-offset-4 hover:text-acento">{CONTACT.email}</a>.
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  const STORAGE_KEY = 'tplv-selection';
+
+  document.querySelectorAll<HTMLFormElement>('[data-contact-form]').forEach((form) => {
+    const levelSelect = form.querySelector<HTMLSelectElement>('[data-level-select]');
+    const packageSelect = form.querySelector<HTMLSelectElement>('[data-package-select]');
+    const button = form.querySelector<HTMLButtonElement>('[data-submit]');
+    const status = form.querySelector<HTMLElement>('[data-status]');
+    const levels = JSON.parse(form.dataset.levels ?? '[]') as { id: string; name: string }[];
+    const packages = JSON.parse(form.dataset.packages ?? '[]') as { id: string; name: string }[];
+
+    // Keep level and package in sync with the programs section.
+    const applySelection = (selection?: { level?: string; package?: string } | null) => {
+      if (!selection) return;
+      if (levelSelect && levels.some((level) => level.id === selection.level)) levelSelect.value = selection.level!;
+      if (packageSelect && packages.some((pkg) => pkg.id === selection.package)) packageSelect.value = selection.package!;
+    };
+    try {
+      applySelection(JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? 'null'));
+    } catch {
+      /* storage unavailable: keep the defaults */
+    }
+    window.addEventListener('tplv:selection', (event) => applySelection((event as CustomEvent).detail));
+    const announce = () =>
+      window.dispatchEvent(new CustomEvent('tplv:set-selection', { detail: { level: levelSelect?.value, package: packageSelect?.value } }));
+    levelSelect?.addEventListener('change', announce);
+    packageSelect?.addEventListener('change', announce);
+
+    const setStatus = (state: 'success' | 'error', message: string) => {
+      if (!status) return;
+      status.dataset.state = state;
+      status.textContent = message;
+      status.hidden = false;
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const value = (name: string) => ((form.elements.namedItem(name) as HTMLInputElement | null)?.value ?? '').trim();
+      const levelName = levels.find((level) => level.id === value('level'))?.name ?? value('level');
+      const packageName = packages.find((pkg) => pkg.id === value('package'))?.name ?? value('package');
+      const phone = value('phone');
+      // The Make scenario forwards `message`: put the program details at the top of it.
+      const details = [`Program level: ${levelName}`, `Package: ${packageName}`, phone && `Phone: ${phone}`, `Language: ${form.dataset.language}`]
+        .filter(Boolean)
+        .join('\n');
+
+      const payload = {
+        name: value('name'),
+        email: value('email'),
+        subject: form.dataset.subject,
+        message: `${details}\n\n${value('message')}`,
+        website: form.dataset.website,
+        level: levelName,
+        package: packageName,
+        phone,
+        language: form.dataset.language,
+      };
+
+      const label = button?.textContent ?? '';
+      if (button) {
+        button.disabled = true;
+        button.textContent = form.dataset.sending ?? label;
+      }
+      status?.setAttribute('hidden', '');
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const keep = { level: levelSelect?.value, package: packageSelect?.value };
+        form.reset();
+        applySelection(keep);
+        setStatus('success', form.dataset.success ?? '');
+      } catch {
+        setStatus('error', form.dataset.error ?? '');
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.textContent = label;
+        }
+      }
+    });
+  });
+</script>

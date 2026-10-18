@@ -1,0 +1,118 @@
+---
+/**
+ * Shared page shell: <head> with SEO (title, description, canonical, hreflang,
+ * Open Graph, Twitter, JSON-LD), fonts, skip link, header and footer.
+ */
+import { Font, getImage } from 'astro:assets';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import shareImageSource from '../assets/images/taller-grupo.jpg';
+import { CONTACT, DEFAULT_LANGUAGE, LANGUAGES, LANGUAGE_DETAILS, UI_TEXT, type Language } from '../i18n/languages';
+
+interface Props {
+  language: Language;
+  /** Page title; the home page passes nothing and uses the meta title. */
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const { language, title, description, noindex = false } = Astro.props;
+const texts = UI_TEXT[language];
+const fullTitle = title ? `${title} · ${texts.brand.name}` : texts.meta.title;
+const pageDescription = description ?? texts.meta.description;
+
+const absoluteUrl = (path: string) => new URL(path, Astro.site).href;
+const canonicalUrl = absoluteUrl(LANGUAGE_DETAILS[language].home);
+
+// Picture shown when the page is shared: 1200×630.
+const shareImage = await getImage({ src: shareImageSource, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const shareImageUrl = absoluteUrl(shareImage.src);
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: texts.brand.name,
+  description: texts.meta.description,
+  url: absoluteUrl('/'),
+  image: shareImageUrl,
+  email: CONTACT.email,
+  telephone: CONTACT.phone.display,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: CONTACT.address.street,
+    postalCode: CONTACT.address.postalCode,
+    addressLocality: CONTACT.address.locality,
+    addressRegion: CONTACT.address.region,
+    addressCountry: CONTACT.address.country,
+  },
+  sameAs: [CONTACT.linkedinUrl],
+  // TODO: confirm the real service area (web-info/marca.md).
+  areaServed: [{ '@type': 'Country', name: 'Netherlands' }],
+  parentOrganization: { '@type': 'Organization', name: 'Tango MJ', url: CONTACT.tangoMjUrl },
+};
+---
+
+<!doctype html>
+<html lang={LANGUAGE_DETAILS[language].htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{fullTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    {
+      noindex ? (
+        <meta name="robots" content="noindex, follow" />
+      ) : (
+        <>
+          <link rel="canonical" href={canonicalUrl} />
+          {LANGUAGES.map((code) => (
+            <link rel="alternate" hreflang={LANGUAGE_DETAILS[code].htmlLang} href={absoluteUrl(LANGUAGE_DETAILS[code].home)} />
+          ))}
+          <link rel="alternate" hreflang="x-default" href={absoluteUrl(LANGUAGE_DETAILS[DEFAULT_LANGUAGE].home)} />
+        </>
+      )
+    }
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={texts.brand.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={shareImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={texts.meta.shareImageAlt} />
+    <meta property="og:locale" content={LANGUAGE_DETAILS[language].ogLocale} />
+    {
+      LANGUAGES.filter((code) => code !== language).map((code) => (
+        <meta property="og:locale:alternate" content={LANGUAGE_DETAILS[code].ogLocale} />
+      ))
+    }
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <Font cssVariable="--font-plex-sans" preload />
+    <Font cssVariable="--font-plex-serif" />
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-surface focus:px-5 focus:py-3 focus:font-semibold focus:text-principal focus:shadow-hover"
+    >
+      {texts.navigation.skipToContent}
+    </a>
+    <Header language={language} />
+    <main id="main-content" tabindex="-1" class="outline-none">
+      <slot />
+    </main>
+    <Footer language={language} />
+  </body>
+</html>
