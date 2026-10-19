@@ -30,7 +30,7 @@ export const SECTION_IDS = {
 const en = {
   meta: {
     // ≤ 60 characters, keyword first. TODO: confirm the main keyword (web-info/marca.md).
-    title: 'Leadership training through tango · Tango Para La Vida',
+    title: 'Leadership training through tango | Tango Para La Vida',
     // ≤ 155 characters (shortened from the client meta text in en.json).
     description:
       'Experiential leadership, communication and team-building programs for organizations, using Argentine Tango as a practical laboratory for connection.',
@@ -64,7 +64,7 @@ const en = {
     linkedin: 'Tango MJ on LinkedIn',
     newTab: '(opens in a new tab)',
     programBy: 'A program by',
-    legal: 'Het Waterwerk Rimburg V.O.F. · KvK 89925688 · VAT NL865155033B01',
+    legal: 'Het Waterwerk Rimburg V.O.F., KvK 89925688, VAT NL865155033B01',
     privacy: 'Privacy policy',
     rights: 'All rights reserved.',
     madeBy: 'Website by',
@@ -75,7 +75,7 @@ export type UiText = typeof en;
 
 const nl: UiText = {
   meta: {
-    title: 'Leiderschapstraining via tango · Tango Para La Vida',
+    title: 'Leiderschapstraining via tango | Tango Para La Vida',
     description:
       "Ervaringsgerichte programma's voor leiderschap, communicatie en teambuilding voor organisaties, met de Argentijnse tango als praktisch laboratorium.",
     shareImageAlt: 'Een groep deelnemers rond twee tangobegeleiders tijdens een workshop',
@@ -108,7 +108,7 @@ const nl: UiText = {
     linkedin: 'Tango MJ op LinkedIn',
     newTab: '(opent in een nieuw tabblad)',
     programBy: 'Een programma van',
-    legal: 'Het Waterwerk Rimburg V.O.F. · KvK 89925688 · btw NL865155033B01',
+    legal: 'Het Waterwerk Rimburg V.O.F., KvK 89925688, btw NL865155033B01',
     privacy: 'Privacyverklaring',
     rights: 'Alle rechten voorbehouden.',
     madeBy: 'Website door',

@@ -13,9 +13,10 @@
   --color-detalle: #f6b40e; /* primary CTA background and focus ring only */
   --color-texto: #2c2c2a;
   --color-texto-muted: rgb(44 44 42 / 0.7); /* never below 70% (5.10:1 on cream) */
-  --color-crema: #f2eee6;
+  --color-crema: #f2eee6; /* text on navy only (19-10-2026: no longer a background) */
+  --color-azul-suave: #ebf2fb; /* #3782d3 at 10% on white: blocks (press, quotes, badges). Navy 9.78:1 */
   --color-bg: #ffffff;
-  --color-bg-alt: #f6f6f6;
+  --color-bg-alt: #f5f9fd; /* #3782d3 at 5% on white: alternate sections */
   --color-surface: #ffffff;
   --color-line: rgb(7 58 124 / 0.14);
   --color-line-strong: rgb(7 58 124 / 0.35);
@@ -61,6 +62,8 @@
 /* ---------- Base ---------- */
 @layer base {
   html {
+    color-scheme: light;
+    -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
     scroll-padding-top: 88px;
     overflow-x: clip;
@@ -86,13 +89,15 @@
   }
 
   ::selection {
-    background: rgb(246 180 14 / 0.35);
+    background: rgb(55 130 211 / 0.22);
     color: var(--color-texto);
   }
 
+  /* Gold ring (diseno.md) with a navy edge so it reaches 3:1 on white and cream too. */
   :focus-visible {
-    outline: 2px solid var(--color-detalle);
-    outline-offset: 3px;
+    outline: 2px solid var(--color-principal);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--color-detalle);
     border-radius: 4px;
   }
 
@@ -113,6 +118,33 @@
       transition-duration: 0.01ms !important;
     }
   }
+}
+
+/* ---------- Motion (Fase 4) ----------
+ * One entrance per section: opacity + 12px rise, 0.45s, ease-enter, once (src/scripts/reveal.ts).
+ * Only under html.motion, which is never set with prefers-reduced-motion.
+ */
+.motion [data-reveal] {
+  transition:
+    opacity 0.45s var(--ease-enter) var(--reveal-delay, 0ms),
+    transform 0.45s var(--ease-enter) var(--reveal-delay, 0ms);
+}
+
+.motion:not(.motion-done) [data-reveal]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+/* FAQ: the answer settles in when a question opens (opening only; closing is instant). */
+@keyframes faq-answer-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.motion details[open] > :not(summary) {
+  animation: faq-answer-in 0.25s var(--ease-enter);
 }
 
 /* ---------- Layout helpers ---------- */

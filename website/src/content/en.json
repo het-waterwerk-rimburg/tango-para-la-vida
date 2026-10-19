@@ -29,7 +29,7 @@
   "hero": {
     "eyebrow": "Tango Para La Vida Business Programs",
     "titulo": "Leadership learned through movement, not slides.",
-    "subtitulo": "Tango Para La Vida uses Argentine Tango as a practical laboratory for leadership, communication, collaboration and self-awareness. It's a portfolio of experiential programs for organizations, leadership teams and professionals.",
+    "subtitulo": "Tango Para La Vida uses Argentine Tango as a practical laboratory for leadership, communication, collaboration and self-awareness. It’s a portfolio of experiential programs for organizations, leadership teams and professionals.",
     "ctaPrincipal": "Book a discovery call",
     "ctaSecundario": "Explore the programs",
     "nivelesLabel": "Or start from a level:"
@@ -40,7 +40,7 @@
     "items": [
       {
         "medio": "RTV Parkstad",
-        "contexto": "Cultuur Agenda · 6 May 2026",
+        "contexto": "Cultuur Agenda, 6 May 2026",
         "titular": "The Passion for the Argentine Tango",
         "idiomaTitular": "en",
         "traduccion": "",
@@ -49,7 +49,7 @@
       },
       {
         "medio": "De Limburger",
-        "contexto": "Newspaper interview · Rimburg",
+        "contexto": "Newspaper interview, Rimburg",
         "titular": "Tango is krachtig middel voor verbinding",
         "idiomaTitular": "nl",
         "traduccion": "Tango is a powerful means of connection.",
@@ -98,9 +98,9 @@
   "about": {
     "_comment": "Bios rewritten on 18-10-2026 from the real biographies on tangomj.nl (About page), in a business tone. TODO: client review. Confirm the intro's mention of NLP.",
     "eyebrow": "Who We Are",
-    "titulo": "Leadership taught the way it's learned",
+    "titulo": "Leadership taught the way it’s learned",
     "parrafo1": "Tango Para La Vida is a program by TangoMJ, a portfolio of experiential programs that use Argentine Tango as a practical laboratory for leadership, communication, collaboration and self-awareness, built for organizations, leadership teams and professionals who want stronger communication, trust and more effective collaboration.",
-    "parrafo2": "We believe the most important lessons in leadership aren't learned from a slide deck. They're learned in the body, through real connection with another person. Every program we run is built around that idea: put people in an unfamiliar, embodied experience together, and watch communication, trust and leadership show up in ways a classroom never reveals.",
+    "parrafo2": "We believe the most important lessons in leadership aren’t learned from a slide deck. They’re learned in the body, through real connection with another person. Every program we run is built around that idea: put people in an unfamiliar, embodied experience together, and watch communication, trust and leadership show up in ways a classroom never reveals.",
     "pilares": [
       {
         "titulo": "Embodied, not theoretical",
@@ -263,7 +263,7 @@
             "imagen": "assets/takeaways/team-5.jpg"
           }
         ],
-        "metodoNota": "Here there's real room to slow down in Observe and Understand, so teams can connect the exercises to their actual communication patterns back at work.",
+        "metodoNota": "Here there’s real room to slow down in Observe and Understand, so teams can connect the exercises to their actual communication patterns back at work.",
         "paquetes": [
           {
             "id": "basic",
@@ -532,35 +532,35 @@
       },
       {
         "pregunta": "What will my team actually take away?",
-        "respuesta": "A direct, embodied experience of trust, communication and collaboration, with insights like \"trust is built through shared experience\" and \"communication goes beyond words\" that stay with participants long after the session ends."
+        "respuesta": "A direct, embodied experience of trust, communication and collaboration, with insights like “trust is built through shared experience” and “communication goes beyond words” that stay with participants long after the session ends."
       },
       {
         "pregunta": "How do we book a program?",
-        "respuesta": "Reach out through the contact form below or book a discovery call, and we'll help you choose the right level, package and schedule for your team."
+        "respuesta": "Reach out through the contact form below or book a discovery call, and we’ll help you choose the right level, package and schedule for your team."
       }
     ]
   },
   "finalCta": {
     "titulo": "Ready to build a stronger team?",
-    "subtitulo": "Book a discovery call and we'll help you choose the right program for where your team is today.",
+    "subtitulo": "Book a discovery call and we’ll help you choose the right program for where your team is today.",
     "ctaTexto": "Book a discovery call"
   },
   "formulario": {
     "titulo": "Prefer we reach out to you?",
-    "subtitulo": "Not ready to book yet? Leave your details and we'll get back to you.",
+    "subtitulo": "Not ready to book yet? Leave your details and we’ll get back to you.",
     "labelNombre": "Name",
     "labelEmail": "Email",
     "labelNivel": "Program level",
     "labelPaquete": "Package",
     "labelTelefono": "Phone (optional)",
-    "labelMensaje": "Tell us about your team and what you're hoping to achieve",
+    "labelMensaje": "Tell us about your team and what you’re hoping to achieve",
     "placeholderNombre": "Your name",
     "placeholderEmail": "you@company.com",
     "placeholderTelefono": "Your phone number",
-    "placeholderMensaje": "A few words about your team and your goals...",
+    "placeholderMensaje": "A few words about your team and your goals…",
     "botonTexto": "Send message",
-    "botonTextoEnviando": "Sending...",
-    "confirmacion": "Thanks! We've received your message and will be in touch soon.",
+    "botonTextoEnviando": "Sending…",
+    "confirmacion": "Thanks! We’ve received your message and will be in touch soon.",
     "emailAlternativa": "Rather write directly? Email us at ",
     "consentimiento": "I have read the {link}.",
     "consentimientoLink": "privacy policy",

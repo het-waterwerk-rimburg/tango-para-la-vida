@@ -23,8 +23,8 @@ const cta = content.finalCta;
 const form = content.formulario;
 const ui = UI_TEXT[language];
 
-// Options read like the level tabs in #programs ("Fun · 2 hours"); the full program name is what gets sent.
-const levels = content.programs.items.map((program) => ({ id: levelId(program), name: program.nombre, short: `${program.nivelCorto} · ${program.duracion}` }));
+// Options read like the level tabs in #programs ("Fun (2 hours)"); the full program name is what gets sent.
+const levels = content.programs.items.map((program) => ({ id: levelId(program), name: program.nombre, short: `${program.nivelCorto} (${program.duracion})` }));
 const packageOptions = content.programs.items[0].paquetes.map((pkg) => ({ id: pkg.id, name: pkg.nombre, recommended: pkg.destacado }));
 const defaultPackage = packageOptions.find((pkg) => pkg.recommended)?.id ?? packageOptions[0].id;
 
@@ -38,13 +38,13 @@ const chevron = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
 
 <section id={SECTION_IDS.contact} aria-labelledby="contact-title" class="section-y bg-principal text-crema">
   <div class="container-site grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
-    <div class="min-w-0 lg:pt-4">
+    <div class="min-w-0 lg:pt-4" data-reveal>
       <h2 id="contact-title" class="max-w-[16ch] text-h2 text-white">{cta.titulo}</h2>
       <p class="mt-5 max-w-[44ch] text-lead text-crema/85">{cta.subtitulo}</p>
 
       <a
         href={discoveryHref}
-        class="group mt-8 inline-flex min-h-12 items-center gap-2.5 rounded-full bg-detalle px-6 text-label font-semibold text-texto transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--color-detalle)_88%,#fff)] active:scale-[0.98]"
+        class="group mt-8 inline-flex min-h-12 items-center gap-2.5 rounded-full bg-detalle px-6 text-label font-semibold text-texto transition-[color,background-color,border-color,transform] duration-200 hover:bg-[color-mix(in_srgb,var(--color-detalle)_88%,#fff)] active:scale-[0.98]"
       >
         {cta.ctaTexto}
         <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">
@@ -52,25 +52,25 @@ const chevron = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
         </svg>
       </a>
 
-      <dl class="mt-12 grid max-w-[28rem] gap-y-4 border-t border-crema/20 pt-8 text-small sm:grid-cols-[7rem_minmax(0,1fr)]">
-        <dt class="text-crema/70">{ui.footer.email}</dt>
-        <dd class="-mt-3 sm:mt-0">
-          <a href={`mailto:${CONTACT.email}`} class="font-semibold text-white underline decoration-crema/40 underline-offset-4 hover:decoration-detalle">{CONTACT.email}</a>
+      <dl class="mt-12 grid max-w-[28rem] gap-y-1 border-t border-crema/20 pt-8 text-small sm:grid-cols-[7rem_minmax(0,1fr)] sm:items-center">
+        <dt class="pt-3 text-crema/70 sm:pt-0">{ui.footer.email}</dt>
+        <dd>
+          <a href={`mailto:${CONTACT.email}`} class="inline-flex min-h-11 items-center font-semibold text-white underline decoration-crema/40 underline-offset-4 hover:decoration-detalle">{CONTACT.email}</a>
         </dd>
-        <dt class="text-crema/70">{ui.footer.phone}</dt>
-        <dd class="-mt-3 sm:mt-0">
-          <a href={CONTACT.phone.href} class="font-semibold tabular-nums text-white underline decoration-crema/40 underline-offset-4 hover:decoration-detalle">{CONTACT.phone.display}</a>
+        <dt class="pt-3 text-crema/70 sm:pt-0">{ui.footer.phone}</dt>
+        <dd>
+          <a href={CONTACT.phone.href} class="inline-flex min-h-11 items-center font-semibold tabular-nums text-white underline decoration-crema/40 underline-offset-4 hover:decoration-detalle">{CONTACT.phone.display}</a>
         </dd>
-        <dt class="text-crema/70">{ui.footer.whatsapp}</dt>
-        <dd class="-mt-3 sm:mt-0">
-          <a href={CONTACT.whatsappUrl} target="_blank" rel="noopener noreferrer" class="font-semibold tabular-nums text-white underline decoration-crema/40 underline-offset-4 hover:decoration-detalle">
+        <dt class="pt-3 text-crema/70 sm:pt-0">{ui.footer.whatsapp}</dt>
+        <dd>
+          <a href={CONTACT.whatsappUrl} target="_blank" rel="noopener noreferrer" class="inline-flex min-h-11 items-center font-semibold tabular-nums text-white underline decoration-crema/40 underline-offset-4 hover:decoration-detalle">
             {CONTACT.phone.display}<span class="sr-only"> {ui.footer.newTab}</span>
           </a>
         </dd>
       </dl>
     </div>
 
-    <div class="min-w-0 rounded-[var(--radius-card)] bg-surface p-6 text-texto shadow-hover sm:p-8 md:p-10">
+    <div data-reveal class="min-w-0 rounded-[var(--radius-card)] bg-surface p-6 text-texto shadow-hover sm:p-8 md:p-10">
       <h3 class="text-h3">{form.titulo}</h3>
       <p class="mt-2 text-texto-muted">{form.subtitulo}</p>
 
@@ -123,7 +123,7 @@ const chevron = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
         <input type="hidden" name="subject" value={CONTACT.formSubject} />
         <input type="hidden" name="website" value={CONTACT.formWebsite} />
 
-        <div class="flex items-start gap-3 sm:col-span-2">
+        <div class="flex min-h-11 items-start gap-3 sm:col-span-2">
           <input id="cf-privacy" name="privacy" type="checkbox" required class="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded accent-principal" />
           <label for="cf-privacy" class="text-small text-texto-muted">
             {consentBefore}<a href={CONTACT.privacyUrl[language]} target="_blank" rel="noopener noreferrer" class="font-medium text-secundario-ink underline underline-offset-4 hover:text-acento">{form.consentimientoLink}<span class="sr-only"> {ui.footer.newTab}</span></a>{consentAfter}
@@ -134,11 +134,11 @@ const chevron = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
           <button
             type="submit"
             data-submit
-            class="inline-flex min-h-12 items-center justify-center gap-2.5 self-start rounded-full bg-principal px-7 text-label font-semibold text-white transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--color-principal)_85%,#000)] active:scale-[0.98] disabled:cursor-progress disabled:opacity-70"
+            class="inline-flex min-h-12 items-center justify-center gap-2.5 self-start rounded-full bg-principal px-7 text-label font-semibold text-white transition-[color,background-color,border-color,transform] duration-200 hover:bg-[color-mix(in_srgb,var(--color-principal)_85%,#000)] active:scale-[0.98] disabled:cursor-progress disabled:opacity-70"
           >
             {form.botonTexto}
           </button>
-          <p data-status role="status" aria-live="polite" hidden class="rounded-[var(--radius-input)] px-4 py-3 text-small data-[state=error]:bg-acento/10 data-[state=error]:text-acento data-[state=success]:bg-crema data-[state=success]:text-principal"></p>
+          <p data-status role="status" aria-live="polite" hidden class="rounded-[var(--radius-input)] px-4 py-3 text-small data-[state=error]:bg-acento/10 data-[state=error]:text-acento data-[state=success]:bg-azul-suave data-[state=success]:text-principal"></p>
           <p class="text-small text-texto-muted">
             {form.emailAlternativa}<a href={`mailto:${CONTACT.email}`} class="font-medium text-secundario-ink underline underline-offset-4 hover:text-acento">{CONTACT.email}</a>.
           </p>

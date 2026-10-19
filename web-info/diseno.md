@@ -3,6 +3,7 @@
 > Escrito en la **Fase 1** (`/ui-ux-pro-max`, 18-10-2026). Opción elegida por el cliente: **B · Sobrio moderno**.
 > Muestra visual: https://claude.ai/artifact/EjGXxPNASnwCUBBnS5MywQ
 > Es la única fuente de verdad del diseño: ninguna skill puede crear otro archivo de diseño.
+> **Ajuste 19-10-2026 (petición del cliente, `/ui-ux-pro-max`):** más protagonismo del azul medio `#3782d3` y menos crema como fondo. Ver tabla y reglas.
 
 **Dirección:** corporativo, limpio, de corte suizo. Mucho espacio en blanco, jerarquía con tamaño y peso (no con color), una sola familia sans y la cursiva serif reservada a citas. El color de marca se usa con contención: el azul marino lleva la marca, el dorado solo marca la acción principal.
 Referencias: masteryhaus.com (estructura de oferta, espacio), ideou.com (programas por niveles y método), theschooloflife.com (tono serio y humano).
@@ -13,20 +14,23 @@ Paleta de marca fija, idéntica a tangomj.nl. No se añaden tonos nuevos: las va
 | Token | Hex | Uso | Contraste sobre fondo |
 |---|---|---|---|
 | `--color-principal` | `#073a7c` | Azul marino. Titulares, citas, enlaces de navegación activos, footer, bandas oscuras puntuales (CTA final), bordes de foco secundarios | 11.02 sobre blanco · 10.21 sobre crema |
-| `--color-secundario` | `#3782d3` | Azul medio. **Solo decorativo** (filetes, iconos grandes, fondos tintados). Nunca como texto | 3.97 sobre blanco ❌ texto |
+| `--color-secundario` | `#3782d3` | Azul medio, segundo color de marca con presencia visible: barritas de acento sobre títulos (beneficios, pilares), comilla grande de las citas, filetes de citas, checks, flechas, iconos de la FAQ, bordes de las píldoras de focus y **numeración del método** (texto grande en negrita: ≥18.66px bold, umbral 3:1). Nunca en texto pequeño | 3.97 sobre blanco: ✅ no-texto y texto grande · ❌ texto normal |
 | `--color-secundario-ink` | `#2b65a5` | `color-mix(in srgb, #3782d3 78%, #000)`. Texto en azul medio: numeración del método, etiquetas, enlaces en texto | 5.99 sobre blanco · 5.55 sobre crema ✅ |
 | `--color-acento` | `#7a1f2b` | Burdeos. Uso mínimo: hover de enlaces de texto, estados de error | 9.45 sobre crema ✅ |
 | `--color-detalle` | `#f6b40e` | Dorado. **Solo** fondo del botón principal (reservar o contactar) y anillo de foco. Nunca como texto sobre fondo claro | Texto `#2c2c2a` sobre dorado: 7.63 ✅ · dorado sobre azul marino: 6.01 ✅ |
 | `--color-texto` | `#2c2c2a` | Texto de cuerpo y titulares secundarios | 13.99 sobre blanco ✅ |
 | `--color-texto-muted` | `#2c2c2a` al 70 % | Texto secundario (metadatos, notas). Mínimo 70 %: al 60 % falla AA | 5.10 sobre crema ✅ |
-| `--color-crema` | `#f2eee6` | Crema de marca. Texto sobre azul marino; fondo de bloques puntuales (cita, prensa) | Crema sobre azul marino: 9.52 ✅ |
+| `--color-crema` | `#f2eee6` | Crema de marca. **Solo texto sobre azul marino** (contacto, pie). Desde el 19-10-2026 ya no se usa como fondo | Crema sobre azul marino: 9.52 ✅ |
+| `--color-azul-suave` | `#ebf2fb` | `#3782d3` al 10 % sobre blanco. Fondo de bloques puntuales: prensa, citas ("lo que se llevan"), etiqueta "Recommended", mensaje de éxito | Azul marino 9.78 · texto 12.41 · texto atenuado 5.04 · `-ink` 5.31 ✅ |
 | `--color-bg` | `#ffffff` | Fondo principal de página | — |
-| `--color-bg-alt` | `#f6f6f6` | Fondo alterno de secciones (ritmo entre secciones) | — |
+| `--color-bg-alt` | `#f5f9fd` | `#3782d3` al 5 % sobre blanco (antes gris `#f6f6f6`). Fondo alterno de secciones (Programas, Facilitadores) | Azul marino 10.42 · texto atenuado 5.15 ✅ |
 | `--color-surface` | `#ffffff` | Tarjetas y paneles sobre `--color-bg-alt` | — |
 | `--color-line` | `#073a7c` al 14 % | Bordes y divisores | Decorativo |
 
 **Reglas de uso**
 - Un solo elemento dorado por pantalla visible: el CTA principal. El resto de botones son de contorno azul.
+- El azul medio aporta el color de la página (acentos y fondos tintados); el azul marino sigue llevando titulares y bandas oscuras. Fondos posibles: blanco, `bg-alt`, `azul-suave` y azul marino. Crema nunca como fondo.
+- Selección de texto: `#3782d3` al 22 %.
 - Sin degradados (tampoco el resplandor dorado del sitio anterior).
 - Fotografía sin filtros de color; sobre foto, texto blanco o crema solo con una capa azul marino que garantice 4.5:1.
 

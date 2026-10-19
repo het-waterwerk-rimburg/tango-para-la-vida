@@ -25,6 +25,7 @@ const home = LANGUAGE_DETAILS[language].home;
 
 const levels = programs.items.map((program) => ({ ...program, id: levelId(program) }));
 const defaultLevel = levels[0].id;
+const defaultIndex = 0;
 const defaultPackage = levels[0].paquetes.find((pkg) => pkg.destacado)?.id ?? levels[0].paquetes[0].id;
 
 // Names used by the script to write the summary line ("You selected Normal for …").
@@ -49,7 +50,7 @@ const checkPath = 'M3.5 8.5 6.5 11.5 12.5 4.5';
   data-names={JSON.stringify(names)}
 >
   <div class="container-site">
-    <div class="max-w-[46rem]">
+    <div class="max-w-[46rem]" data-reveal>
       <h2 id="programs-title" class="text-h2">{programs.titulo}</h2>
       <p class="mt-5 max-w-[56ch] text-lead text-texto-muted">{programs.subtitulo}</p>
     </div>
@@ -58,9 +59,17 @@ const checkPath = 'M3.5 8.5 6.5 11.5 12.5 4.5';
     <div
       role="tablist"
       aria-label={programs.selectorHint}
-      class="mt-10 grid max-w-[40rem] grid-cols-3 gap-1 rounded-[calc(var(--radius-card)+4px)] border border-line bg-surface p-1 shadow-rest"
+      class="relative mt-10 grid max-w-[40rem] grid-cols-3 gap-1 rounded-[calc(var(--radius-card)+4px)] border border-line bg-surface p-1 shadow-rest"
       data-level-tabs
+      data-reveal
     >
+      <!-- The navy pill slides to the chosen level (transform only). -->
+      <span
+        aria-hidden="true"
+        data-tab-indicator
+        class="pointer-events-none absolute inset-y-1 left-1 w-[calc((100%-1rem)/3)] rounded-[var(--radius-card)] bg-principal transition-transform duration-300 ease-[var(--ease-enter)]"
+        style={`transform: translateX(calc(${defaultIndex} * (100% + 0.25rem)))`}
+      ></span>
       {
         levels.map((level) => (
           <button
@@ -71,15 +80,16 @@ const checkPath = 'M3.5 8.5 6.5 11.5 12.5 4.5';
             aria-selected={level.id === defaultLevel ? 'true' : 'false'}
             tabindex={level.id === defaultLevel ? 0 : -1}
             data-level-tab={level.id}
-            class="flex min-h-14 min-w-0 flex-col items-center justify-center rounded-[var(--radius-card)] px-2 py-2 text-center text-principal transition-colors duration-200 hover:bg-principal/5 aria-selected:bg-principal aria-selected:text-white"
+            class="relative flex min-h-14 min-w-0 flex-col items-center justify-center rounded-[var(--radius-card)] px-2 py-2 text-center text-principal transition-colors duration-200 hover:bg-principal/5 aria-selected:text-white aria-selected:hover:bg-transparent"
           >
-            <span class="text-label font-semibold">{level.nivelCorto}</span>
+            <span class="text-label font-semibold" translate="no">{level.nivelCorto}</span>
             <span class="mt-1 text-[0.8125rem] tabular-nums opacity-80">{level.duracion}</span>
           </button>
         ))
       }
     </div>
 
+    <div data-reveal>
     {
       levels.map((level) => (
         <div
@@ -94,17 +104,18 @@ const checkPath = 'M3.5 8.5 6.5 11.5 12.5 4.5';
           <!-- Program: what it is, what it works on, what people keep. -->
           <div class="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
             <div class="min-w-0">
-              <p class="text-small font-semibold tabular-nums text-secundario-ink">
-                {level.nivelCorto} · {level.duracion}
+              <p class="flex flex-wrap items-baseline gap-x-3 text-small tabular-nums">
+                <span class="font-semibold text-secundario-ink" translate="no">{level.nivelCorto}</span>
+                <span class="text-texto-muted">{level.duracion}</span>
               </p>
-              <h3 class="mt-2 text-h2">{level.nombre}</h3>
+              <h3 class="mt-2 text-h2" translate="no">{level.nombre}</h3>
               <p class="mt-2 text-body font-medium text-texto">{level.nivel.split(':').slice(1).join(':').trim()}</p>
               <p class="mt-5 max-w-[60ch] text-texto-muted">{level.proposito}</p>
 
               <p class="mt-8 text-small font-semibold text-texto">{programs.focusLabel}</p>
               <ul class="mt-3 flex flex-wrap gap-2">
                 {level.focus.map((topic) => (
-                  <li class="rounded-full border border-line bg-surface px-3.5 py-1.5 text-small text-principal">{topic}</li>
+                  <li class="rounded-full border border-secundario/40 bg-surface px-3.5 py-1.5 text-small text-principal">{topic}</li>
                 ))}
               </ul>
 
@@ -114,13 +125,19 @@ const checkPath = 'M3.5 8.5 6.5 11.5 12.5 4.5';
               </div>
             </div>
 
-            <div class="min-w-0 rounded-[var(--radius-card)] border border-line bg-surface p-7 md:p-8 lg:self-start">
-              <p class="text-small font-semibold text-texto">{programs.resultadosLabel}</p>
-              <ul class="mt-4">
+            <!-- Takeaways read as what participants say afterwards: quotes on cream (diseno.md: cream = quotes). -->
+            <div class="relative min-w-0 overflow-hidden rounded-[var(--radius-card)] border border-secundario/25 bg-azul-suave p-7 sm:p-8 md:p-10 lg:self-start">
+              <svg viewBox="0 0 48 36" width="96" height="72" aria-hidden="true" class="pointer-events-none absolute -top-1 right-5 h-auto w-16 text-secundario/80 md:right-8 md:w-24">
+                <path d="M0 36V22C0 9.5 6.5 2 19 0l2 5c-6.5 2-9.5 6-10 12h9v19H0Zm27 0V22C27 9.5 33.5 2 46 0l2 5c-6.5 2-9.5 6-10 12h9v19H27Z" fill="currentColor" />
+              </svg>
+              <p class="relative flex items-center gap-3 pr-16 text-small font-semibold text-principal md:pr-24">
+                <span aria-hidden="true" class="h-0.5 w-8 bg-secundario" />
+                {programs.resultadosLabel}
+              </p>
+              <ul class="relative mt-6">
                 {level.resultados.map((result) => (
-                  <li class="flex gap-4 border-t border-line py-4 first:border-t-0 first:pt-2 last:pb-0">
-                    <span aria-hidden="true" class="mt-[0.8em] h-px w-5 shrink-0 bg-secundario" />
-                    <span class="text-lead font-medium text-principal">{result.texto}</span>
+                  <li class="border-t border-secundario/25 py-5 first:border-t-0 first:pt-0 last:pb-0">
+                    <p class="font-serif text-quote text-balance italic text-principal">{result.texto}</p>
                   </li>
                 ))}
               </ul>
@@ -143,9 +160,9 @@ const checkPath = 'M3.5 8.5 6.5 11.5 12.5 4.5';
                     data-selected={pkg.id === defaultPackage ? '' : undefined}
                   >
                     <div class="flex min-h-7 items-center justify-between gap-3">
-                      <h4 class="text-h3 font-semibold text-principal">{pkg.nombre}</h4>
+                      <h4 class="text-h3 font-semibold text-principal" translate="no">{pkg.nombre}</h4>
                       {pkg.destacado && (
-                        <span class="rounded-full bg-crema px-3 py-1 text-[0.8125rem] font-semibold text-principal">
+                        <span class="rounded-full bg-azul-suave px-3 py-1 text-[0.8125rem] font-semibold text-principal">
                           {packages.recommendedLabel}
                         </span>
                       )}
@@ -155,7 +172,7 @@ const checkPath = 'M3.5 8.5 6.5 11.5 12.5 4.5';
                     <ul class="mt-6 grid gap-3 border-t border-line pt-6">
                       {pkg.caracteristicas.map((feature) => (
                         <li class="flex gap-3 text-small text-texto">
-                          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" class="mt-0.5 shrink-0 text-secundario-ink">
+                          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" class="mt-0.5 shrink-0 text-secundario">
                             <path d={checkPath} fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
                           </svg>
                           <span class="tabular-nums">{feature}</span>
@@ -168,7 +185,7 @@ const checkPath = 'M3.5 8.5 6.5 11.5 12.5 4.5';
                       type="button"
                       data-package-choice={pkg.id}
                       aria-pressed={pkg.id === defaultPackage ? 'true' : 'false'}
-                      class="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border-[1.5px] border-line-strong px-6 text-label font-semibold text-principal transition-colors duration-200 hover:border-principal active:scale-[0.98] aria-pressed:border-principal aria-pressed:bg-principal aria-pressed:text-white"
+                      class="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border-[1.5px] border-line-strong px-6 text-label font-semibold text-principal transition-[color,background-color,border-color,transform] duration-200 hover:border-principal active:scale-[0.98] aria-pressed:border-principal aria-pressed:bg-principal aria-pressed:text-white"
                     >
                       <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" class="hidden group-data-[selected]:block">
                         <path d={checkPath} fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
@@ -183,13 +200,14 @@ const checkPath = 'M3.5 8.5 6.5 11.5 12.5 4.5';
         </div>
       ))
     }
+    </div>
 
     <!-- Summary of the choice and the way to booking (the gold action of this screen). -->
-    <div class="mt-10 flex flex-col gap-4 rounded-[var(--radius-card)] bg-principal p-6 text-crema sm:flex-row sm:items-center sm:justify-between md:px-8">
+    <div data-reveal class="mt-10 flex flex-col gap-4 rounded-[var(--radius-card)] bg-principal p-6 text-crema sm:flex-row sm:items-center sm:justify-between md:px-8">
       <p class="text-body" aria-live="polite" data-selection-summary>{summaryText(defaultLevel, defaultPackage)}</p>
       <a
         href={`${home}#${SECTION_IDS.contact}`}
-        class="group inline-flex min-h-12 shrink-0 items-center justify-center gap-2.5 self-start rounded-full bg-detalle px-6 text-label font-semibold text-texto transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--color-detalle)_88%,#000)] active:scale-[0.98] sm:self-auto"
+        class="group inline-flex min-h-12 shrink-0 items-center justify-center gap-2.5 self-start rounded-full bg-detalle px-6 text-label font-semibold text-texto transition-[color,background-color,border-color,transform] duration-200 hover:bg-[color-mix(in_srgb,var(--color-detalle)_88%,#000)] active:scale-[0.98] sm:self-auto"
       >
         {packages.continueCtaTexto}
         <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">
@@ -227,7 +245,12 @@ const checkPath = 'M3.5 8.5 6.5 11.5 12.5 4.5';
       /* storage unavailable: keep the defaults */
     }
 
+    const indicator = section.querySelector<HTMLElement>('[data-tab-indicator]');
+    const motion = () => document.documentElement.classList.contains('motion');
+
     const render = () => {
+      const index = Math.max(0, tabs.findIndex((tab) => tab.dataset.levelTab === state.level));
+      if (indicator) indicator.style.transform = `translateX(calc(${index} * (100% + 0.25rem)))`;
       tabs.forEach((tab) => {
         const active = tab.dataset.levelTab === state.level;
         tab.setAttribute('aria-selected', String(active));
@@ -257,11 +280,19 @@ const checkPath = 'M3.5 8.5 6.5 11.5 12.5 4.5';
       window.dispatchEvent(new CustomEvent('tplv:selection', { detail: { ...state } }));
     };
 
-    const selectLevel = (level: string, focusTab = false) => {
+    const selectLevel = (level: string, fromKeyboard = false) => {
       if (!names.levels[level]) return;
+      const changed = level !== state.level;
       state.level = level;
+      // Keyboard changes are instant (no slide, no fade): they repeat quickly.
+      if (indicator) indicator.style.transitionDuration = fromKeyboard ? '0ms' : '';
       commit();
-      if (focusTab) tabs.find((tab) => tab.dataset.levelTab === level)?.focus();
+      if (fromKeyboard) tabs.find((tab) => tab.dataset.levelTab === level)?.focus();
+      if (changed && !fromKeyboard && motion()) {
+        panels
+          .find((panel) => panel.dataset.levelPanel === level)
+          ?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+      }
     };
 
     tabs.forEach((tab, index) => {

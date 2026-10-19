@@ -34,7 +34,7 @@ const splitPillar = (title: string) => {
 
 <section id={SECTION_IDS.about} aria-labelledby="about-title" class="section-y bg-bg-alt">
   <div class="container-site">
-    <div class="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16" data-reveal>
       <h2 id="about-title" class="max-w-[16ch] text-h2">{about.titulo}</h2>
       <div class="min-w-0 max-w-[64ch] space-y-5 text-texto-muted">
         <p>{about.parrafo1}</p>
@@ -42,12 +42,13 @@ const splitPillar = (title: string) => {
       </div>
     </div>
 
-    <ul class="mt-14 grid border-t border-line md:grid-cols-3">
+    <ul class="mt-14 grid border-t border-line md:grid-cols-3" data-reveal>
       {
         about.pilares.map((pillar, index) => {
           const [lead, rest] = splitPillar(pillar.titulo);
           return (
             <li class:list={['min-w-0 border-b border-line py-8 md:border-b-0', index > 0 && 'md:border-l md:pl-8', index < about.pilares.length - 1 && 'md:pr-8']}>
+              <span aria-hidden="true" class="mb-5 block h-0.5 w-8 bg-secundario" />
               <h3 class="text-h3">
                 {lead} {rest && <span class="font-normal text-texto-muted">{rest}</span>}
               </h3>
@@ -59,7 +60,7 @@ const splitPillar = (title: string) => {
     </ul>
 
     <div class="mt-16 lg:mt-20">
-      <div class="max-w-[46rem]">
+      <div class="max-w-[46rem]" data-reveal>
         <h3 class="text-h3">{about.facilitadores.titulo}</h3>
         <p class="mt-3 max-w-[60ch] text-texto-muted">{about.facilitadores.intro}</p>
       </div>
@@ -69,7 +70,7 @@ const splitPillar = (title: string) => {
           about.facilitadores.items.map((person) => {
             const portrait = portraits[person.nombre];
             return (
-              <li class="min-w-0">
+              <li class="min-w-0" data-reveal>
                 <article class="flex h-full flex-col gap-6 rounded-[var(--radius-card)] border border-line bg-surface p-7 sm:flex-row md:p-8">
                   {portrait ? (
                     <Image
@@ -81,7 +82,7 @@ const splitPillar = (title: string) => {
                       style={`object-position: ${portrait.position}`}
                     />
                   ) : (
-                    <span aria-hidden="true" class="grid h-28 w-28 shrink-0 place-items-center rounded-[var(--radius-image)] bg-crema text-h2 font-semibold text-principal">
+                    <span aria-hidden="true" class="grid h-28 w-28 shrink-0 place-items-center rounded-[var(--radius-image)] bg-azul-suave text-h2 font-semibold text-principal">
                       {person.iniciales}
                     </span>
                   )}

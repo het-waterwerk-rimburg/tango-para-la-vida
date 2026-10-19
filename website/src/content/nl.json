@@ -29,9 +29,9 @@
   "hero": {
     "eyebrow": "Tango Para La Vida Business Programs",
     "titulo": "Leiderschap, geleerd door beweging, niet door slides.",
-    "subtitulo": "Tango Para La Vida gebruikt de Argentijnse tango als praktisch laboratorium voor leiderschap, communicatie, samenwerking en zelfinzicht. Een portfolio van ervaringsgerichte programma's voor organisaties, leiderschapsteams en professionals.",
+    "subtitulo": "Tango Para La Vida gebruikt de Argentijnse tango als praktisch laboratorium voor leiderschap, communicatie, samenwerking en zelfinzicht. Een portfolio van ervaringsgerichte programma’s voor organisaties, leiderschapsteams en professionals.",
     "ctaPrincipal": "Plan een kennismakingsgesprek",
-    "ctaSecundario": "Bekijk de programma's",
+    "ctaSecundario": "Bekijk de programma’s",
     "nivelesLabel": "Of begin bij een niveau:"
   },
   "prensa": {
@@ -40,7 +40,7 @@
     "items": [
       {
         "medio": "RTV Parkstad",
-        "contexto": "Cultuur Agenda · 6 mei 2026",
+        "contexto": "Cultuur Agenda, 6 mei 2026",
         "titular": "The Passion for the Argentine Tango",
         "idiomaTitular": "en",
         "traduccion": "",
@@ -49,7 +49,7 @@
       },
       {
         "medio": "De Limburger",
-        "contexto": "Krantenartikel · Rimburg",
+        "contexto": "Krantenartikel, Rimburg",
         "titular": "Tango is krachtig middel voor verbinding",
         "idiomaTitular": "nl",
         "traduccion": "",
@@ -99,7 +99,7 @@
     "_comment": "Biografieën herschreven op basis van tangomj.nl. TODO: controle door de klant; NLP in de intro bevestigen.",
     "eyebrow": "Who We Are",
     "titulo": "Leiderschap, onderwezen zoals het geleerd wordt",
-    "parrafo1": "Tango Para La Vida is een programma van TangoMJ: een portfolio van ervaringsgerichte programma's die de Argentijnse tango gebruiken als praktisch laboratorium voor leiderschap, communicatie, samenwerking en zelfinzicht. Het is gemaakt voor organisaties, leiderschapsteams en professionals die sterkere communicatie, meer vertrouwen en een effectievere samenwerking willen.",
+    "parrafo1": "Tango Para La Vida is een programma van TangoMJ: een portfolio van ervaringsgerichte programma’s die de Argentijnse tango gebruiken als praktisch laboratorium voor leiderschap, communicatie, samenwerking en zelfinzicht. Het is gemaakt voor organisaties, leiderschapsteams en professionals die sterkere communicatie, meer vertrouwen en een effectievere samenwerking willen.",
     "parrafo2": "Wij geloven dat de belangrijkste lessen in leiderschap niet uit een presentatie komen. Ze worden geleerd in het lichaam, door echte verbinding met een ander mens. Elk programma is rond dat idee gebouwd: breng mensen samen in een onbekende, lichamelijke ervaring en zie hoe communicatie, vertrouwen en leiderschap zich tonen op een manier die een klaslokaal nooit laat zien.",
     "pilares": [
       {
@@ -516,7 +516,7 @@
     "items": [
       {
         "pregunta": "Wat is Tango Para La Vida?",
-        "respuesta": "Tango Para La Vida is een portfolio van ervaringsgerichte programma's die de Argentijnse tango gebruiken als praktisch laboratorium voor leiderschap, communicatie, samenwerking en zelfinzicht, ontworpen voor organisaties, leiderschapsteams en professionals."
+        "respuesta": "Tango Para La Vida is een portfolio van ervaringsgerichte programma’s die de Argentijnse tango gebruiken als praktisch laboratorium voor leiderschap, communicatie, samenwerking en zelfinzicht, ontworpen voor organisaties, leiderschapsteams en professionals."
       },
       {
         "pregunta": "Welk programma past bij onze organisatie?",
@@ -527,7 +527,7 @@
         "respuesta": "Voor de meeste teams is Normal het juiste vertrekpunt. Het omvat een volledige workshop plus een gesprek vooraf en een opvolging. Basic werkt goed voor één lichtere sessie, en Premium past bij organisaties die een leiderschapstraject met meerdere sessies plannen."
       },
       {
-        "pregunta": "Voor wie zijn deze programma's bedoeld?",
+        "pregunta": "Voor wie zijn deze programma’s bedoeld?",
         "respuesta": "Vooral voor leiderschapsteams, ondernemers, IT-bedrijven, mkb-bedrijven en familiebedrijven, maar ook voor zorgorganisaties, fysiotherapiepraktijken, welzijnsorganisaties, yoga- en mindfulnessgemeenschappen en onderwijsinstellingen."
       },
       {

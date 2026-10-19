@@ -30,7 +30,7 @@ const columns = 'lg:grid-cols-[4.5rem_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1f
 
 <section id={SECTION_IDS.method} aria-labelledby="method-title" class="section-y">
   <div class="container-site">
-    <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end lg:gap-16">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end lg:gap-16" data-reveal>
       <div class="min-w-0">
         <h2 id="method-title" class="max-w-[18ch] text-h2">{method.titulo}</h2>
         <p class="mt-5 max-w-[52ch] text-lead text-texto-muted">{method.subtitulo}</p>
@@ -51,8 +51,8 @@ const columns = 'lg:grid-cols-[4.5rem_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1f
     <ol class="mt-10 border-t border-line lg:mt-0 lg:border-t-0">
       {
         method.etapas.map((stage) => (
-          <li class:list={['grid gap-4 border-b border-line py-8', columns]}>
-            <span class="text-h3 font-semibold tabular-nums text-secundario-ink" aria-hidden="true">
+          <li class:list={['grid gap-4 border-b border-line py-8', columns]} data-reveal>
+            <span class="text-h3 font-semibold tabular-nums text-secundario" aria-hidden="true">
               {stage.numero}
             </span>
 
@@ -69,12 +69,9 @@ const columns = 'lg:grid-cols-[4.5rem_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1f
 
             <div class="min-w-0">
               <p class="text-small font-medium text-texto-muted lg:sr-only">{method.labelActividades}</p>
-              <ul class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-small text-texto lg:mt-1">
+              <ul class="mt-2 grid gap-1 text-small text-texto lg:mt-1">
                 {stage.actividades.map((activity) => (
-                  <li class="flex items-center gap-2">
-                    <span aria-hidden="true" class="h-1 w-1 shrink-0 rounded-full bg-secundario" />
-                    {activity}
-                  </li>
+                  <li>{activity}</li>
                 ))}
               </ul>
             </div>
@@ -90,11 +87,12 @@ const columns = 'lg:grid-cols-[4.5rem_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1f
 
     <!-- How deep the method goes at the chosen level, and the next step. -->
     <div
+      data-reveal
       class="mt-12 flex flex-col gap-6 rounded-[var(--radius-card)] bg-bg-alt p-6 md:flex-row md:items-center md:justify-between md:p-8"
       data-method-note
       data-levels={JSON.stringify(levels)}
     >
-      <div class="min-w-0 max-w-[64ch]" aria-live="polite">
+      <div class="min-w-0 max-w-[64ch]">
         <p class="text-small font-semibold text-principal">
           {content.programs.metodoLabel}: <span data-method-level>{firstLevel.name}</span>
         </p>
@@ -102,7 +100,7 @@ const columns = 'lg:grid-cols-[4.5rem_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1f
       </div>
       <a
         href={`${home}#${SECTION_IDS.contact}`}
-        class="group inline-flex min-h-12 shrink-0 items-center justify-center gap-2.5 self-start rounded-full bg-detalle px-6 text-label font-semibold text-texto transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--color-detalle)_88%,#000)] active:scale-[0.98] md:self-auto"
+        class="group inline-flex min-h-12 shrink-0 items-center justify-center gap-2.5 self-start rounded-full bg-detalle px-6 text-label font-semibold text-texto transition-[color,background-color,border-color,transform] duration-200 hover:bg-[color-mix(in_srgb,var(--color-detalle)_88%,#000)] active:scale-[0.98] md:self-auto"
       >
         {method.ctaTexto}
         <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">

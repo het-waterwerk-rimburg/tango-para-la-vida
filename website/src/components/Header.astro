@@ -29,7 +29,7 @@ const links = [
     <a href={home} class="flex shrink-0 items-center gap-3 rounded-md" aria-label={texts.brand.homeLink}>
       <Image src={emblem} alt="" widths={[40, 80]} sizes="40px" class="h-9 w-9" loading="eager" />
       <span class="flex flex-col leading-none">
-        <span class="text-[1.0625rem] font-semibold tracking-[-0.01em] text-principal">{texts.brand.name}</span>
+        <span class="text-[1.0625rem] font-semibold tracking-[-0.01em] text-principal" translate="no">{texts.brand.name}</span>
         <span class="mt-1 text-[0.75rem] text-texto-muted">{texts.brand.byline}</span>
       </span>
     </a>
@@ -108,7 +108,7 @@ const links = [
 
       <a
         href={`${home}#${SECTION_IDS.contact}`}
-        class="hidden min-h-11 items-center whitespace-nowrap rounded-full bg-detalle px-5 min-[520px]:inline-flex text-label font-semibold text-texto transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--color-detalle)_88%,#000)] active:scale-[0.98]"
+        class="hidden min-h-11 items-center whitespace-nowrap rounded-full bg-detalle px-5 min-[520px]:inline-flex text-label font-semibold text-texto transition-[color,background-color,border-color,transform] duration-200 hover:bg-[color-mix(in_srgb,var(--color-detalle)_88%,#000)] active:scale-[0.98]"
       >
         {texts.navigation.cta}
       </a>
